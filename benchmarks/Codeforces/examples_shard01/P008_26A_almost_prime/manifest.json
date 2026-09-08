@@ -1,0 +1,19 @@
+{
+  "id": "P008_26A_almost_prime",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "26/A",
+    "title": "Almost Prime",
+    "url": "https://codeforces.com/problemset/problem/26/A",
+    "rating": 900,
+    "tags": [
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

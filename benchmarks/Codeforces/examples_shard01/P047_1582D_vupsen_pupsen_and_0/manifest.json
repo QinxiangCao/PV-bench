@@ -1,0 +1,20 @@
+{
+  "id": "P047_1582D_vupsen_pupsen_and_0",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1582/D",
+    "title": "Vupsen, Pupsen and 0",
+    "url": "https://codeforces.com/problemset/problem/1582/D",
+    "rating": 1600,
+    "tags": [
+      "constructive algorithms",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "P010_48A_rock_paper_scissors",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "48/A",
+    "title": "Rock-paper-scissors",
+    "url": "https://codeforces.com/problemset/problem/48/A",
+    "rating": 900,
+    "tags": [
+      "implementation",
+      "schedules"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": false
+  }
+}

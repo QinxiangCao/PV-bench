@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P063_1569D_inconvenient_pairs.rocq.groundtruth Require Import P063_1569D_inconvenient_pairs_goal P063_1569D_inconvenient_pairs_proof_auto P063_1569D_inconvenient_pairs_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P063_1569D_inconvenient_pairs_proof_auto.
+  Include P063_1569D_inconvenient_pairs_proof_manual.
+End VC_Correctness.

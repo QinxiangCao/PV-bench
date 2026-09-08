@@ -1,0 +1,302 @@
+import Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_proof_auto
+
+theorem proof_of_quicksort_numbers_safety_wit_1 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_2 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_3 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_4 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_5 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_5 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_7 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_7 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_8 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_8 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_9 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_9 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_10 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_10 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_11 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_11 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_12 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_12 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_13 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_13 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_14 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_14 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_15 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_15 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_16 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_16 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_17 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_17 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_18 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_18 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_20 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_20 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_21 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_21 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_22 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_22 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_23 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_23 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_24 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_24 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_25 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_25 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_26 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_26 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_27 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_27 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_28 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_28 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_29 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_29 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_30 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_30 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_31 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_31 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_32 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_32 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_33 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_33 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_34 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_34 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_35 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_35 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_36 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_36 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_37 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_37 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_38 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_38 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_39 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_39 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_40 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_40 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_41 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_41 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_42 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_42 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_43 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_43 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_44 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_44 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_45 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_45 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_46 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_46 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_47 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_47 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_48 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_48 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_49 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_49 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_50 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_50 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_51 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_51 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_safety_wit_52 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_safety_wit_52 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_entail_wit_3 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_entail_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_entail_wit_5 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_entail_wit_5 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_entail_wit_8 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_entail_wit_8 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_entail_wit_10 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_entail_wit_10 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_1 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_2 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_3 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_4 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_5 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_5 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_6 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_6 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_7 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_7 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_8 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_8 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_9 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_9 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_10 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_10 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_11 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_11 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_12 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_12 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_13 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_13 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_14 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_14 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_15 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_15 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_16 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_16 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_17 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_17 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_18 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_18 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_19 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_19 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_20 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_20 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_21 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_21 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_22_pure : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_22_pure := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_22 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_22 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_23_pure : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_23_pure := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_23 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_23 := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_24_pure : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_24_pure := by
+  sorry
+
+theorem proof_of_quicksort_numbers_partial_solve_wit_24 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.quicksort_numbers_partial_solve_wit_24 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_1 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_1 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_2 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_2 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_3 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_3 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_4 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_4 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_5 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_5 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_6 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_6 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_7 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_7 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_8 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_8 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_9 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_9 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_10 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_10 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_11 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_11 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_safety_wit_12 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_safety_wit_12 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_partial_solve_wit_1_pure : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_partial_solve_wit_1_pure := by
+  sorry
+
+theorem proof_of_concatenating_numbers_partial_solve_wit_1 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_partial_solve_wit_2 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_partial_solve_wit_3 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_concatenating_numbers_partial_solve_wit_4 : Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_goal.concatenating_numbers_partial_solve_wit_4 := by
+  sorry
+
+
+end Algorithms.concatenating_numbers.lean.groundtruth.concatenating_numbers_proof_auto

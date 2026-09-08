@@ -1,0 +1,22 @@
+{
+  "id": "P057_1355C_count_triangles",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1355/C",
+    "title": "Count Triangles",
+    "url": "https://codeforces.com/problemset/problem/1355/C",
+    "rating": 1800,
+    "tags": [
+      "binary search",
+      "implementation",
+      "math",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

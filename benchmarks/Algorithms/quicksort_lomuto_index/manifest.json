@@ -1,0 +1,18 @@
+{
+  "id": "quicksort_lomuto_index",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "quicksort_lomuto_index",
+    "title": "Quicksort — Lomuto Partition",
+    "tags": [
+      "quicksort",
+      "lomuto"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "streetlight",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1220",
+    "title": "P1220 Turning Off Streetlights",
+    "url": "https://www.luogu.com.cn/problem/P1220",
+    "tags": [
+      "streetlight"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

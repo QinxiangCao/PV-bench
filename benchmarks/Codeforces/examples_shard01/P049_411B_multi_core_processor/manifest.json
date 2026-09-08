@@ -1,0 +1,19 @@
+{
+  "id": "P049_411B_multi_core_processor",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "411/B",
+    "title": "Multi-core Processor",
+    "url": "https://codeforces.com/problemset/problem/411/B",
+    "rating": 1600,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

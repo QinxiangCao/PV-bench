@@ -1,0 +1,19 @@
+{
+  "id": "sightseeing_bus",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1315",
+    "title": "P1315 — Sightseeing Bus",
+    "url": "https://www.luogu.com.cn/problem/P1315",
+    "tags": [
+      "sightseeing",
+      "bus"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

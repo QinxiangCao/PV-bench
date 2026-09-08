@@ -1,0 +1,21 @@
+{
+  "id": "P013_1744C_traffic_light",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1744/C",
+    "title": "Traffic Light",
+    "url": "https://codeforces.com/problemset/problem/1744/C",
+    "rating": 1000,
+    "tags": [
+      "binary search",
+      "implementation",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

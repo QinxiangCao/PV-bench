@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P023_985A_chess_placing.rocq.groundtruth Require Import P023_985A_chess_placing_goal P023_985A_chess_placing_proof_auto P023_985A_chess_placing_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P023_985A_chess_placing_proof_auto.
+  Include P023_985A_chess_placing_proof_manual.
+End VC_Correctness.

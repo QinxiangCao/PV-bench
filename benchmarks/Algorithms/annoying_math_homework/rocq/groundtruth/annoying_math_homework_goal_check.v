@@ -1,0 +1,6 @@
+From PVbench.Algorithms.annoying_math_homework.rocq.groundtruth Require Import annoying_math_homework_goal annoying_math_homework_proof_auto annoying_math_homework_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include annoying_math_homework_proof_auto.
+  Include annoying_math_homework_proof_manual.
+End VC_Correctness.

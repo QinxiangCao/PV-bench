@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P041_1538F_interesting_function.rocq.groundtruth Require Import P041_1538F_interesting_function_goal P041_1538F_interesting_function_proof_auto P041_1538F_interesting_function_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P041_1538F_interesting_function_proof_auto.
+  Include P041_1538F_interesting_function_proof_manual.
+End VC_Correctness.

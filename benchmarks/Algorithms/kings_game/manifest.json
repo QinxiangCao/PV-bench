@@ -1,0 +1,19 @@
+{
+  "id": "kings_game",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1080",
+    "title": "P1080 The King's Game",
+    "url": "https://www.luogu.com.cn/problem/P1080",
+    "tags": [
+      "kings",
+      "game"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

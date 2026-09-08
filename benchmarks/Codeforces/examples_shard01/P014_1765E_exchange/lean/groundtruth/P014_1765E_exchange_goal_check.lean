@@ -1,0 +1,18 @@
+import Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_proof_auto
+import Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_proof_manual
+
+namespace Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_goal_check
+
+open Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_proof_auto
+open Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_proof_manual
+
+def VC_Correctness : Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_goal.VC_Correct where
+  proof_of_solver_safety_wit_1 := proof_of_solver_safety_wit_1
+  proof_of_solver_safety_wit_2 := proof_of_solver_safety_wit_2
+  proof_of_solver_safety_wit_3 := proof_of_solver_safety_wit_3
+  proof_of_solver_safety_wit_4 := proof_of_solver_safety_wit_4
+  proof_of_solver_safety_wit_5 := proof_of_solver_safety_wit_5
+  proof_of_solver_return_wit_1 := proof_of_solver_return_wit_1
+  proof_of_solver_return_wit_2 := proof_of_solver_return_wit_2
+
+end Codeforces.examples_shard01.P014_1765E_exchange.lean.groundtruth.P014_1765E_exchange_goal_check

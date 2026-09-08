@@ -1,0 +1,20 @@
+{
+  "id": "P021_602A_two_bases",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "602/A",
+    "title": "Two Bases",
+    "url": "https://codeforces.com/problemset/problem/602/A",
+    "rating": 1100,
+    "tags": [
+      "brute force",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

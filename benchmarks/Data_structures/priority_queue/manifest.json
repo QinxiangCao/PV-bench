@@ -1,0 +1,19 @@
+{
+  "id": "priority_queue",
+  "source": {
+    "dataset": "classical_data_structure",
+    "problem_id": "priority_queue",
+    "title": "Array-Based Priority Queue",
+    "tags": [
+      "data structures",
+      "priority queue"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

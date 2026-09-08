@@ -1,0 +1,20 @@
+{
+  "id": "P012_1139B_chocolates",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1139/B",
+    "title": "Chocolates",
+    "url": "https://codeforces.com/problemset/problem/1139/B",
+    "rating": 1000,
+    "tags": [
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

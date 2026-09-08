@@ -1,0 +1,23 @@
+{
+  "id": "P055_276D_little_girl_and_maximum_xor",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "276/D",
+    "title": "Little Girl and Maximum XOR",
+    "url": "https://codeforces.com/problemset/problem/276/D",
+    "rating": 1700,
+    "tags": [
+      "bitmasks",
+      "dp",
+      "greedy",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

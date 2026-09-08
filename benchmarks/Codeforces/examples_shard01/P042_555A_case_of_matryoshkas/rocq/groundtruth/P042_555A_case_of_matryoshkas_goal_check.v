@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P042_555A_case_of_matryoshkas.rocq.groundtruth Require Import P042_555A_case_of_matryoshkas_goal P042_555A_case_of_matryoshkas_proof_auto P042_555A_case_of_matryoshkas_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P042_555A_case_of_matryoshkas_proof_auto.
+  Include P042_555A_case_of_matryoshkas_proof_manual.
+End VC_Correctness.

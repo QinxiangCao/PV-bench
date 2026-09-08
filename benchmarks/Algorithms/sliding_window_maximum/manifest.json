@@ -1,0 +1,20 @@
+{
+  "id": "sliding_window_maximum",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "sliding-window-maximum",
+    "title": "LeetCode 239: Sliding Window Maximum",
+    "url": "https://leetcode.com/problems/sliding-window-maximum/",
+    "tags": [
+      "sliding",
+      "window",
+      "maximum"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

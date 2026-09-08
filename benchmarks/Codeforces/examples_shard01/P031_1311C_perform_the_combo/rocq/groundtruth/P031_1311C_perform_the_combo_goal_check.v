@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P031_1311C_perform_the_combo.rocq.groundtruth Require Import P031_1311C_perform_the_combo_goal P031_1311C_perform_the_combo_proof_auto P031_1311C_perform_the_combo_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P031_1311C_perform_the_combo_proof_auto.
+  Include P031_1311C_perform_the_combo_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,6 @@
+From PVbench.Algorithms.chinese_remainder_theorem.rocq.groundtruth Require Import chinese_remainder_theorem_goal chinese_remainder_theorem_proof_auto chinese_remainder_theorem_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include chinese_remainder_theorem_proof_auto.
+  Include chinese_remainder_theorem_proof_manual.
+End VC_Correctness.

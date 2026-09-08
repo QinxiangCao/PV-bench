@@ -1,0 +1,7 @@
+From PVbench.Algorithms.stock_trading.rocq.groundtruth Require Import stock_trading_proof_manual_part1 stock_trading_proof_manual_part2 stock_trading_proof_manual_part3 stock_trading_proof_manual_part4 stock_trading_proof_manual_part5.
+
+Include stock_trading_proof_manual_part1.
+Include stock_trading_proof_manual_part2.
+Include stock_trading_proof_manual_part3.
+Include stock_trading_proof_manual_part4.
+Include stock_trading_proof_manual_part5.

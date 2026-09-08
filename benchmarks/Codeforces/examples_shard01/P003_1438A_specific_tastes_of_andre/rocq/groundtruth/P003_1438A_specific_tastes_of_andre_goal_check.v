@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P003_1438A_specific_tastes_of_andre.rocq.groundtruth Require Import P003_1438A_specific_tastes_of_andre_goal P003_1438A_specific_tastes_of_andre_proof_auto P003_1438A_specific_tastes_of_andre_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P003_1438A_specific_tastes_of_andre_proof_auto.
+  Include P003_1438A_specific_tastes_of_andre_proof_manual.
+End VC_Correctness.

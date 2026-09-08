@@ -1,0 +1,20 @@
+{
+  "id": "P036_1705C_mark_and_his_unfinished_essay",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1705/C",
+    "title": "Mark and His Unfinished Essay",
+    "url": "https://codeforces.com/problemset/problem/1705/C",
+    "rating": 1400,
+    "tags": [
+      "brute force",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "P014_1765E_exchange",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1765/E",
+    "title": "Exchange",
+    "url": "https://codeforces.com/problemset/problem/1765/E",
+    "rating": 1000,
+    "tags": [
+      "brute force",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

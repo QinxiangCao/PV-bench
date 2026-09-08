@@ -1,0 +1,19 @@
+{
+  "id": "P031_1311C_perform_the_combo",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1311/C",
+    "title": "Perform the Combo",
+    "url": "https://codeforces.com/problemset/problem/1311/C",
+    "rating": 1300,
+    "tags": [
+      "brute force"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

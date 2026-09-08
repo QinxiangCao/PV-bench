@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P065_535C_tavas_and_karafs.rocq.groundtruth Require Import P065_535C_tavas_and_karafs_goal P065_535C_tavas_and_karafs_proof_auto P065_535C_tavas_and_karafs_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P065_535C_tavas_and_karafs_proof_auto.
+  Include P065_535C_tavas_and_karafs_proof_manual.
+End VC_Correctness.

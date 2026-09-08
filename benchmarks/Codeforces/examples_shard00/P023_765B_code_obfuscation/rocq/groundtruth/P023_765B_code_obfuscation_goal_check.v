@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P023_765B_code_obfuscation.rocq.groundtruth Require Import P023_765B_code_obfuscation_goal P023_765B_code_obfuscation_proof_auto P023_765B_code_obfuscation_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P023_765B_code_obfuscation_proof_auto.
+  Include P023_765B_code_obfuscation_proof_manual.
+End VC_Correctness.

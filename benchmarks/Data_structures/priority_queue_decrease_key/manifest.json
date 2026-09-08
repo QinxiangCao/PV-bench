@@ -1,0 +1,19 @@
+{
+  "id": "priority_queue_decrease_key",
+  "source": {
+    "dataset": "classical_data_structure",
+    "problem_id": "priority_queue_decrease_key",
+    "title": "Priority Queue with Decrease-Key",
+    "tags": [
+      "data structures",
+      "priority queue"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

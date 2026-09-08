@@ -1,0 +1,22 @@
+{
+  "id": "P037_1266C_diverse_matrix",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1266/C",
+    "title": "Diverse Matrix",
+    "url": "https://codeforces.com/problemset/problem/1266/C",
+    "rating": 1400,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

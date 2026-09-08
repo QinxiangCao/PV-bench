@@ -1,0 +1,18 @@
+{
+  "id": "bucket_sort",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "bucket_sort",
+    "title": "Decimal Radix Sort",
+    "tags": [
+      "bucket",
+      "sort"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "max_sum_increasing_sequence",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "max_sum_increasing_sequence",
+    "title": "Maximum-Sum Increasing Subsequence",
+    "tags": [
+      "max",
+      "sum",
+      "increasing",
+      "sequence"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "P019_1807G2_subsequence_addition_hard",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1807/G2",
+    "title": "Subsequence Addition (Hard Version)",
+    "url": "https://codeforces.com/problemset/problem/1807/G2",
+    "rating": 1100,
+    "tags": [
+      "bitmasks",
+      "dp",
+      "greedy",
+      "implementation",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

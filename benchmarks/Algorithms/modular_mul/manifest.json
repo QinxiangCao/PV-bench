@@ -1,0 +1,18 @@
+{
+  "id": "modular_mul",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "modular_mul",
+    "title": "Overflow-Safe Modular Multiplication",
+    "tags": [
+      "modular",
+      "mul"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

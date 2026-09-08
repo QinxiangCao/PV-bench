@@ -1,0 +1,19 @@
+{
+  "id": "P035_288A_polo_the_penguin_and_strings",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "288/A",
+    "title": "Polo the Penguin and Strings",
+    "url": "https://codeforces.com/problemset/problem/288/A",
+    "rating": 1300,
+    "tags": [
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": false
+  }
+}

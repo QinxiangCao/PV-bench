@@ -1,0 +1,19 @@
+{
+  "id": "P004_1890A_doremys_paint_3",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1890/A",
+    "title": "Doremy's Paint 3",
+    "url": "https://codeforces.com/problemset/problem/1890/A",
+    "rating": 800,
+    "tags": [
+      "constructive algorithms"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

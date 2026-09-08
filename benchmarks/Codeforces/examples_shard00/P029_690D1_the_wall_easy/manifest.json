@@ -1,0 +1,17 @@
+{
+  "id": "P029_690D1_the_wall_easy",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "690/D1",
+    "title": "The Wall (easy)",
+    "url": "https://codeforces.com/problemset/problem/690/D1",
+    "rating": 1200,
+    "tags": []
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

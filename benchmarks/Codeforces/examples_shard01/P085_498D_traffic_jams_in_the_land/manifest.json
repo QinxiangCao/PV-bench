@@ -1,0 +1,21 @@
+{
+  "id": "P085_498D_traffic_jams_in_the_land",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "498/D",
+    "title": "Traffic Jams in the Land",
+    "url": "https://codeforces.com/problemset/problem/498/D",
+    "rating": 2400,
+    "tags": [
+      "data structures",
+      "dp",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

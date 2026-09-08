@@ -1,0 +1,21 @@
+{
+  "id": "P017_753A_santa_claus_and_candies",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "753/A",
+    "title": "Santa Claus and Candies",
+    "url": "https://codeforces.com/problemset/problem/753/A",
+    "rating": 1000,
+    "tags": [
+      "dp",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

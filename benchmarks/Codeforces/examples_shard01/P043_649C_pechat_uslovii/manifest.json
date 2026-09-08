@@ -1,0 +1,21 @@
+{
+  "id": "P043_649C_pechat_uslovii",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "649/C",
+    "title": "\u041f\u0435\u0447\u0430\u0442\u044c \u0443\u0441\u043b\u043e\u0432\u0438\u0439",
+    "url": "https://codeforces.com/problemset/problem/649/C",
+    "rating": 1500,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

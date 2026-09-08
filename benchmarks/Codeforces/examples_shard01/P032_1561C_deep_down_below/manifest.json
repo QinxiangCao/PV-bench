@@ -1,0 +1,21 @@
+{
+  "id": "P032_1561C_deep_down_below",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1561/C",
+    "title": "Deep Down Below",
+    "url": "https://codeforces.com/problemset/problem/1561/C",
+    "rating": 1300,
+    "tags": [
+      "binary search",
+      "greedy",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

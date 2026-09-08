@@ -1,0 +1,20 @@
+{
+  "id": "P011_765A_neverending_competitions",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "765/A",
+    "title": "Neverending competitions",
+    "url": "https://codeforces.com/problemset/problem/765/A",
+    "rating": 900,
+    "tags": [
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

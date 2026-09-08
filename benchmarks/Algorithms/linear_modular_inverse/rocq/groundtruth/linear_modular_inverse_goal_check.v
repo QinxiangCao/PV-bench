@@ -1,0 +1,6 @@
+From PVbench.Algorithms.linear_modular_inverse.rocq.groundtruth Require Import linear_modular_inverse_goal linear_modular_inverse_proof_auto linear_modular_inverse_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include linear_modular_inverse_proof_auto.
+  Include linear_modular_inverse_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,18 @@
+{
+  "id": "bubble_sort",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "bubble_sort",
+    "title": "Bubble Sort",
+    "tags": [
+      "bubble",
+      "sort"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

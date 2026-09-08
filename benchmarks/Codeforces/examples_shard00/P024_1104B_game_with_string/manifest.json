@@ -1,0 +1,21 @@
+{
+  "id": "P024_1104B_game_with_string",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1104/B",
+    "title": "Game with string",
+    "url": "https://codeforces.com/problemset/problem/1104/B",
+    "rating": 1200,
+    "tags": [
+      "data structures",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "vec",
+  "source": {
+    "dataset": "engineering",
+    "problem_id": "vec",
+    "title": "MiniSat Vector",
+    "tags": [
+      "engineering",
+      "minisat",
+      "vector"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

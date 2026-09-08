@@ -1,0 +1,20 @@
+{
+  "id": "P031_1194C_from_s_to_t",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1194/C",
+    "title": "From S To T",
+    "url": "https://codeforces.com/problemset/problem/1194/C",
+    "rating": 1300,
+    "tags": [
+      "implementation",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "house_robber",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "house-robber",
+    "title": "LeetCode 198: House Robber",
+    "url": "https://leetcode.com/problems/house-robber/",
+    "tags": [
+      "house",
+      "robber"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

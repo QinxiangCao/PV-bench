@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P029_817A_treasure_hunt.rocq.groundtruth Require Import P029_817A_treasure_hunt_goal P029_817A_treasure_hunt_proof_auto P029_817A_treasure_hunt_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P029_817A_treasure_hunt_proof_auto.
+  Include P029_817A_treasure_hunt_proof_manual.
+End VC_Correctness.

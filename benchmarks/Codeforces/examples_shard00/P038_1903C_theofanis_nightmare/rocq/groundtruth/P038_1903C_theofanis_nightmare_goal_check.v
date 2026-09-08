@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P038_1903C_theofanis_nightmare.rocq.groundtruth Require Import P038_1903C_theofanis_nightmare_goal P038_1903C_theofanis_nightmare_proof_auto P038_1903C_theofanis_nightmare_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P038_1903C_theofanis_nightmare_proof_auto.
+  Include P038_1903C_theofanis_nightmare_proof_manual.
+End VC_Correctness.

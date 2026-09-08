@@ -1,0 +1,8 @@
+From PVbench.Codeforces.examples_shard01.P020_433A_kitahara_harukis_gift.rocq.groundtruth Require Import P020_433A_kitahara_harukis_gift_goal P020_433A_kitahara_harukis_gift_proof_auto P020_433A_kitahara_harukis_gift_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include char_array_strategy_proof.
+  Include string_strategy_proof.
+  Include P020_433A_kitahara_harukis_gift_proof_auto.
+  Include P020_433A_kitahara_harukis_gift_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,23 @@
+{
+  "id": "P049_1946C_tree_cutting",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1946/C",
+    "title": "Tree Cutting",
+    "url": "https://codeforces.com/problemset/problem/1946/C",
+    "rating": 1600,
+    "tags": [
+      "binary search",
+      "dp",
+      "greedy",
+      "implementation",
+      "trees"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

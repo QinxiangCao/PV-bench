@@ -1,0 +1,6 @@
+From PVbench.Algorithms.concatenating_numbers_dp.rocq.groundtruth Require Import concatenating_numbers_dp_goal concatenating_numbers_dp_proof_auto concatenating_numbers_dp_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include concatenating_numbers_dp_proof_auto.
+  Include concatenating_numbers_dp_proof_manual.
+End VC_Correctness.

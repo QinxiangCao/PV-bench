@@ -1,0 +1,19 @@
+{
+  "id": "modular_power",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1226",
+    "title": "P1226 — Fast Modular Exponentiation",
+    "url": "https://www.luogu.com.cn/problem/P1226",
+    "tags": [
+      "modular",
+      "power"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

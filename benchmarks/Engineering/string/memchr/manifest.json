@@ -1,0 +1,20 @@
+{
+  "id": "memchr",
+  "source": {
+    "dataset": "engineering",
+    "problem_id": "memchr",
+    "title": "Memory Character Search",
+    "tags": [
+      "engineering",
+      "string",
+      "memory"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

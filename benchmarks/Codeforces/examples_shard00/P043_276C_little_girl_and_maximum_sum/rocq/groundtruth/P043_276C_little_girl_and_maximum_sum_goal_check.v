@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P043_276C_little_girl_and_maximum_sum.rocq.groundtruth Require Import P043_276C_little_girl_and_maximum_sum_goal P043_276C_little_girl_and_maximum_sum_proof_auto P043_276C_little_girl_and_maximum_sum_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P043_276C_little_girl_and_maximum_sum_proof_auto.
+  Include P043_276C_little_girl_and_maximum_sum_proof_manual.
+End VC_Correctness.

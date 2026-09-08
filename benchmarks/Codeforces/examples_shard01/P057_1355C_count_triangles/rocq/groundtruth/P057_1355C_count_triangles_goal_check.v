@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P057_1355C_count_triangles.rocq.groundtruth Require Import P057_1355C_count_triangles_goal P057_1355C_count_triangles_proof_auto P057_1355C_count_triangles_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P057_1355C_count_triangles_proof_auto.
+  Include P057_1355C_count_triangles_proof_manual.
+End VC_Correctness.

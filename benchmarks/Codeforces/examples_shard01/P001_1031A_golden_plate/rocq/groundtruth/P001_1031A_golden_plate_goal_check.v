@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P001_1031A_golden_plate.rocq.groundtruth Require Import P001_1031A_golden_plate_goal P001_1031A_golden_plate_proof_auto P001_1031A_golden_plate_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P001_1031A_golden_plate_proof_auto.
+  Include P001_1031A_golden_plate_proof_manual.
+End VC_Correctness.

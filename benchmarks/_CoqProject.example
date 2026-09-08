@@ -1,0 +1,21 @@
+# Copy to _CoqProject and replace @QCP_ROCQ@ with your QCP checkout's Rocq/ directory,
+# e.g. /path/to/qcp-backend/Rocq (the one holding sets/, SeparationLogic/, ...).
+-R @QCP_ROCQ@/sets SetsClass
+-R @QCP_ROCQ@/unifysl Logic
+-R @QCP_ROCQ@/compcert_lib compcert.lib
+-R @QCP_ROCQ@/auxlibs AUXLib
+-R @QCP_ROCQ@/flocq/src Flocq
+-R @QCP_ROCQ@/coq-record-update/src RecordUpdate
+-R @QCP_ROCQ@/fixedpoints FP
+-R @QCP_ROCQ@/MonadLib MonadLib
+-R @QCP_ROCQ@/tracelib TraceLib
+-Q @QCP_ROCQ@/algorithms Algorithms
+-R @QCP_ROCQ@/listlib ListLib
+-R @QCP_ROCQ@/MaxMinLib MaxMinLib
+-R @QCP_ROCQ@/GraphLib GraphLib
+-R @QCP_ROCQ@/SumLib SumLib
+-R @QCP_ROCQ@/SeparationLogic SimpleC.SL
+-R @QCP_ROCQ@/Common SimpleC.Common
+-R @QCP_ROCQ@/examples SimpleC.EE
+-R @QCP_ROCQ@/stdlib SimpleC.StdLib
+-R . PVbench

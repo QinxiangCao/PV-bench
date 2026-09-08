@@ -1,0 +1,21 @@
+{
+  "id": "P082_623B_array_gcd",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "623/B",
+    "title": "Array GCD",
+    "url": "https://codeforces.com/problemset/problem/623/B",
+    "rating": 2300,
+    "tags": [
+      "dp",
+      "greedy",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

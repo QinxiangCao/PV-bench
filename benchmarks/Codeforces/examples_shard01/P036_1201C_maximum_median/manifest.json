@@ -1,0 +1,22 @@
+{
+  "id": "P036_1201C_maximum_median",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1201/C",
+    "title": "Maximum Median",
+    "url": "https://codeforces.com/problemset/problem/1201/C",
+    "rating": 1400,
+    "tags": [
+      "binary search",
+      "greedy",
+      "math",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

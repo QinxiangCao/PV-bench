@@ -1,0 +1,77 @@
+import Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_proof_auto
+
+theorem proof_of_maxSlidingWindow_safety_wit_1 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_1 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_2 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_2 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_3 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_3 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_4 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_4 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_5 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_5 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_6 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_6 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_7 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_7 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_8 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_8 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_9 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_9 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_10 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_10 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_11 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_11 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_12 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_12 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_13 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_13 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_safety_wit_14 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_safety_wit_14 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_return_wit_1 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_return_wit_1 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_1 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_2 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_3 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_4 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_5 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_5 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_6 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_6 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_7 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_7 := by
+  sorry
+
+theorem proof_of_maxSlidingWindow_partial_solve_wit_8 : Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_goal.maxSlidingWindow_partial_solve_wit_8 := by
+  sorry
+
+
+end Algorithms.sliding_window_maximum.lean.groundtruth.sliding_window_maximum_proof_auto

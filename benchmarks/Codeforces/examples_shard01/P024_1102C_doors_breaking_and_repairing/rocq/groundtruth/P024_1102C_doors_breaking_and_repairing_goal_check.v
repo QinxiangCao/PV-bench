@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P024_1102C_doors_breaking_and_repairing.rocq.groundtruth Require Import P024_1102C_doors_breaking_and_repairing_goal P024_1102C_doors_breaking_and_repairing_proof_auto P024_1102C_doors_breaking_and_repairing_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P024_1102C_doors_breaking_and_repairing_proof_auto.
+  Include P024_1102C_doors_breaking_and_repairing_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,18 @@
+{
+  "id": "modular_inverse",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "modular_inverse",
+    "title": "Modular Multiplicative Inverse",
+    "tags": [
+      "modular",
+      "inverse"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "P009_275A_lights_out",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "275/A",
+    "title": "Lights Out",
+    "url": "https://codeforces.com/problemset/problem/275/A",
+    "rating": 900,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "GRID",
+    "interactive": false,
+    "multi_test": false
+  }
+}

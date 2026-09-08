@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P015_435A_queue_on_bus_stop.rocq.groundtruth Require Import P015_435A_queue_on_bus_stop_goal P015_435A_queue_on_bus_stop_proof_auto P015_435A_queue_on_bus_stop_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P015_435A_queue_on_bus_stop_proof_auto.
+  Include P015_435A_queue_on_bus_stop_proof_manual.
+End VC_Correctness.

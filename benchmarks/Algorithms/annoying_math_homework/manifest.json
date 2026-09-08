@@ -1,0 +1,19 @@
+{
+  "id": "annoying_math_homework",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P4999",
+    "title": "Annoying Math Homework",
+    "url": "https://www.luogu.com.cn/problem/P4999",
+    "tags": [
+      "digit dp",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

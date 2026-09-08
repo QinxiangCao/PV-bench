@@ -1,0 +1,21 @@
+{
+  "id": "P051_639B_bear_and_forgotten_tree_3",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "639/B",
+    "title": "Bear and Forgotten Tree 3",
+    "url": "https://codeforces.com/problemset/problem/639/B",
+    "rating": 1600,
+    "tags": [
+      "constructive algorithms",
+      "graphs",
+      "trees"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

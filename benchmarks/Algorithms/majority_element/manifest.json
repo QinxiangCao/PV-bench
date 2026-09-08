@@ -1,0 +1,19 @@
+{
+  "id": "majority_element",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "majority-element",
+    "title": "LeetCode 169: Majority Element",
+    "url": "https://leetcode.com/problems/majority-element/",
+    "tags": [
+      "majority",
+      "element"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

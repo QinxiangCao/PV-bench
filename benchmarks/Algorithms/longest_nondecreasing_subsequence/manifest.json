@@ -1,0 +1,19 @@
+{
+  "id": "longest_nondecreasing_subsequence",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "longest_nondecreasing_subsequence",
+    "title": "Longest Nondecreasing Subsequence",
+    "tags": [
+      "longest",
+      "nondecreasing",
+      "subsequence"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "catalan_numbers",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1044",
+    "title": "P1044 Stack",
+    "url": "https://www.luogu.com.cn/problem/P1044",
+    "tags": [
+      "catalan",
+      "numbers"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

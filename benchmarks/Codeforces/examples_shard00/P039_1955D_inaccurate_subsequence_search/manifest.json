@@ -1,0 +1,20 @@
+{
+  "id": "P039_1955D_inaccurate_subsequence_search",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1955/D",
+    "title": "Inaccurate Subsequence Search",
+    "url": "https://codeforces.com/problemset/problem/1955/D",
+    "rating": 1400,
+    "tags": [
+      "data structures",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

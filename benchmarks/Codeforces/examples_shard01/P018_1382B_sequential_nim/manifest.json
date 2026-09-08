@@ -1,0 +1,20 @@
+{
+  "id": "P018_1382B_sequential_nim",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1382/B",
+    "title": "Sequential Nim",
+    "url": "https://codeforces.com/problemset/problem/1382/B",
+    "rating": 1100,
+    "tags": [
+      "dp",
+      "games"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

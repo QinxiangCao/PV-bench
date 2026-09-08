@@ -1,0 +1,19 @@
+{
+  "id": "convex_hull_float",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "convex_hull_float",
+    "title": "Convex Hull of Floating-Point Points",
+    "tags": [
+      "convex",
+      "hull",
+      "float"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "P026_1355A_sequence_with_digits",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1355/A",
+    "title": "Sequence with Digits",
+    "url": "https://codeforces.com/problemset/problem/1355/A",
+    "rating": 1200,
+    "tags": [
+      "brute force",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

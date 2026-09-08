@@ -1,0 +1,17 @@
+{
+  "id": "discretize",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "discretize",
+    "title": "Coordinate Compression",
+    "tags": [
+      "discretize"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

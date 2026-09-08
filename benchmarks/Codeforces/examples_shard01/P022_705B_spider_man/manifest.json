@@ -1,0 +1,20 @@
+{
+  "id": "P022_705B_spider_man",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "705/B",
+    "title": "Spider Man",
+    "url": "https://codeforces.com/problemset/problem/705/B",
+    "rating": 1100,
+    "tags": [
+      "games",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "OPSEQ",
+    "interactive": false,
+    "multi_test": false
+  }
+}

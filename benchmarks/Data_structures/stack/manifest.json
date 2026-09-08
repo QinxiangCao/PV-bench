@@ -1,0 +1,19 @@
+{
+  "id": "stack",
+  "source": {
+    "dataset": "classical_data_structure",
+    "problem_id": "stack",
+    "title": "Array-Based Stack",
+    "tags": [
+      "data structures",
+      "stack"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

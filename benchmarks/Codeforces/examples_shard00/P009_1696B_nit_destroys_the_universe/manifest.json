@@ -1,0 +1,19 @@
+{
+  "id": "P009_1696B_nit_destroys_the_universe",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1696/B",
+    "title": "NIT Destroys the Universe",
+    "url": "https://codeforces.com/problemset/problem/1696/B",
+    "rating": 900,
+    "tags": [
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

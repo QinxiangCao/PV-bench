@@ -1,0 +1,65 @@
+import Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_proof_auto
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_1 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_1 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_2 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_2 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_4 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_4 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_5 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_5 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_6 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_6 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_8 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_8 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_10 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_10 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_12 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_12 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_13 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_13 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_14 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_14 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_15 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_15 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_16 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_16 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_18 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_18 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_safety_wit_19 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_safety_wit_19 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_partial_solve_wit_1 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_partial_solve_wit_2 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_partial_solve_wit_3 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_partial_solve_wit_4 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_chinese_remainder_theorem_partial_solve_wit_5 : Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_goal.chinese_remainder_theorem_partial_solve_wit_5 := by
+  sorry
+
+
+end Algorithms.chinese_remainder_theorem.lean.groundtruth.chinese_remainder_theorem_proof_auto

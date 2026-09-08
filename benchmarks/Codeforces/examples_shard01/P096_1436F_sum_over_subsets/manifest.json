@@ -1,0 +1,21 @@
+{
+  "id": "P096_1436F_sum_over_subsets",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1436/F",
+    "title": "Sum Over Subsets",
+    "url": "https://codeforces.com/problemset/problem/1436/F",
+    "rating": 2800,
+    "tags": [
+      "combinatorics",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "VH",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

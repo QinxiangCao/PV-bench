@@ -1,0 +1,21 @@
+{
+  "id": "P021_2030C_a_true_battle",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "2030/C",
+    "title": "A TRUE Battle",
+    "url": "https://codeforces.com/problemset/problem/2030/C",
+    "rating": 1100,
+    "tags": [
+      "brute force",
+      "games",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

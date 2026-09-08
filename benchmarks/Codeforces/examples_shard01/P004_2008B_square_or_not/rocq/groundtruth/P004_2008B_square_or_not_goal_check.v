@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P004_2008B_square_or_not.rocq.groundtruth Require Import P004_2008B_square_or_not_goal P004_2008B_square_or_not_proof_auto P004_2008B_square_or_not_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P004_2008B_square_or_not_proof_auto.
+  Include P004_2008B_square_or_not_proof_manual.
+End VC_Correctness.

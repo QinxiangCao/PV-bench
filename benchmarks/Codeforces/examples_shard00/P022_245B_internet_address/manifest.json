@@ -1,0 +1,20 @@
+{
+  "id": "P022_245B_internet_address",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "245/B",
+    "title": "Internet Address",
+    "url": "https://codeforces.com/problemset/problem/245/B",
+    "rating": 1100,
+    "tags": [
+      "implementation",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

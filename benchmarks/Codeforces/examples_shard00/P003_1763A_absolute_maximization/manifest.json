@@ -1,0 +1,22 @@
+{
+  "id": "P003_1763A_absolute_maximization",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1763/A",
+    "title": "Absolute Maximization",
+    "url": "https://codeforces.com/problemset/problem/1763/A",
+    "rating": 800,
+    "tags": [
+      "bitmasks",
+      "constructive algorithms",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "integer_divide",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "integer_divide",
+    "title": "Prime Factorization",
+    "tags": [
+      "integer",
+      "divide"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

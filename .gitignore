@@ -1,0 +1,60 @@
+# --- Coq / Rocq build artifacts ---
+*.vo
+*.vok
+*.vos
+*.vio
+*.glob
+*.aux
+.*.aux
+*.cache
+.lia.cache
+.nia.cache
+.csdp.cache
+.coq-native/
+.Makefile.coq.d
+Makefile.coq
+Makefile.coq.conf
+.vfiles.stamp
+
+# --- local machine configuration (QCP path differs per checkout) ---
+# make your own from the .example files
+CONFIGURE
+_CoqProject
+
+# --- C build artifacts ---
+*.o
+*.a
+*.out
+a.out
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- editors / OS ---
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+.vscode/*
+!.vscode/settings.json
+
+# --- scratch ---
+/scratch/
+/tmp/
+
+# --- Lean / Lake (dependency paths are local to each checkout) ---
+.lake/
+benchmarks/lake-manifest.json
+*.olean
+*.ilean
+*.trace
+
+benchmarks/Engineering/glibc_slist/
+
+# --- working documents (not part of the published benchmark) ---
+/notes/

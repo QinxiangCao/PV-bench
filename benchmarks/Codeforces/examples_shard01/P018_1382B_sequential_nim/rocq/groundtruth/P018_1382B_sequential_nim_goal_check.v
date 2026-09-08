@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P018_1382B_sequential_nim.rocq.groundtruth Require Import P018_1382B_sequential_nim_goal P018_1382B_sequential_nim_proof_auto P018_1382B_sequential_nim_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P018_1382B_sequential_nim_proof_auto.
+  Include P018_1382B_sequential_nim_proof_manual.
+End VC_Correctness.

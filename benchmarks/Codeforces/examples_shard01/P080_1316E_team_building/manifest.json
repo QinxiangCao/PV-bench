@@ -1,0 +1,22 @@
+{
+  "id": "P080_1316E_team_building",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1316/E",
+    "title": "Team Building",
+    "url": "https://codeforces.com/problemset/problem/1316/E",
+    "rating": 2300,
+    "tags": [
+      "bitmasks",
+      "dp",
+      "greedy",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

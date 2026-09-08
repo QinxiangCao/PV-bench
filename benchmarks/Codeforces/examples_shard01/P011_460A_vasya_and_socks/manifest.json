@@ -1,0 +1,21 @@
+{
+  "id": "P011_460A_vasya_and_socks",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "460/A",
+    "title": "Vasya and Socks",
+    "url": "https://codeforces.com/problemset/problem/460/A",
+    "rating": 900,
+    "tags": [
+      "brute force",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

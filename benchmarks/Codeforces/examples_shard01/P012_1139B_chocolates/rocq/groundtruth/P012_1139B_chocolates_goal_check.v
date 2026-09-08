@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P012_1139B_chocolates.rocq.groundtruth Require Import P012_1139B_chocolates_goal P012_1139B_chocolates_proof_auto P012_1139B_chocolates_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P012_1139B_chocolates_proof_auto.
+  Include P012_1139B_chocolates_proof_manual.
+End VC_Correctness.

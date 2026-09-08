@@ -1,0 +1,20 @@
+{
+  "id": "P045_569A_music",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "569/A",
+    "title": "Music",
+    "url": "https://codeforces.com/problemset/problem/569/A",
+    "rating": 1500,
+    "tags": [
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

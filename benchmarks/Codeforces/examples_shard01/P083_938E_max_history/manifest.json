@@ -1,0 +1,20 @@
+{
+  "id": "P083_938E_max_history",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "938/E",
+    "title": "Max History",
+    "url": "https://codeforces.com/problemset/problem/938/E",
+    "rating": 2300,
+    "tags": [
+      "combinatorics",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

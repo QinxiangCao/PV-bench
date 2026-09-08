@@ -1,0 +1,22 @@
+import Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_proof_auto
+import Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_proof_manual
+
+namespace Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_goal_check
+
+open Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_proof_auto
+open Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_proof_manual
+
+def VC_Correctness : Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_goal.VC_Correct where
+  proof_of_solver_safety_wit_1 := proof_of_solver_safety_wit_1
+  proof_of_solver_safety_wit_2 := proof_of_solver_safety_wit_2
+  proof_of_solver_safety_wit_3 := proof_of_solver_safety_wit_3
+  proof_of_solver_safety_wit_4 := proof_of_solver_safety_wit_4
+  proof_of_solver_safety_wit_5 := proof_of_solver_safety_wit_5
+  proof_of_solver_safety_wit_6 := proof_of_solver_safety_wit_6
+  proof_of_solver_safety_wit_7 := proof_of_solver_safety_wit_7
+  proof_of_solver_entail_wit_1 := proof_of_solver_entail_wit_1
+  proof_of_solver_entail_wit_2_1 := proof_of_solver_entail_wit_2_1
+  proof_of_solver_entail_wit_2_2 := proof_of_solver_entail_wit_2_2
+  proof_of_solver_return_wit_1 := proof_of_solver_return_wit_1
+
+end Codeforces.examples_shard01.P011_460A_vasya_and_socks.lean.groundtruth.P011_460A_vasya_and_socks_goal_check

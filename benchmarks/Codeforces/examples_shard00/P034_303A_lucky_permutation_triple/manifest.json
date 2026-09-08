@@ -1,0 +1,21 @@
+{
+  "id": "P034_303A_lucky_permutation_triple",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "303/A",
+    "title": "Lucky Permutation Triple",
+    "url": "https://codeforces.com/problemset/problem/303/A",
+    "rating": 1300,
+    "tags": [
+      "constructive algorithms",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

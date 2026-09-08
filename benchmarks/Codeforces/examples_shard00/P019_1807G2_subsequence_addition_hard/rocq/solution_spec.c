@@ -1,0 +1,76 @@
+/* Codeforces 1807/G2 - Subsequence Addition (Hard Version) */
+// #include <stdio.h>
+// #include <stdlib.h>
+
+typedef unsigned long size_t;
+
+static int cmp_int(const void *x, const void *y)
+{
+    int a = *(const int *)x, b = *(const int *)y;
+    return (a > b) - (a < b);
+}
+
+/*@ Extern Coq
+      (IntArray::full : Z -> Z -> list Z -> Assertion)
+      (Spec : list Z -> Z -> Prop)
+*/
+/*@ Extern Coq
+      (Permutation : list Z -> list Z -> Prop)
+      (increasing : list Z -> Prop)
+      (FullDecisionSpecBridge : list Z -> list Z -> Prop)
+*/
+/*@ Import Coq Require Import PVbench.Codeforces.examples_shard00.P019_1807G2_subsequence_addition_hard.rocq.spec_lib */
+
+void qsort(int *base, size_t nmemb, size_t size,
+           int (*compar)(const void *, const void *))
+/*@ With (contents : list Z)
+    Require
+      nmemb == Zlength(contents) &&
+      IntArray::full(base, nmemb, contents)
+    Ensure
+      exists sorted,
+        Permutation(contents, sorted) &&
+        increasing(sorted) &&
+        Zlength(sorted) == nmemb &&
+        FullDecisionSpecBridge(contents, sorted) &&
+        IntArray::full(base, nmemb, sorted)
+*/
+;
+
+static int solver(int *a, int n)
+
+/*@ With (input : list Z)
+    Require
+      n == Zlength(input) &&
+      1 <= Zlength(input) && Zlength(input) <= 200000 &&
+      (forall i, (0 <= i && i < Zlength(input)) =>
+        (1 <= input[i] && input[i] <= 200000)) &&
+      IntArray::full(a, n, input)
+    Ensure
+      exists post,
+        Spec(input, __return) &&
+        IntArray::full(a, n, post)
+*/
+
+{
+    qsort(a, (size_t)n, sizeof(*a), cmp_int);
+    if (a[0] != 1) return 0;
+    long long sum = 1;
+    
+    for (int i = 1; i < n; ++i) {
+        if (a[i] > sum) return 0;
+        sum += a[i];
+    }
+    return 1;
+}
+
+// int main(void)
+// {
+//     int t; scanf("%d", &t);
+//     while (t--) {
+//         int n, *a; scanf("%d", &n); a = malloc((size_t)n * sizeof(*a));
+//         for (int i = 0; i < n; ++i) scanf("%d", &a[i]);
+//         puts(solver(a, n) ? "YES" : "NO"); free(a);
+//     }
+//     return 0;
+// }

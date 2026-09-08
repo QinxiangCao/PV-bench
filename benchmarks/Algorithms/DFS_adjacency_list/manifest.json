@@ -1,0 +1,22 @@
+{
+  "id": "DFS_adjacency_list",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "DFS_adjacency_list",
+    "title": "Depth-First Search on an Adjacency List",
+    "tags": [
+      "graphs",
+      "depth-first search",
+      "adjacency list",
+      "monad",
+      "relational two layered method"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

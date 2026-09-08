@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P004_1890A_doremys_paint_3.rocq.groundtruth Require Import P004_1890A_doremys_paint_3_goal P004_1890A_doremys_paint_3_proof_auto P004_1890A_doremys_paint_3_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P004_1890A_doremys_paint_3_proof_auto.
+  Include P004_1890A_doremys_paint_3_proof_manual.
+End VC_Correctness.

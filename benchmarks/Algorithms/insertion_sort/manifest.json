@@ -1,0 +1,18 @@
+{
+  "id": "insertion_sort",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "insertion_sort",
+    "title": "Insertion Sort",
+    "tags": [
+      "insertion",
+      "sort"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

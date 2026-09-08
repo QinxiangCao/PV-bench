@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P005_1891A_sorting_with_twos.rocq.groundtruth Require Import P005_1891A_sorting_with_twos_goal P005_1891A_sorting_with_twos_proof_auto P005_1891A_sorting_with_twos_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P005_1891A_sorting_with_twos_proof_auto.
+  Include P005_1891A_sorting_with_twos_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,22 @@
+{
+  "id": "P043_276C_little_girl_and_maximum_sum",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "276/C",
+    "title": "Little Girl and Maximum Sum",
+    "url": "https://codeforces.com/problemset/problem/276/C",
+    "rating": 1500,
+    "tags": [
+      "data structures",
+      "greedy",
+      "implementation",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

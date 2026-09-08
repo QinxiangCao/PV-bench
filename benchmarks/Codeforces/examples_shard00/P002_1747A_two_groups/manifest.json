@@ -1,0 +1,20 @@
+{
+  "id": "P002_1747A_two_groups",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1747/A",
+    "title": "Two Groups",
+    "url": "https://codeforces.com/problemset/problem/1747/A",
+    "rating": 800,
+    "tags": [
+      "constructive algorithms",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "P048_1607E_robot_on_the_board_1",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1607/E",
+    "title": "Robot on the Board 1",
+    "url": "https://codeforces.com/problemset/problem/1607/E",
+    "rating": 1600,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

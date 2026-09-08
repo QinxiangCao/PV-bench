@@ -1,0 +1,6 @@
+From PVbench.Algorithms.sliding_window_maximum.rocq.groundtruth Require Import sliding_window_maximum_goal sliding_window_maximum_proof_auto sliding_window_maximum_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include sliding_window_maximum_proof_auto.
+  Include sliding_window_maximum_proof_manual.
+End VC_Correctness.

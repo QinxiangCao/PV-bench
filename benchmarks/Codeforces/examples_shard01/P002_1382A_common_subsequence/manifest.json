@@ -1,0 +1,19 @@
+{
+  "id": "P002_1382A_common_subsequence",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1382/A",
+    "title": "Common Subsequence",
+    "url": "https://codeforces.com/problemset/problem/1382/A",
+    "rating": 800,
+    "tags": [
+      "brute force"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

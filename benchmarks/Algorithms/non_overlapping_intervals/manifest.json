@@ -1,0 +1,20 @@
+{
+  "id": "non_overlapping_intervals",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "non-overlapping-intervals",
+    "title": "LeetCode 435: Non-overlapping Intervals",
+    "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+    "tags": [
+      "non",
+      "overlapping",
+      "intervals"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,68 @@
+import Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_proof_auto
+
+theorem proof_of_maxAreaLinear_safety_wit_1 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_1 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_2 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_2 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_3 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_3 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_4 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_4 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_5 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_5 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_6 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_6 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_7 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_7 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_8 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_8 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_9 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_9 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_10 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_10 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_11 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_11 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_12 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_12 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_safety_wit_13 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_safety_wit_13 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_return_wit_1 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_return_wit_1 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_partial_solve_wit_1 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_partial_solve_wit_2 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_partial_solve_wit_3 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_partial_solve_wit_4 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_partial_solve_wit_5 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_partial_solve_wit_5 := by
+  sorry
+
+theorem proof_of_maxAreaLinear_partial_solve_wit_6 : Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_goal.maxAreaLinear_partial_solve_wit_6 := by
+  sorry
+
+
+end Algorithms.container_with_most_water_linear.lean.groundtruth.container_with_most_water_linear_proof_auto

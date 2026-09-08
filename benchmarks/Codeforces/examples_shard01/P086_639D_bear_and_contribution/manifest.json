@@ -1,0 +1,22 @@
+{
+  "id": "P086_639D_bear_and_contribution",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "639/D",
+    "title": "Bear and Contribution",
+    "url": "https://codeforces.com/problemset/problem/639/D",
+    "rating": 2400,
+    "tags": [
+      "data structures",
+      "greedy",
+      "sortings",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

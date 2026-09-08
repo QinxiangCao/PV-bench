@@ -1,0 +1,18 @@
+{
+  "id": "multiple_knapsack",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "multiple_knapsack",
+    "title": "Bounded Knapsack",
+    "tags": [
+      "multiple",
+      "knapsack"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,7 @@
+From PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.groundtruth Require Import Dijkstra_linked_forward_star_decrease_key_goal Dijkstra_linked_forward_star_decrease_key_proof_auto Dijkstra_linked_forward_star_decrease_key_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include safeexec_strategy_proof.
+  Include Dijkstra_linked_forward_star_decrease_key_proof_auto.
+  Include Dijkstra_linked_forward_star_decrease_key_proof_manual.
+End VC_Correctness.

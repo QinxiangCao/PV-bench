@@ -1,0 +1,18 @@
+{
+  "id": "rmq",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P3865",
+    "title": "P3865 — Sparse Table and Range Maximum Query",
+    "url": "https://www.luogu.com.cn/problem/P3865?lang=en",
+    "tags": [
+      "rmq"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

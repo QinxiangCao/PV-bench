@@ -1,0 +1,15 @@
+import Codeforces.examples_shard01.P081_432E_square_tiling.lean.spec_lib
+import Codeforces.examples_shard01.P081_432E_square_tiling.lean.helper_lib
+import SimpleC.EE.LLM_bench.Codeforces.examples_shard09.P081_432E_square_tiling_optimality
+
+set_option maxHeartbeats 8000000
+set_option maxRecDepth 8000
+set_option linter.unusedVariables false
+
+namespace Codeforces.examples_shard01.P081_432E_square_tiling.lean.groundtruth.proof_lib
+
+open Codeforces.examples_shard01.P081_432E_square_tiling.lean
+open scoped SimpleC
+
+end Codeforces.examples_shard01.P081_432E_square_tiling.lean.groundtruth.proof_lib
+

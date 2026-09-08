@@ -1,0 +1,20 @@
+{
+  "id": "P035_807B_t_shirt_hunt",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "807/B",
+    "title": "T-Shirt Hunt",
+    "url": "https://codeforces.com/problemset/problem/807/B",
+    "rating": 1300,
+    "tags": [
+      "brute force",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

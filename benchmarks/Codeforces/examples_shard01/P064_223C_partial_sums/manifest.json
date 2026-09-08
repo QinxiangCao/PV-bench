@@ -1,0 +1,21 @@
+{
+  "id": "P064_223C_partial_sums",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "223/C",
+    "title": "Partial Sums",
+    "url": "https://codeforces.com/problemset/problem/223/C",
+    "rating": 1900,
+    "tags": [
+      "combinatorics",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

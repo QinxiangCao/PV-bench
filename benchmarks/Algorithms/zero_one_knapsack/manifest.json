@@ -1,0 +1,19 @@
+{
+  "id": "zero_one_knapsack",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "zero_one_knapsack",
+    "title": "0/1 Knapsack",
+    "tags": [
+      "zero",
+      "one",
+      "knapsack"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "prim_forward_star_heap",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "prim_forward_star_heap",
+    "title": "Heap-Based Prim on Forward-Star Edges",
+    "tags": ["graphs", "prim", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

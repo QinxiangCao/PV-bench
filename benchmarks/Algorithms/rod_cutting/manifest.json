@@ -1,0 +1,18 @@
+{
+  "id": "rod_cutting",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "rod_cutting",
+    "title": "Rod cutting",
+    "tags": [
+      "rod",
+      "cutting"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

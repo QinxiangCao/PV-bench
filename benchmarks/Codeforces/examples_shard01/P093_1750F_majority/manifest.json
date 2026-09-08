@@ -1,0 +1,22 @@
+{
+  "id": "P093_1750F_majority",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1750/F",
+    "title": "Majority",
+    "url": "https://codeforces.com/problemset/problem/1750/F",
+    "rating": 2700,
+    "tags": [
+      "combinatorics",
+      "dp",
+      "math",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

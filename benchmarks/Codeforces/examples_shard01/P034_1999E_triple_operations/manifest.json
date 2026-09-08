@@ -1,0 +1,21 @@
+{
+  "id": "P034_1999E_triple_operations",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1999/E",
+    "title": "Triple Operations",
+    "url": "https://codeforces.com/problemset/problem/1999/E",
+    "rating": 1300,
+    "tags": [
+      "dp",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OPSEQ",
+    "interactive": false,
+    "multi_test": true
+  }
+}

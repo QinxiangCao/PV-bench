@@ -1,0 +1,73 @@
+# 867/A — Between the Offices
+
+*Contest:* Codeforces Round 437 (Div. 2, based on MemSQL Start[c]UP 3.0 - Round 2) · *Rating:* 800 · *Limits:* 2.0s, 256.0 MB · *Tags:* implementation
+
+## Description
+
+As you may know, MemSQL has American offices in both San Francisco and Seattle. Being a manager in the company, you travel a lot between the two cities, always by plane.
+
+You prefer flying from Seattle to San Francisco than in the other direction, because it's warmer in San Francisco. You are so busy that you don't remember the number of flights you have made in either direction. However, for each of the last n days you know whether you were in San Francisco office or in Seattle office. You always fly at nights, so you never were at both offices on the same day. Given this information, determine if you flew more times from Seattle to San Francisco during the last n days, or not.
+
+## Input
+
+The first line of input contains single integer n (2 ≤ n ≤ 100) — the number of days.
+
+The second line contains a string of length n consisting of only capital 'S' and 'F' letters. If the i-th letter is 'S', then you were in Seattle office on that day. Otherwise you were in San Francisco. The days are given in chronological order, i.e. today is the last day in this sequence.
+
+## Output
+
+Print "YES" if you flew more times from Seattle to San Francisco, and "NO" otherwise.
+
+You can print each letter in any case (upper or lower).
+
+## Note
+
+In the first example you were initially at San Francisco, then flew to Seattle, were there for two days and returned to San Francisco. You made one flight in each direction, so the answer is "NO".
+
+In the second example you just flew from Seattle to San Francisco, so the answer is "YES".
+
+In the third example you stayed the whole period in San Francisco, so the answer is "NO".
+
+In the fourth example if you replace 'S' with ones, and 'F' with zeros, you'll get the first few digits of π in binary representation. Not very useful information though.
+
+## Examples
+
+*Example 1 — input:*
+```
+4
+FSSF
+```
+*Example 1 — output:*
+```
+NO
+```
+
+*Example 2 — input:*
+```
+2
+SF
+```
+*Example 2 — output:*
+```
+YES
+```
+
+*Example 3 — input:*
+```
+10
+FFFFFFFFFF
+```
+*Example 3 — output:*
+```
+NO
+```
+
+*Example 4 — input:*
+```
+10
+SSFFSFFSFF
+```
+*Example 4 — output:*
+```
+YES
+```

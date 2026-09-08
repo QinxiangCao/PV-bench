@@ -1,0 +1,20 @@
+{
+  "id": "P044_837C_two_seals",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "837/C",
+    "title": "Two Seals",
+    "url": "https://codeforces.com/problemset/problem/837/C",
+    "rating": 1500,
+    "tags": [
+      "brute force",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

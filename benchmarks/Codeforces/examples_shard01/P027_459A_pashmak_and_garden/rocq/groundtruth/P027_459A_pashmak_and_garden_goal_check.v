@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P027_459A_pashmak_and_garden.rocq.groundtruth Require Import P027_459A_pashmak_and_garden_goal P027_459A_pashmak_and_garden_proof_auto P027_459A_pashmak_and_garden_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P027_459A_pashmak_and_garden_proof_auto.
+  Include P027_459A_pashmak_and_garden_proof_manual.
+End VC_Correctness.

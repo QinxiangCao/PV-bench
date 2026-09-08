@@ -1,0 +1,20 @@
+{
+  "id": "memory",
+  "source": {
+    "dataset": "engineering",
+    "problem_id": "memory",
+    "title": "Memory Operations",
+    "tags": [
+      "engineering",
+      "string",
+      "memory"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

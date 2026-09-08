@@ -1,0 +1,19 @@
+{
+  "id": "quicksort_hoare_swap_index2",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "quicksort_hoare_swap_index2",
+    "title": "Quicksort — Hoare Swap Partition (Variant 2)",
+    "tags": [
+      "quicksort",
+      "hoare",
+      "index2"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

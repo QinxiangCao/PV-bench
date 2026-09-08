@@ -1,0 +1,19 @@
+{
+  "id": "optimized_selection_sort",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "optimized_selection_sort",
+    "title": "Bidirectional Selection Sort",
+    "tags": [
+      "optimized",
+      "selection",
+      "sort"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "P041_1054C_candies_distribution",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1054/C",
+    "title": "Candies Distribution",
+    "url": "https://codeforces.com/problemset/problem/1054/C",
+    "rating": 1500,
+    "tags": [
+      "constructive algorithms",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

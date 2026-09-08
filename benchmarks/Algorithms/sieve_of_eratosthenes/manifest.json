@@ -1,0 +1,18 @@
+{
+  "id": "sieve_of_eratosthenes",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "sieve_of_eratosthenes",
+    "title": "Sieve of Eratosthenes",
+    "tags": [
+      "sieve",
+      "eratosthenes"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

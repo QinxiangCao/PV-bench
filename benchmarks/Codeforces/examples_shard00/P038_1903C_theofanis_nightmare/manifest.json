@@ -1,0 +1,20 @@
+{
+  "id": "P038_1903C_theofanis_nightmare",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1903/C",
+    "title": "Theofanis' Nightmare",
+    "url": "https://codeforces.com/problemset/problem/1903/C",
+    "rating": 1400,
+    "tags": [
+      "constructive algorithms",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

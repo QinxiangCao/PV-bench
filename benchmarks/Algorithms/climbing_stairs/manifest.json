@@ -1,0 +1,19 @@
+{
+  "id": "climbing_stairs",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "climbing-stairs",
+    "title": "LeetCode 70: Climbing Stairs",
+    "url": "https://leetcode.com/problems/climbing-stairs/",
+    "tags": [
+      "climbing",
+      "stairs"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

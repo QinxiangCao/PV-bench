@@ -1,0 +1,19 @@
+{
+  "id": "P046_1243B2_character_swap",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1243/B2",
+    "title": "Character Swap (Hard Version)",
+    "url": "https://codeforces.com/problemset/problem/1243/B2",
+    "rating": 1600,
+    "tags": [
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

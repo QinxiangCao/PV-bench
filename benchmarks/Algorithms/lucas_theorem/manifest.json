@@ -1,0 +1,19 @@
+{
+  "id": "lucas_theorem",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P3807",
+    "title": "P3807 — Lucas Theorem",
+    "url": "https://www.luogu.com.cn/problem/P3807",
+    "tags": [
+      "lucas",
+      "theorem"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "P005_707A_brains_photos",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "707/A",
+    "title": "Brain's Photos",
+    "url": "https://codeforces.com/problemset/problem/707/A",
+    "rating": 800,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

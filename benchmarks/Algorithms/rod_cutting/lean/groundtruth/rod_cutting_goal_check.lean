@@ -1,0 +1,33 @@
+import Algorithms.rod_cutting.lean.groundtruth.rod_cutting_proof_auto
+import Algorithms.rod_cutting.lean.groundtruth.rod_cutting_proof_manual
+
+namespace Algorithms.rod_cutting.lean.groundtruth.rod_cutting_goal_check
+
+open Algorithms.rod_cutting.lean.groundtruth.rod_cutting_proof_auto
+open Algorithms.rod_cutting.lean.groundtruth.rod_cutting_proof_manual
+
+def VC_Correctness : Algorithms.rod_cutting.lean.groundtruth.rod_cutting_goal.VC_Correct where
+  proof_of_rod_cutting_safety_wit_1 := proof_of_rod_cutting_safety_wit_1
+  proof_of_rod_cutting_safety_wit_2 := proof_of_rod_cutting_safety_wit_2
+  proof_of_rod_cutting_safety_wit_3 := proof_of_rod_cutting_safety_wit_3
+  proof_of_rod_cutting_safety_wit_4 := proof_of_rod_cutting_safety_wit_4
+  proof_of_rod_cutting_safety_wit_5 := proof_of_rod_cutting_safety_wit_5
+  proof_of_rod_cutting_safety_wit_6 := proof_of_rod_cutting_safety_wit_6
+  proof_of_rod_cutting_safety_wit_7 := proof_of_rod_cutting_safety_wit_7
+  proof_of_rod_cutting_safety_wit_8 := proof_of_rod_cutting_safety_wit_8
+  proof_of_rod_cutting_safety_wit_9 := proof_of_rod_cutting_safety_wit_9
+  proof_of_rod_cutting_safety_wit_10 := proof_of_rod_cutting_safety_wit_10
+  proof_of_rod_cutting_entail_wit_3 := proof_of_rod_cutting_entail_wit_3
+  proof_of_rod_cutting_partial_solve_wit_1 := proof_of_rod_cutting_partial_solve_wit_1
+  proof_of_rod_cutting_partial_solve_wit_2 := proof_of_rod_cutting_partial_solve_wit_2
+  proof_of_rod_cutting_partial_solve_wit_3 := proof_of_rod_cutting_partial_solve_wit_3
+  proof_of_rod_cutting_partial_solve_wit_4 := proof_of_rod_cutting_partial_solve_wit_4
+  proof_of_rod_cutting_partial_solve_wit_5 := proof_of_rod_cutting_partial_solve_wit_5
+  proof_of_rod_cutting_entail_wit_1 := proof_of_rod_cutting_entail_wit_1
+  proof_of_rod_cutting_entail_wit_2 := proof_of_rod_cutting_entail_wit_2
+  proof_of_rod_cutting_entail_wit_4_1 := proof_of_rod_cutting_entail_wit_4_1
+  proof_of_rod_cutting_entail_wit_4_2 := proof_of_rod_cutting_entail_wit_4_2
+  proof_of_rod_cutting_entail_wit_5 := proof_of_rod_cutting_entail_wit_5
+  proof_of_rod_cutting_return_wit_1 := proof_of_rod_cutting_return_wit_1
+
+end Algorithms.rod_cutting.lean.groundtruth.rod_cutting_goal_check

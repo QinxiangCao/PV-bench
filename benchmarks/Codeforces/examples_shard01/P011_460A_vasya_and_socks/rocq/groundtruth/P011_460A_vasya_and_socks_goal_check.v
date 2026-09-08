@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P011_460A_vasya_and_socks.rocq.groundtruth Require Import P011_460A_vasya_and_socks_goal P011_460A_vasya_and_socks_proof_auto P011_460A_vasya_and_socks_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P011_460A_vasya_and_socks_proof_auto.
+  Include P011_460A_vasya_and_socks_proof_manual.
+End VC_Correctness.

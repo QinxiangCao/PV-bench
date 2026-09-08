@@ -1,0 +1,21 @@
+{
+  "id": "P008_1537B_bad_boy",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1537/B",
+    "title": "Bad Boy",
+    "url": "https://codeforces.com/problemset/problem/1537/B",
+    "rating": 900,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

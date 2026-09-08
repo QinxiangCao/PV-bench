@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P081_432E_square_tiling.rocq.groundtruth Require Import P081_432E_square_tiling_goal P081_432E_square_tiling_proof_auto P081_432E_square_tiling_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P081_432E_square_tiling_proof_auto.
+  Include P081_432E_square_tiling_proof_manual.
+End VC_Correctness.

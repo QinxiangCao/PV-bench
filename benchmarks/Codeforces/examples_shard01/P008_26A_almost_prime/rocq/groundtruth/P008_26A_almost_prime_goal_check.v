@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P008_26A_almost_prime.rocq.groundtruth Require Import P008_26A_almost_prime_goal P008_26A_almost_prime_proof_auto P008_26A_almost_prime_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P008_26A_almost_prime_proof_auto.
+  Include P008_26A_almost_prime_proof_manual.
+End VC_Correctness.

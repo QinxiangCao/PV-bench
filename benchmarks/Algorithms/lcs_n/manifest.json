@@ -1,0 +1,18 @@
+{
+  "id": "lcs_n",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "lcs_n",
+    "title": "Longest Common Subsequence",
+    "tags": [
+      "lcs",
+      "n"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

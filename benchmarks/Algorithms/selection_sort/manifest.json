@@ -1,0 +1,18 @@
+{
+  "id": "selection_sort",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "selection_sort",
+    "title": "Selection Sort",
+    "tags": [
+      "selection",
+      "sort"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

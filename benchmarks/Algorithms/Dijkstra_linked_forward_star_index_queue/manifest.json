@@ -1,0 +1,16 @@
+{
+  "id": "Dijkstra_linked_forward_star_index_queue",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "Dijkstra_linked_forward_star_index_queue",
+    "title": "Dijkstra with an Indexed Priority Queue",
+    "tags": ["graphs", "dijkstra", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

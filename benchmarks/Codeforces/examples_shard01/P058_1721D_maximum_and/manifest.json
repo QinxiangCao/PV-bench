@@ -1,0 +1,23 @@
+{
+  "id": "P058_1721D_maximum_and",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1721/D",
+    "title": "Maximum AND",
+    "url": "https://codeforces.com/problemset/problem/1721/D",
+    "rating": 1800,
+    "tags": [
+      "bitmasks",
+      "dfs and similar",
+      "divide and conquer",
+      "greedy",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P038_1365C_rotation_matching",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1365/C",
+    "title": "Rotation Matching",
+    "url": "https://codeforces.com/problemset/problem/1365/C",
+    "rating": 1400,
+    "tags": [
+      "constructive algorithms",
+      "data structures",
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

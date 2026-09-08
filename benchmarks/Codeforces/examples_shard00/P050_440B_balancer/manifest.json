@@ -1,0 +1,20 @@
+{
+  "id": "P050_440B_balancer",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "440/B",
+    "title": "Balancer",
+    "url": "https://codeforces.com/problemset/problem/440/B",
+    "rating": 1600,
+    "tags": [
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

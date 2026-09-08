@@ -1,0 +1,20 @@
+{
+  "id": "P014_1784A_monsters_easy_version",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1784/A",
+    "title": "Monsters (easy version)",
+    "url": "https://codeforces.com/problemset/problem/1784/A",
+    "rating": 1000,
+    "tags": [
+      "brute force",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

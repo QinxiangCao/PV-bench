@@ -1,0 +1,21 @@
+{
+  "id": "P090_1027G_x_mouse_in_the_campus",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1027/G",
+    "title": "X-mouse in the Campus",
+    "url": "https://codeforces.com/problemset/problem/1027/G",
+    "rating": 2600,
+    "tags": [
+      "bitmasks",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

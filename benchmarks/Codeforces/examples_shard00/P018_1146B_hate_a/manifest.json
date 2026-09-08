@@ -1,0 +1,20 @@
+{
+  "id": "P018_1146B_hate_a",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1146/B",
+    "title": "Hate \"A\"",
+    "url": "https://codeforces.com/problemset/problem/1146/B",
+    "rating": 1100,
+    "tags": [
+      "implementation",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": false
+  }
+}

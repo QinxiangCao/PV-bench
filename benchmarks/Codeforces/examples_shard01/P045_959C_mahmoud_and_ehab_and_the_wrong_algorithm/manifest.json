@@ -1,0 +1,20 @@
+{
+  "id": "P045_959C_mahmoud_and_ehab_and_the_wrong_algorithm",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "959/C",
+    "title": "Mahmoud and Ehab and the wrong algorithm",
+    "url": "https://codeforces.com/problemset/problem/959/C",
+    "rating": 1500,
+    "tags": [
+      "constructive algorithms",
+      "trees"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

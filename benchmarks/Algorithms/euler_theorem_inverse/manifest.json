@@ -1,0 +1,19 @@
+{
+  "id": "euler_theorem_inverse",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "euler_theorem_inverse",
+    "title": "Modular Inverse by Euler's Theorem",
+    "tags": [
+      "euler",
+      "theorem",
+      "inverse"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

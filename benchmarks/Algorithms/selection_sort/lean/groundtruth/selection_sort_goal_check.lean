@@ -1,0 +1,29 @@
+import Algorithms.selection_sort.lean.groundtruth.selection_sort_proof_auto
+import Algorithms.selection_sort.lean.groundtruth.selection_sort_proof_manual
+
+namespace Algorithms.selection_sort.lean.groundtruth.selection_sort_goal_check
+
+open Algorithms.selection_sort.lean.groundtruth.selection_sort_proof_auto
+open Algorithms.selection_sort.lean.groundtruth.selection_sort_proof_manual
+
+def VC_Correctness : Algorithms.selection_sort.lean.groundtruth.selection_sort_goal.VC_Correct where
+  proof_of_sortArray_safety_wit_1 := proof_of_sortArray_safety_wit_1
+  proof_of_sortArray_safety_wit_2 := proof_of_sortArray_safety_wit_2
+  proof_of_sortArray_safety_wit_3 := proof_of_sortArray_safety_wit_3
+  proof_of_sortArray_safety_wit_4 := proof_of_sortArray_safety_wit_4
+  proof_of_sortArray_safety_wit_5 := proof_of_sortArray_safety_wit_5
+  proof_of_sortArray_safety_wit_6 := proof_of_sortArray_safety_wit_6
+  proof_of_sortArray_entail_wit_3_2 := proof_of_sortArray_entail_wit_3_2
+  proof_of_sortArray_partial_solve_wit_1 := proof_of_sortArray_partial_solve_wit_1
+  proof_of_sortArray_partial_solve_wit_2 := proof_of_sortArray_partial_solve_wit_2
+  proof_of_sortArray_partial_solve_wit_3 := proof_of_sortArray_partial_solve_wit_3
+  proof_of_sortArray_partial_solve_wit_4 := proof_of_sortArray_partial_solve_wit_4
+  proof_of_sortArray_partial_solve_wit_5 := proof_of_sortArray_partial_solve_wit_5
+  proof_of_sortArray_partial_solve_wit_6 := proof_of_sortArray_partial_solve_wit_6
+  proof_of_sortArray_entail_wit_1 := proof_of_sortArray_entail_wit_1
+  proof_of_sortArray_entail_wit_2 := proof_of_sortArray_entail_wit_2
+  proof_of_sortArray_entail_wit_3_1 := proof_of_sortArray_entail_wit_3_1
+  proof_of_sortArray_entail_wit_4 := proof_of_sortArray_entail_wit_4
+  proof_of_sortArray_return_wit_1 := proof_of_sortArray_return_wit_1
+
+end Algorithms.selection_sort.lean.groundtruth.selection_sort_goal_check

@@ -1,0 +1,20 @@
+{
+  "id": "strcpy",
+  "source": {
+    "dataset": "engineering",
+    "problem_id": "strcpy",
+    "title": "String Copy",
+    "tags": [
+      "engineering",
+      "string",
+      "memory"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

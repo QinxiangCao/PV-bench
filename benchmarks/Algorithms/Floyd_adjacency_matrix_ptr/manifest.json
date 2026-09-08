@@ -1,0 +1,16 @@
+{
+  "id": "Floyd_adjacency_matrix_ptr",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "Floyd_adjacency_matrix_ptr",
+    "title": "Floyd–Warshall on a Matrix of Row Pointers",
+    "tags": ["graphs", "floyd", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

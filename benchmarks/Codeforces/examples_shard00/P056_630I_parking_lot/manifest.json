@@ -1,0 +1,20 @@
+{
+  "id": "P056_630I_parking_lot",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "630/I",
+    "title": "Parking Lot",
+    "url": "https://codeforces.com/problemset/problem/630/I",
+    "rating": 1700,
+    "tags": [
+      "combinatorics",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

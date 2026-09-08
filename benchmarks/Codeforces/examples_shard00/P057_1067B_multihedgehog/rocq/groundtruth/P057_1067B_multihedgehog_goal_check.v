@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P057_1067B_multihedgehog.rocq.groundtruth Require Import P057_1067B_multihedgehog_goal P057_1067B_multihedgehog_proof_auto P057_1067B_multihedgehog_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P057_1067B_multihedgehog_proof_auto.
+  Include P057_1067B_multihedgehog_proof_manual.
+End VC_Correctness.

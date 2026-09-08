@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P050_847H_load_testing.rocq.groundtruth Require Import P050_847H_load_testing_goal P050_847H_load_testing_proof_auto P050_847H_load_testing_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P050_847H_load_testing_proof_auto.
+  Include P050_847H_load_testing_proof_manual.
+End VC_Correctness.

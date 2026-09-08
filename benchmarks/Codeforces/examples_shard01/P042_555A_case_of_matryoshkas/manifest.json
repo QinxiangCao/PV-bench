@@ -1,0 +1,19 @@
+{
+  "id": "P042_555A_case_of_matryoshkas",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "555/A",
+    "title": "Case of Matryoshkas",
+    "url": "https://codeforces.com/problemset/problem/555/A",
+    "rating": 1500,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

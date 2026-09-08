@@ -1,0 +1,19 @@
+{
+  "id": "P006_867A_between_the_offices",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "867/A",
+    "title": "Between the Offices",
+    "url": "https://codeforces.com/problemset/problem/867/A",
+    "rating": 800,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

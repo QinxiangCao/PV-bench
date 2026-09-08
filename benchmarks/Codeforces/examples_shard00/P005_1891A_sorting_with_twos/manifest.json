@@ -1,0 +1,20 @@
+{
+  "id": "P005_1891A_sorting_with_twos",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1891/A",
+    "title": "Sorting with Twos",
+    "url": "https://codeforces.com/problemset/problem/1891/A",
+    "rating": 800,
+    "tags": [
+      "constructive algorithms",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

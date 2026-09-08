@@ -1,0 +1,149 @@
+import Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_proof_auto
+
+theorem proof_of_partition_safety_wit_1 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_1 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_2 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_2 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_3 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_3 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_4 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_4 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_5 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_5 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_6 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_6 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_7 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_7 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_8 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_8 := by
+  sorry
+
+theorem proof_of_partition_safety_wit_9 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_safety_wit_9 := by
+  sorry
+
+theorem proof_of_partition_entail_wit_2 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_entail_wit_2 := by
+  sorry
+
+theorem proof_of_partition_entail_wit_3 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_entail_wit_3 := by
+  sorry
+
+theorem proof_of_partition_entail_wit_5 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_entail_wit_5 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_1 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_2 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_3 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_4 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_5 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_5 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_6 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_6 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_7 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_7 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_8 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_8 := by
+  sorry
+
+theorem proof_of_partition_partial_solve_wit_9 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.partition_partial_solve_wit_9 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_1 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_2 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_3 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_4 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_5 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_5 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_6 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_6 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_7 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_7 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_8 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_8 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_9 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_9 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_10 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_10 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_11 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_11 := by
+  sorry
+
+theorem proof_of_quicksort_range_safety_wit_12 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_safety_wit_12 := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_1_pure : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_1_pure := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_1 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_2_pure : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_2_pure := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_2 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_3_pure : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_3_pure := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_3 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_4_pure : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_4_pure := by
+  sorry
+
+theorem proof_of_quicksort_range_partial_solve_wit_4 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_range_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_safety_wit_1 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_safety_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_safety_wit_2 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_safety_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_safety_wit_3 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_safety_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_safety_wit_4 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_safety_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_partial_solve_wit_1_pure : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_partial_solve_wit_1_pure := by
+  sorry
+
+theorem proof_of_quicksort_partial_solve_wit_1 : Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_goal.quicksort_partial_solve_wit_1 := by
+  sorry
+
+
+end Algorithms.quicksort_hoare_fill_index2.lean.groundtruth.quicksort_hoare_fill_index2_proof_auto

@@ -1,0 +1,23 @@
+{
+  "id": "P053_1594D_the_number_of_imposters",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1594/D",
+    "title": "The Number of Imposters",
+    "url": "https://codeforces.com/problemset/problem/1594/D",
+    "rating": 1700,
+    "tags": [
+      "constructive algorithms",
+      "dfs and similar",
+      "dp",
+      "dsu",
+      "graphs"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": true
+  }
+}

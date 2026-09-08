@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P055_276D_little_girl_and_maximum_xor.rocq.groundtruth Require Import P055_276D_little_girl_and_maximum_xor_goal P055_276D_little_girl_and_maximum_xor_proof_auto P055_276D_little_girl_and_maximum_xor_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P055_276D_little_girl_and_maximum_xor_proof_auto.
+  Include P055_276D_little_girl_and_maximum_xor_proof_manual.
+End VC_Correctness.

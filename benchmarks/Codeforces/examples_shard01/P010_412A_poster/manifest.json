@@ -1,0 +1,20 @@
+{
+  "id": "P010_412A_poster",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "412/A",
+    "title": "Poster",
+    "url": "https://codeforces.com/problemset/problem/412/A",
+    "rating": 900,
+    "tags": [
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

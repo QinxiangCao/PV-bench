@@ -1,0 +1,19 @@
+{
+  "id": "matrix_chain_multiplication",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "matrix_chain_multiplication",
+    "title": "Matrix-chain multiplication",
+    "tags": [
+      "matrix",
+      "chain",
+      "multiplication"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

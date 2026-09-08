@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P096_1436F_sum_over_subsets.rocq.groundtruth Require Import P096_1436F_sum_over_subsets_goal P096_1436F_sum_over_subsets_proof_auto P096_1436F_sum_over_subsets_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P096_1436F_sum_over_subsets_proof_auto.
+  Include P096_1436F_sum_over_subsets_proof_manual.
+End VC_Correctness.

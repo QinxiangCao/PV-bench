@@ -1,0 +1,16 @@
+{
+  "id": "DFS_adjacency_matrix_2Darray",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "DFS_adjacency_matrix_2Darray",
+    "title": "Depth-First Search on a Two-Dimensional Adjacency Matrix",
+    "tags": ["graphs", "dfs", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

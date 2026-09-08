@@ -1,0 +1,20 @@
+{
+  "id": "P001_1031A_golden_plate",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1031/A",
+    "title": "Golden Plate",
+    "url": "https://codeforces.com/problemset/problem/1031/A",
+    "rating": 800,
+    "tags": [
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

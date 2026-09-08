@@ -1,0 +1,21 @@
+{
+  "id": "P042_1551C_interesting_story",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1551/C",
+    "title": "Interesting Story",
+    "url": "https://codeforces.com/problemset/problem/1551/C",
+    "rating": 1500,
+    "tags": [
+      "greedy",
+      "sortings",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "sieve_of_euler",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "sieve_of_euler",
+    "title": "Euler's Linear Sieve",
+    "tags": [
+      "sieve",
+      "euler"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

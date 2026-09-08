@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P032_1561C_deep_down_below.rocq.groundtruth Require Import P032_1561C_deep_down_below_goal P032_1561C_deep_down_below_proof_auto P032_1561C_deep_down_below_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P032_1561C_deep_down_below_proof_auto.
+  Include P032_1561C_deep_down_below_proof_manual.
+End VC_Correctness.

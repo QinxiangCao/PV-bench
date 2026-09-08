@@ -1,0 +1,19 @@
+{
+  "id": "choir_singing",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1091",
+    "title": "P1091 Choir Formation",
+    "url": "https://www.luogu.com.cn/problem/P1091",
+    "tags": [
+      "choir",
+      "singing"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "P039_435B_pasha_maximizes",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "435/B",
+    "title": "Pasha Maximizes",
+    "url": "https://codeforces.com/problemset/problem/435/B",
+    "rating": 1400,
+    "tags": [
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

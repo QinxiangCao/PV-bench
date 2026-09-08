@@ -1,0 +1,21 @@
+{
+  "id": "container_with_most_water_nlogn",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "container-with-most-water",
+    "title": "LeetCode 11: Container With Most Water",
+    "url": "https://leetcode.com/problems/container-with-most-water/",
+    "tags": [
+      "container",
+      "most",
+      "water",
+      "nlogn"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

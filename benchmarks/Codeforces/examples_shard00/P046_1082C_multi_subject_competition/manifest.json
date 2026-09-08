@@ -1,0 +1,20 @@
+{
+  "id": "P046_1082C_multi_subject_competition",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1082/C",
+    "title": "Multi-Subject Competition",
+    "url": "https://codeforces.com/problemset/problem/1082/C",
+    "rating": 1600,
+    "tags": [
+      "greedy",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

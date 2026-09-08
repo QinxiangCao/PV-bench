@@ -1,0 +1,21 @@
+{
+  "id": "P029_817A_treasure_hunt",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "817/A",
+    "title": "Treasure Hunt",
+    "url": "https://codeforces.com/problemset/problem/817/A",
+    "rating": 1200,
+    "tags": [
+      "implementation",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

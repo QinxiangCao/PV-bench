@@ -1,0 +1,19 @@
+{
+  "id": "P024_1102C_doors_breaking_and_repairing",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1102/C",
+    "title": "Doors Breaking and Repairing",
+    "url": "https://codeforces.com/problemset/problem/1102/C",
+    "rating": 1200,
+    "tags": [
+      "games"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

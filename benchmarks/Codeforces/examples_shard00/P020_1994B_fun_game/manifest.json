@@ -1,0 +1,22 @@
+{
+  "id": "P020_1994B_fun_game",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1994/B",
+    "title": "Fun Game",
+    "url": "https://codeforces.com/problemset/problem/1994/B",
+    "rating": 1100,
+    "tags": [
+      "bitmasks",
+      "constructive algorithms",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

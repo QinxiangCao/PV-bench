@@ -1,0 +1,21 @@
+{
+  "id": "P032_1367C_social_distance",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1367/C",
+    "title": "Social Distance",
+    "url": "https://codeforces.com/problemset/problem/1367/C",
+    "rating": 1300,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

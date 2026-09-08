@@ -1,0 +1,20 @@
+{
+  "id": "P073_1799D2_hot_start_up",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1799/D2",
+    "title": "Hot Start Up (hard version)",
+    "url": "https://codeforces.com/problemset/problem/1799/D2",
+    "rating": 2100,
+    "tags": [
+      "data structures",
+      "dp"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

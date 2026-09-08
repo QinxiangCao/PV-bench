@@ -1,0 +1,15 @@
+{
+  "id": "Floyd_adjacency_matrix",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "Floyd_adjacency_matrix",
+    "title": "Floyd–Warshall on an Adjacency Matrix",
+    "tags": ["graphs", "floyd", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

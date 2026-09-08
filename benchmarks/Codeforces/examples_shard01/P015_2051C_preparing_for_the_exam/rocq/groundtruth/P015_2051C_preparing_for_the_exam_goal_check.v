@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P015_2051C_preparing_for_the_exam.rocq.groundtruth Require Import P015_2051C_preparing_for_the_exam_goal P015_2051C_preparing_for_the_exam_proof_auto P015_2051C_preparing_for_the_exam_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P015_2051C_preparing_for_the_exam_proof_auto.
+  Include P015_2051C_preparing_for_the_exam_proof_manual.
+End VC_Correctness.

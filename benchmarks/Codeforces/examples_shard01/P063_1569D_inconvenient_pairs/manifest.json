@@ -1,0 +1,23 @@
+{
+  "id": "P063_1569D_inconvenient_pairs",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1569/D",
+    "title": "Inconvenient Pairs",
+    "url": "https://codeforces.com/problemset/problem/1569/D",
+    "rating": 1900,
+    "tags": [
+      "binary search",
+      "data structures",
+      "implementation",
+      "sortings",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

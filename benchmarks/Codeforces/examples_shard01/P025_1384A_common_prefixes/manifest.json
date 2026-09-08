@@ -1,0 +1,21 @@
+{
+  "id": "P025_1384A_common_prefixes",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1384/A",
+    "title": "Common Prefixes",
+    "url": "https://codeforces.com/problemset/problem/1384/A",
+    "rating": 1200,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

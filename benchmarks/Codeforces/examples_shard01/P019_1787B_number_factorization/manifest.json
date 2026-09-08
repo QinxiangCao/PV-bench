@@ -1,0 +1,21 @@
+{
+  "id": "P019_1787B_number_factorization",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1787/B",
+    "title": "Number Factorization",
+    "url": "https://codeforces.com/problemset/problem/1787/B",
+    "rating": 1100,
+    "tags": [
+      "greedy",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P039_435B_pasha_maximizes.rocq.groundtruth Require Import P039_435B_pasha_maximizes_goal P039_435B_pasha_maximizes_proof_auto P039_435B_pasha_maximizes_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P039_435B_pasha_maximizes_proof_auto.
+  Include P039_435B_pasha_maximizes_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,22 @@
+{
+  "id": "P060_1930D1_sum_over_all_substrings",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1930/D1",
+    "title": "Sum over all Substrings (Easy Version)",
+    "url": "https://codeforces.com/problemset/problem/1930/D1",
+    "rating": 1800,
+    "tags": [
+      "brute force",
+      "dp",
+      "greedy",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P038_1365C_rotation_matching.rocq.groundtruth Require Import P038_1365C_rotation_matching_goal P038_1365C_rotation_matching_proof_auto P038_1365C_rotation_matching_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P038_1365C_rotation_matching_proof_auto.
+  Include P038_1365C_rotation_matching_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P016_371A_k_periodic_array.rocq.groundtruth Require Import P016_371A_k_periodic_array_goal P016_371A_k_periodic_array_proof_auto P016_371A_k_periodic_array_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P016_371A_k_periodic_array_proof_auto.
+  Include P016_371A_k_periodic_array_proof_manual.
+End VC_Correctness.

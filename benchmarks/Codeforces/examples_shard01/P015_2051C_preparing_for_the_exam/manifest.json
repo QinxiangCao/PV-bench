@@ -1,0 +1,20 @@
+{
+  "id": "P015_2051C_preparing_for_the_exam",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "2051/C",
+    "title": "Preparing for the Exam",
+    "url": "https://codeforces.com/problemset/problem/2051/C",
+    "rating": 1000,
+    "tags": [
+      "constructive algorithms",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

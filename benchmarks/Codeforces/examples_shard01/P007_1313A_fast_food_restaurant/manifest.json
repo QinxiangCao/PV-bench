@@ -1,0 +1,21 @@
+{
+  "id": "P007_1313A_fast_food_restaurant",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1313/A",
+    "title": "Fast Food Restaurant",
+    "url": "https://codeforces.com/problemset/problem/1313/A",
+    "rating": 900,
+    "tags": [
+      "brute force",
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

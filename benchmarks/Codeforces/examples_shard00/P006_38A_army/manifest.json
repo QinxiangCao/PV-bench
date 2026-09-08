@@ -1,0 +1,19 @@
+{
+  "id": "P006_38A_army",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "38/A",
+    "title": "Army",
+    "url": "https://codeforces.com/problemset/problem/38/A",
+    "rating": 800,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

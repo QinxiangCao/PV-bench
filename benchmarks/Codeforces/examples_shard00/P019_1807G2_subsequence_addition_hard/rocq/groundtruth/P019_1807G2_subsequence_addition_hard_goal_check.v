@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P019_1807G2_subsequence_addition_hard.rocq.groundtruth Require Import P019_1807G2_subsequence_addition_hard_goal P019_1807G2_subsequence_addition_hard_proof_auto P019_1807G2_subsequence_addition_hard_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P019_1807G2_subsequence_addition_hard_proof_auto.
+  Include P019_1807G2_subsequence_addition_hard_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P006_867A_between_the_offices.rocq.groundtruth Require Import P006_867A_between_the_offices_goal P006_867A_between_the_offices_proof_auto P006_867A_between_the_offices_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P006_867A_between_the_offices_proof_auto.
+  Include P006_867A_between_the_offices_proof_manual.
+End VC_Correctness.

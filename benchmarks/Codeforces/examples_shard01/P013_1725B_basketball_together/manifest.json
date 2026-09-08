@@ -1,0 +1,21 @@
+{
+  "id": "P013_1725B_basketball_together",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1725/B",
+    "title": "Basketball Together",
+    "url": "https://codeforces.com/problemset/problem/1725/B",
+    "rating": 1000,
+    "tags": [
+      "binary search",
+      "greedy",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

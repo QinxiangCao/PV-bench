@@ -1,0 +1,18 @@
+{
+  "id": "manacher",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "longest-palindromic-substring",
+    "title": "LeetCode 5: Longest Palindromic Substring",
+    "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+    "tags": [
+      "manacher"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "counting_sort",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "counting_sort",
+    "title": "Stable Counting Sort",
+    "tags": [
+      "counting",
+      "sort"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

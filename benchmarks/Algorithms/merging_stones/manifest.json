@@ -1,0 +1,19 @@
+{
+  "id": "merging_stones",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1775",
+    "title": "P1775 Merging Stones (Simplified Version)",
+    "url": "https://www.luogu.com.cn/problem/P1775",
+    "tags": [
+      "merging",
+      "stones"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

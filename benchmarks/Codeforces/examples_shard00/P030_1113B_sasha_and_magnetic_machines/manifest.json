@@ -1,0 +1,20 @@
+{
+  "id": "P030_1113B_sasha_and_magnetic_machines",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1113/B",
+    "title": "Sasha and Magnetic Machines",
+    "url": "https://codeforces.com/problemset/problem/1113/B",
+    "rating": 1300,
+    "tags": [
+      "greedy",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

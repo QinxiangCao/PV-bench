@@ -1,0 +1,20 @@
+{
+  "id": "P020_433A_kitahara_harukis_gift",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "433/A",
+    "title": "Kitahara Haruki's Gift",
+    "url": "https://codeforces.com/problemset/problem/433/A",
+    "rating": 1100,
+    "tags": [
+      "brute force",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

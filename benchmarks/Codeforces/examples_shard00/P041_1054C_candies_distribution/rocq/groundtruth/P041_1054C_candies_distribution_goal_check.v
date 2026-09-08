@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P041_1054C_candies_distribution.rocq.groundtruth Require Import P041_1054C_candies_distribution_goal P041_1054C_candies_distribution_proof_auto P041_1054C_candies_distribution_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P041_1054C_candies_distribution_proof_auto.
+  Include P041_1054C_candies_distribution_proof_manual.
+End VC_Correctness.

@@ -1,0 +1,21 @@
+{
+  "id": "P056_65B_harry_potter_and_the_history_of_magic",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "65/B",
+    "title": "Harry Potter and the History of Magic",
+    "url": "https://codeforces.com/problemset/problem/65/B",
+    "rating": 1700,
+    "tags": [
+      "brute force",
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "choosing_inns",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1311",
+    "title": "P1311 Choosing Inns",
+    "url": "https://www.luogu.com.cn/problem/P1311",
+    "tags": [
+      "choosing",
+      "inns"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "huffman_encoding",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "huffman_encoding",
+    "title": "Huffman Merge Cost",
+    "tags": [
+      "huffman",
+      "encoding"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

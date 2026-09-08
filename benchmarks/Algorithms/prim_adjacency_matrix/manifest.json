@@ -1,0 +1,16 @@
+{
+  "id": "prim_adjacency_matrix",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "prim_adjacency_matrix",
+    "title": "Prim Minimum Spanning Tree on an Adjacency Matrix",
+    "tags": ["graphs", "prim", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

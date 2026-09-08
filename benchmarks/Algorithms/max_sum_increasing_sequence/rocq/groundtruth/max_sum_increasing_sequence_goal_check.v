@@ -1,0 +1,6 @@
+From PVbench.Algorithms.max_sum_increasing_sequence.rocq.groundtruth Require Import max_sum_increasing_sequence_goal max_sum_increasing_sequence_proof_auto max_sum_increasing_sequence_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include max_sum_increasing_sequence_proof_auto.
+  Include max_sum_increasing_sequence_proof_manual.
+End VC_Correctness.

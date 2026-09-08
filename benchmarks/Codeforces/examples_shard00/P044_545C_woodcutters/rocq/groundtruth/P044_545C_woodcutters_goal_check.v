@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P044_545C_woodcutters.rocq.groundtruth Require Import P044_545C_woodcutters_goal P044_545C_woodcutters_proof_auto P044_545C_woodcutters_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P044_545C_woodcutters_proof_auto.
+  Include P044_545C_woodcutters_proof_manual.
+End VC_Correctness.

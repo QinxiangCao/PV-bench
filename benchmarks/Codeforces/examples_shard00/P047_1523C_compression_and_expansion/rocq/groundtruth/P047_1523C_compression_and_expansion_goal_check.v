@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P047_1523C_compression_and_expansion.rocq.groundtruth Require Import P047_1523C_compression_and_expansion_goal P047_1523C_compression_and_expansion_proof_auto P047_1523C_compression_and_expansion_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P047_1523C_compression_and_expansion_proof_auto.
+  Include P047_1523C_compression_and_expansion_proof_manual.
+End VC_Correctness.

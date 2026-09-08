@@ -1,0 +1,19 @@
+{
+  "id": "paint_house_ii",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "paint-house-ii",
+    "title": "LeetCode 265: Paint House II",
+    "url": "https://leetcode.com/problems/paint-house-ii/",
+    "tags": [
+      "paint",
+      "house"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

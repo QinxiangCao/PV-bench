@@ -1,0 +1,6 @@
+From PVbench.Algorithms.container_with_most_water_nlogn.rocq.groundtruth Require Import container_with_most_water_nlogn_goal container_with_most_water_nlogn_proof_auto container_with_most_water_nlogn_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include container_with_most_water_nlogn_proof_auto.
+  Include container_with_most_water_nlogn_proof_manual.
+End VC_Correctness.

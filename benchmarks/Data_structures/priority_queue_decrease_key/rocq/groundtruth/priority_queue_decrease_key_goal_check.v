@@ -1,0 +1,6 @@
+From PVbench.Data_structures.priority_queue_decrease_key.rocq.groundtruth Require Import priority_queue_decrease_key_goal priority_queue_decrease_key_proof_auto priority_queue_decrease_key_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include priority_queue_decrease_key_proof_auto.
+  Include priority_queue_decrease_key_proof_manual.
+End VC_Correctness.

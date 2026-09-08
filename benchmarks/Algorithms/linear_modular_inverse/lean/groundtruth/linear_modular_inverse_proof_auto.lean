@@ -1,0 +1,44 @@
+import Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_proof_auto
+
+theorem proof_of_linear_modular_inverse_safety_wit_1 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_1 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_2 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_2 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_3 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_3 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_4 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_4 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_5 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_5 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_6 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_6 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_7 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_7 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_8 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_8 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_safety_wit_9 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_safety_wit_9 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_partial_solve_wit_1 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_partial_solve_wit_2 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_linear_modular_inverse_partial_solve_wit_3 : Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_goal.linear_modular_inverse_partial_solve_wit_3 := by
+  sorry
+
+
+end Algorithms.linear_modular_inverse.lean.groundtruth.linear_modular_inverse_proof_auto

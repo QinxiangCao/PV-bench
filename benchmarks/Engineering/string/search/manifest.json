@@ -1,0 +1,20 @@
+{
+  "id": "search",
+  "source": {
+    "dataset": "engineering",
+    "problem_id": "search",
+    "title": "String and Memory Search",
+    "tags": [
+      "engineering",
+      "string",
+      "memory"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

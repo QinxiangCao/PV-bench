@@ -1,0 +1,19 @@
+{
+  "id": "P058_132C_logo_turtle",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "132/C",
+    "title": "Logo Turtle",
+    "url": "https://codeforces.com/problemset/problem/132/C",
+    "rating": 1800,
+    "tags": [
+      "dp"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

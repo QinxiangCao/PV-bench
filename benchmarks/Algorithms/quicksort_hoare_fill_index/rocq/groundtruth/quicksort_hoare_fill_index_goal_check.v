@@ -1,0 +1,6 @@
+From PVbench.Algorithms.quicksort_hoare_fill_index.rocq.groundtruth Require Import quicksort_hoare_fill_index_goal quicksort_hoare_fill_index_proof_auto quicksort_hoare_fill_index_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include quicksort_hoare_fill_index_proof_auto.
+  Include quicksort_hoare_fill_index_proof_manual.
+End VC_Correctness.

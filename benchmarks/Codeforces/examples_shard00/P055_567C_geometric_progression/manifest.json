@@ -1,0 +1,21 @@
+{
+  "id": "P055_567C_geometric_progression",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "567/C",
+    "title": "Geometric Progression",
+    "url": "https://codeforces.com/problemset/problem/567/C",
+    "rating": 1700,
+    "tags": [
+      "binary search",
+      "data structures",
+      "dp"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

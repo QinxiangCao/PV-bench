@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P019_1787B_number_factorization.rocq.groundtruth Require Import P019_1787B_number_factorization_goal P019_1787B_number_factorization_proof_auto P019_1787B_number_factorization_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P019_1787B_number_factorization_proof_auto.
+  Include P019_1787B_number_factorization_proof_manual.
+End VC_Correctness.

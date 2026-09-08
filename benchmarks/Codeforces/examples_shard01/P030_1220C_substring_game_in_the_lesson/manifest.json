@@ -1,0 +1,21 @@
+{
+  "id": "P030_1220C_substring_game_in_the_lesson",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1220/C",
+    "title": "Substring Game in the Lesson",
+    "url": "https://codeforces.com/problemset/problem/1220/C",
+    "rating": 1300,
+    "tags": [
+      "games",
+      "greedy",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

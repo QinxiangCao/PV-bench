@@ -1,0 +1,20 @@
+{
+  "id": "strcat",
+  "source": {
+    "dataset": "engineering",
+    "problem_id": "strcat",
+    "title": "String Concatenation",
+    "tags": [
+      "engineering",
+      "string",
+      "memory"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

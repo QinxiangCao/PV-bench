@@ -1,0 +1,19 @@
+{
+  "id": "P023_985A_chess_placing",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "985/A",
+    "title": "Chess Placing",
+    "url": "https://codeforces.com/problemset/problem/985/A",
+    "rating": 1100,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "OPSEQ",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P051_986A_fair",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "986/A",
+    "title": "Fair",
+    "url": "https://codeforces.com/problemset/problem/986/A",
+    "rating": 1600,
+    "tags": [
+      "graphs",
+      "greedy",
+      "number theory",
+      "shortest paths"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P026_2000D_right_left_wrong.rocq.groundtruth Require Import P026_2000D_right_left_wrong_goal P026_2000D_right_left_wrong_proof_auto P026_2000D_right_left_wrong_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P026_2000D_right_left_wrong_proof_auto.
+  Include P026_2000D_right_left_wrong_proof_manual.
+End VC_Correctness.

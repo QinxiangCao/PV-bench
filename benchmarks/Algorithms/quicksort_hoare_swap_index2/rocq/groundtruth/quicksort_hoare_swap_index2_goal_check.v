@@ -1,0 +1,6 @@
+From PVbench.Algorithms.quicksort_hoare_swap_index2.rocq.groundtruth Require Import quicksort_hoare_swap_index2_goal quicksort_hoare_swap_index2_proof_auto quicksort_hoare_swap_index2_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include quicksort_hoare_swap_index2_proof_auto.
+  Include quicksort_hoare_swap_index2_proof_manual.
+End VC_Correctness.

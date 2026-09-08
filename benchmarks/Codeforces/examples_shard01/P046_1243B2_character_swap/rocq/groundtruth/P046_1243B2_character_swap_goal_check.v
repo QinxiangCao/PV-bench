@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P046_1243B2_character_swap.rocq.groundtruth Require Import P046_1243B2_character_swap_goal P046_1243B2_character_swap_proof_auto P046_1243B2_character_swap_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P046_1243B2_character_swap_proof_auto.
+  Include P046_1243B2_character_swap_proof_manual.
+End VC_Correctness.

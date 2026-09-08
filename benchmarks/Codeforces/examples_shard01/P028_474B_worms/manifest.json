@@ -1,0 +1,20 @@
+{
+  "id": "P028_474B_worms",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "474/B",
+    "title": "Worms",
+    "url": "https://codeforces.com/problemset/problem/474/B",
+    "rating": 1200,
+    "tags": [
+      "binary search",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

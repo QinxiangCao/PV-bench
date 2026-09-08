@@ -1,0 +1,19 @@
+{
+  "id": "priority_queue_index",
+  "source": {
+    "dataset": "classical_data_structure",
+    "problem_id": "priority_queue_index",
+    "title": "Indexed Priority Queue",
+    "tags": [
+      "data structures",
+      "priority queue"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

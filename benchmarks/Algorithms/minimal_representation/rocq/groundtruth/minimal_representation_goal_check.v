@@ -1,0 +1,6 @@
+From PVbench.Algorithms.minimal_representation.rocq.groundtruth Require Import minimal_representation_goal minimal_representation_proof_auto minimal_representation_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include minimal_representation_proof_auto.
+  Include minimal_representation_proof_manual.
+End VC_Correctness.

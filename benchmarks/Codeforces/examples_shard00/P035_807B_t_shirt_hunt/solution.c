@@ -1,0 +1,27 @@
+/* Codeforces 807/B - T-Shirt Hunt */
+#include <stdio.h>
+
+static int wins(int place, int score)
+{
+    int z = (score / 50) % 475;
+    for (int i = 0; i < 25; ++i) {
+        z = (z * 96 + 42) % 475;
+        if (z + 26 == place) return 1;
+    }
+    return 0;
+}
+
+static int solver(int p, int x, int y)
+{
+    int score = y;
+    while ((score - x) % 50 != 0) ++score;
+    while (!wins(p, score)) score += 50;
+    return score <= x ? 0 : (score - x + 99) / 100;
+}
+
+int main(void)
+{
+    int p, x, y; if (scanf("%d %d %d", &p, &x, &y) != 3) return 0;
+    printf("%d\n", solver(p, x, y));
+    return 0;
+}

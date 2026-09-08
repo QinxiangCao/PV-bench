@@ -1,0 +1,22 @@
+{
+  "id": "P062_1492D_geniuss_gambit",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1492/D",
+    "title": "Genius's Gambit",
+    "url": "https://codeforces.com/problemset/problem/1492/D",
+    "rating": 1900,
+    "tags": [
+      "bitmasks",
+      "constructive algorithms",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

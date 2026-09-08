@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P048_1771C_hossam_and_trainees.rocq.groundtruth Require Import P048_1771C_hossam_and_trainees_goal P048_1771C_hossam_and_trainees_proof_auto P048_1771C_hossam_and_trainees_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P048_1771C_hossam_and_trainees_proof_auto.
+  Include P048_1771C_hossam_and_trainees_proof_manual.
+End VC_Correctness.

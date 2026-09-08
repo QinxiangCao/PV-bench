@@ -1,0 +1,21 @@
+{
+  "id": "P065_535C_tavas_and_karafs",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "535/C",
+    "title": "Tavas and Karafs",
+    "url": "https://codeforces.com/problemset/problem/535/C",
+    "rating": 1900,
+    "tags": [
+      "binary search",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

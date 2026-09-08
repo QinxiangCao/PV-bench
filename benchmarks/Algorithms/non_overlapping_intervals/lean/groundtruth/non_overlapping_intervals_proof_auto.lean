@@ -1,0 +1,164 @@
+import Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_proof_auto
+
+theorem proof_of_swap_intervals_partial_solve_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_4 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_5 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_5 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_6 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_6 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_7 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_7 := by
+  sorry
+
+theorem proof_of_swap_intervals_partial_solve_wit_8 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.swap_intervals_partial_solve_wit_8 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_1 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_2 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_3 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_4 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_4 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_5 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_5 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_6 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_6 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_7 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_7 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_8 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_8 := by
+  sorry
+
+theorem proof_of_partition_intervals_safety_wit_9 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_safety_wit_9 := by
+  sorry
+
+theorem proof_of_partition_intervals_partial_solve_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_partition_intervals_partial_solve_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_partition_intervals_partial_solve_wit_3_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_partial_solve_wit_3_pure := by
+  sorry
+
+theorem proof_of_partition_intervals_partial_solve_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_partition_intervals_partial_solve_wit_4_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_partial_solve_wit_4_pure := by
+  sorry
+
+theorem proof_of_partition_intervals_partial_solve_wit_4 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.partition_intervals_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_safety_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_safety_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_safety_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_safety_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_safety_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_safety_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_safety_wit_4 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_safety_wit_4 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_partial_solve_wit_1_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_partial_solve_wit_1_pure := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_partial_solve_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_partial_solve_wit_2_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_partial_solve_wit_2_pure := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_partial_solve_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_partial_solve_wit_3_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_partial_solve_wit_3_pure := by
+  sorry
+
+theorem proof_of_quicksort_intervals_range_partial_solve_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_range_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_safety_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_safety_wit_1 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_safety_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_safety_wit_2 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_safety_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_safety_wit_3 := by
+  sorry
+
+theorem proof_of_quicksort_intervals_partial_solve_wit_1_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_partial_solve_wit_1_pure := by
+  sorry
+
+theorem proof_of_quicksort_intervals_partial_solve_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.quicksort_intervals_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_1 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_2 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_3 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_4 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_4 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_5 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_5 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_6 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_6 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_7 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_7 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_8 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_8 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_safety_wit_9 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_safety_wit_9 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_partial_solve_wit_1_pure : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_partial_solve_wit_1_pure := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_partial_solve_wit_1 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_partial_solve_wit_2 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_partial_solve_wit_3 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_eraseOverlapIntervals_partial_solve_wit_4 : Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_goal.eraseOverlapIntervals_partial_solve_wit_4 := by
+  sorry
+
+
+end Algorithms.non_overlapping_intervals.lean.groundtruth.non_overlapping_intervals_proof_auto

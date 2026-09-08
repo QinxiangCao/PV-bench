@@ -1,0 +1,19 @@
+{
+  "id": "coin_change",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "coin-change",
+    "title": "Maximum Reachable Amount",
+    "url": "https://leetcode.com/problems/coin-change/",
+    "tags": [
+      "coin",
+      "change"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

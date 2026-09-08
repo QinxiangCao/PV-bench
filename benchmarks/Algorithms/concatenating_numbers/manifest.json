@@ -1,0 +1,19 @@
+{
+  "id": "concatenating_numbers",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1012",
+    "title": "P1012 Concatenating Numbers",
+    "url": "https://www.luogu.com.cn/problem/P1012",
+    "tags": [
+      "concatenating",
+      "numbers"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

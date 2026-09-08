@@ -1,0 +1,22 @@
+{
+  "id": "P053_1393C_pinkie_pie_eats_patty_cakes",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1393/C",
+    "title": "Pinkie Pie Eats Patty-cakes",
+    "url": "https://codeforces.com/problemset/problem/1393/C",
+    "rating": 1700,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "math",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

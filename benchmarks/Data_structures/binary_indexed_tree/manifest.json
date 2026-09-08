@@ -1,0 +1,19 @@
+{
+  "id": "binary_indexed_tree",
+  "source": {
+    "dataset": "classical_data_structure",
+    "problem_id": "binary_indexed_tree",
+    "title": "Binary Indexed Tree",
+    "tags": [
+      "data structures",
+      "binary indexed tree"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

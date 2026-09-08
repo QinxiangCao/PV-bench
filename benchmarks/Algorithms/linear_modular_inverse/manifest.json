@@ -1,0 +1,20 @@
+{
+  "id": "linear_modular_inverse",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P3811",
+    "title": "P3811 — Multiplicative Inverses Modulo a Prime",
+    "url": "https://www.luogu.com.cn/problem/P3811",
+    "tags": [
+      "linear",
+      "modular",
+      "inverse"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "kruskal_union_find",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "kruskal_union_find",
+    "title": "Kruskal Minimum Spanning Tree with Union–Find",
+    "tags": ["graphs", "kruskal", "monad", "relational two layered method"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
+

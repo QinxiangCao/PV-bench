@@ -1,0 +1,21 @@
+{
+  "id": "P048_1771C_hossam_and_trainees",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1771/C",
+    "title": "Hossam and Trainees",
+    "url": "https://codeforces.com/problemset/problem/1771/C",
+    "rating": 1600,
+    "tags": [
+      "greedy",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

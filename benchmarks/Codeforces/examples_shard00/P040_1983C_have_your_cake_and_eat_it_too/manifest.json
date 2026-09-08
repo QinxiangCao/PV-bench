@@ -1,0 +1,22 @@
+{
+  "id": "P040_1983C_have_your_cake_and_eat_it_too",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1983/C",
+    "title": "Have Your Cake and Eat It Too",
+    "url": "https://codeforces.com/problemset/problem/1983/C",
+    "rating": 1400,
+    "tags": [
+      "binary search",
+      "brute force",
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

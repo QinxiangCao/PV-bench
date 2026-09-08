@@ -1,0 +1,21 @@
+{
+  "id": "P054_1776F_train_splitting",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1776/F",
+    "title": "Train Splitting",
+    "url": "https://codeforces.com/problemset/problem/1776/F",
+    "rating": 1700,
+    "tags": [
+      "constructive algorithms",
+      "graphs",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "extended_chinese_remainder_theorem",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P4777",
+    "title": "P4777 — Extended Chinese Remainder Theorem",
+    "url": "https://www.luogu.com.cn/problem/P4777",
+    "tags": [
+      "extended",
+      "chinese",
+      "remainder",
+      "theorem"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

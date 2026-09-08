@@ -1,0 +1,20 @@
+{
+  "id": "P070_509E_pretty_song",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "509/E",
+    "title": "Pretty Song",
+    "url": "https://codeforces.com/problemset/problem/509/E",
+    "rating": 2000,
+    "tags": [
+      "math",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

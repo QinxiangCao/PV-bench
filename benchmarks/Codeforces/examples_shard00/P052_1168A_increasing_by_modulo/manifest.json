@@ -1,0 +1,20 @@
+{
+  "id": "P052_1168A_increasing_by_modulo",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1168/A",
+    "title": "Increasing by Modulo",
+    "url": "https://codeforces.com/problemset/problem/1168/A",
+    "rating": 1700,
+    "tags": [
+      "binary search",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

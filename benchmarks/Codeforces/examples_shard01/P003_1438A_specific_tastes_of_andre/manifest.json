@@ -1,0 +1,20 @@
+{
+  "id": "P003_1438A_specific_tastes_of_andre",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1438/A",
+    "title": "Specific Tastes of Andre",
+    "url": "https://codeforces.com/problemset/problem/1438/A",
+    "rating": 800,
+    "tags": [
+      "constructive algorithms",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

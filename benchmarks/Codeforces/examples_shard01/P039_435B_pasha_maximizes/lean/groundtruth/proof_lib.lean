@@ -1,0 +1,15 @@
+import Codeforces.examples_shard01.P039_435B_pasha_maximizes.lean.spec_lib
+import Codeforces.examples_shard01.P039_435B_pasha_maximizes.lean.helper_lib
+import SimpleC.EE.LLM_bench.Codeforces.examples_shard09.P039_435B_pasha_maximizes_histories
+
+set_option maxHeartbeats 8000000
+set_option maxRecDepth 8000
+set_option linter.unusedVariables false
+
+namespace Codeforces.examples_shard01.P039_435B_pasha_maximizes.lean.groundtruth.proof_lib
+
+open Codeforces.examples_shard01.P039_435B_pasha_maximizes.lean
+open scoped SimpleC
+
+end Codeforces.examples_shard01.P039_435B_pasha_maximizes.lean.groundtruth.proof_lib
+

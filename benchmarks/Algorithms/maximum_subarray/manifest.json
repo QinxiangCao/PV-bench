@@ -1,0 +1,19 @@
+{
+  "id": "maximum_subarray",
+  "source": {
+    "dataset": "leetcode",
+    "problem_id": "maximum-subarray",
+    "title": "LeetCode 53: Maximum Subarray",
+    "url": "https://leetcode.com/problems/maximum-subarray/",
+    "tags": [
+      "maximum",
+      "subarray"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

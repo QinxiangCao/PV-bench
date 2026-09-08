@@ -1,0 +1,21 @@
+{
+  "id": "P033_1454D_number_into_sequence",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1454/D",
+    "title": "Number into Sequence",
+    "url": "https://codeforces.com/problemset/problem/1454/D",
+    "rating": 1300,
+    "tags": [
+      "constructive algorithms",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

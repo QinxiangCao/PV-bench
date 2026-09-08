@@ -1,0 +1,50 @@
+/*
+ * Codeforces 555/A - Case of Matryoshkas  (rating 1500, IMPLEMENTATION)
+ *
+ * The prefix 1 -> 2 -> ... -> p that already sits at the start of some chain
+ * can be kept as is.  Everything else must be taken apart: each chain of
+ * length m costs m-1 extractions, minus the p-1 we keep, and then n-p
+ * insertions rebuild the big chain.
+ */
+
+#include <stdio.h>
+
+/* solver: pure.  Minimum seconds, given the total n, the chain lengths m[],
+ * the number of chains k, and p = length of the usable 1..p prefix. */
+static long long solver(int n, const int *m, int k, int p)
+{
+    long long ops = 0;
+    for (int i = 0; i < k; i++)
+        ops += m[i] - 1;                  /* full disassembly */
+    ops -= p - 1;                         /* the kept prefix stays nested */
+    ops += n - p;                         /* re-nest everything else */
+    return ops;
+}
+
+int main(void)
+{
+    int n, k;
+    if (scanf("%d %d", &n, &k) != 2)
+        return 0;
+    static int m[100005];
+    int p = 0;
+    for (int i = 0; i < k; i++) {
+        scanf("%d", &m[i]);
+        int prev = 0, run = 0;
+        for (int j = 0; j < m[i]; j++) {
+            int a;
+            scanf("%d", &a);
+            if (j == 0 && a == 1)
+                run = 1;
+            else if (run == j && a == prev + 1)
+                run++;
+            prev = a;
+        }
+        if (run > p)
+            p = run;
+    }
+    if (p == 0)
+        p = 1;                            /* doll 1 is always usable alone */
+    printf("%lld\n", solver(n, m, k, p));
+    return 0;
+}

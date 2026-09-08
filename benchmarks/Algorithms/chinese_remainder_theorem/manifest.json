@@ -1,0 +1,20 @@
+{
+  "id": "chinese_remainder_theorem",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1495",
+    "title": "P1495 — Chinese Remainder Theorem / Cao Chong Raises Pigs",
+    "url": "https://www.luogu.com.cn/problem/P1495",
+    "tags": [
+      "chinese",
+      "remainder",
+      "theorem"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

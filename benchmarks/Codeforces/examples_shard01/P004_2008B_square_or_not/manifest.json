@@ -1,0 +1,21 @@
+{
+  "id": "P004_2008B_square_or_not",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "2008/B",
+    "title": "Square or Not",
+    "url": "https://codeforces.com/problemset/problem/2008/B",
+    "rating": 800,
+    "tags": [
+      "brute force",
+      "math",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

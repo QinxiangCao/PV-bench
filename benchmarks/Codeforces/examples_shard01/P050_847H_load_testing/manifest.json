@@ -1,0 +1,19 @@
+{
+  "id": "P050_847H_load_testing",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "847/H",
+    "title": "Load Testing",
+    "url": "https://codeforces.com/problemset/problem/847/H",
+    "rating": 1600,
+    "tags": [
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "P047_1523C_compression_and_expansion",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1523/C",
+    "title": "Compression and Expansion",
+    "url": "https://codeforces.com/problemset/problem/1523/C",
+    "rating": 1600,
+    "tags": [
+      "brute force",
+      "data structures",
+      "greedy",
+      "implementation",
+      "trees"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

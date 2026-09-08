@@ -1,0 +1,21 @@
+{
+  "id": "P057_1067B_multihedgehog",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1067/B",
+    "title": "Multihedgehog",
+    "url": "https://codeforces.com/problemset/problem/1067/B",
+    "rating": 1800,
+    "tags": [
+      "dfs and similar",
+      "graphs",
+      "shortest paths"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

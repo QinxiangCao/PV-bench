@@ -1,0 +1,19 @@
+{
+  "id": "P015_435A_queue_on_bus_stop",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "435/A",
+    "title": "Queue on Bus Stop",
+    "url": "https://codeforces.com/problemset/problem/435/A",
+    "rating": 1000,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P003_1763A_absolute_maximization.rocq.groundtruth Require Import P003_1763A_absolute_maximization_goal P003_1763A_absolute_maximization_proof_auto P003_1763A_absolute_maximization_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P003_1763A_absolute_maximization_proof_auto.
+  Include P003_1763A_absolute_maximization_proof_manual.
+End VC_Correctness.

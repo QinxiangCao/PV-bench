@@ -1,0 +1,22 @@
+{
+  "id": "P041_1538F_interesting_function",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1538/F",
+    "title": "Interesting Function",
+    "url": "https://codeforces.com/problemset/problem/1538/F",
+    "rating": 1500,
+    "tags": [
+      "binary search",
+      "dp",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

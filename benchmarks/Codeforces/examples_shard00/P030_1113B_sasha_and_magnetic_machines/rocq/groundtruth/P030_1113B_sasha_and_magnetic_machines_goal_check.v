@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P030_1113B_sasha_and_magnetic_machines.rocq.groundtruth Require Import P030_1113B_sasha_and_magnetic_machines_goal P030_1113B_sasha_and_magnetic_machines_proof_auto P030_1113B_sasha_and_magnetic_machines_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P030_1113B_sasha_and_magnetic_machines_proof_auto.
+  Include P030_1113B_sasha_and_magnetic_machines_proof_manual.
+End VC_Correctness.

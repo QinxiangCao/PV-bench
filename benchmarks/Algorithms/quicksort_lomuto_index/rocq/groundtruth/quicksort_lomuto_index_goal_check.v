@@ -1,0 +1,6 @@
+From PVbench.Algorithms.quicksort_lomuto_index.rocq.groundtruth Require Import quicksort_lomuto_index_goal quicksort_lomuto_index_proof_auto quicksort_lomuto_index_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include quicksort_lomuto_index_proof_auto.
+  Include quicksort_lomuto_index_proof_manual.
+End VC_Correctness.

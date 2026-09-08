@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P032_1367C_social_distance.rocq.groundtruth Require Import P032_1367C_social_distance_goal P032_1367C_social_distance_proof_auto P032_1367C_social_distance_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P032_1367C_social_distance_proof_auto.
+  Include P032_1367C_social_distance_proof_manual.
+End VC_Correctness.

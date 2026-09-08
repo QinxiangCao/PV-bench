@@ -1,0 +1,6 @@
+From PVbench.Algorithms.longest_nondecreasing_subsequence.rocq.groundtruth Require Import longest_nondecreasing_subsequence_goal longest_nondecreasing_subsequence_proof_auto longest_nondecreasing_subsequence_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include longest_nondecreasing_subsequence_proof_auto.
+  Include longest_nondecreasing_subsequence_proof_manual.
+End VC_Correctness.

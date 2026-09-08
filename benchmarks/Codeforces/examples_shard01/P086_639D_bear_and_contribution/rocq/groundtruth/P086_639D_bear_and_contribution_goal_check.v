@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P086_639D_bear_and_contribution.rocq.groundtruth Require Import P086_639D_bear_and_contribution_goal P086_639D_bear_and_contribution_proof_auto P086_639D_bear_and_contribution_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P086_639D_bear_and_contribution_proof_auto.
+  Include P086_639D_bear_and_contribution_proof_manual.
+End VC_Correctness.

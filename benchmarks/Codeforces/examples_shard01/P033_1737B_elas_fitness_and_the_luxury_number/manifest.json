@@ -1,0 +1,21 @@
+{
+  "id": "P033_1737B_elas_fitness_and_the_luxury_number",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1737/B",
+    "title": "Ela's Fitness and the Luxury Number",
+    "url": "https://codeforces.com/problemset/problem/1737/B",
+    "rating": 1300,
+    "tags": [
+      "binary search",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

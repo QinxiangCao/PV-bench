@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P017_753A_santa_claus_and_candies.rocq.groundtruth Require Import P017_753A_santa_claus_and_candies_goal P017_753A_santa_claus_and_candies_proof_auto P017_753A_santa_claus_and_candies_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P017_753A_santa_claus_and_candies_proof_auto.
+  Include P017_753A_santa_claus_and_candies_proof_manual.
+End VC_Correctness.

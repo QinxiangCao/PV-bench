@@ -1,0 +1,19 @@
+{
+  "id": "minimal_representation",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1368",
+    "title": "P1368 Minimal Representation",
+    "url": "https://www.luogu.com.cn/problem/P1368",
+    "tags": [
+      "minimal",
+      "representation"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

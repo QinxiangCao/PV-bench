@@ -1,0 +1,59 @@
+import Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal
+
+set_option linter.unusedVariables false
+
+namespace Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_proof_auto
+
+theorem proof_of_optimized_selection_sort_safety_wit_1 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_1 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_2 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_2 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_3 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_3 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_4 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_4 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_5 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_5 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_6 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_6 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_7 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_7 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_8 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_8 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_9 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_9 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_entail_wit_3_1 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_entail_wit_3_1 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_entail_wit_3_2 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_entail_wit_3_2 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_1 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_1 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_2 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_2 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_3 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_3 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_4 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_4 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_5 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_5 := by
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_6 : Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_6 := by
+  sorry
+
+
+end Algorithms.optimized_selection_sort.lean.groundtruth.optimized_selection_sort_proof_auto

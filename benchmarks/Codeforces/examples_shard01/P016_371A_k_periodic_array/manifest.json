@@ -1,0 +1,21 @@
+{
+  "id": "P016_371A_k_periodic_array",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "371/A",
+    "title": "K-Periodic Array",
+    "url": "https://codeforces.com/problemset/problem/371/A",
+    "rating": 1000,
+    "tags": [
+      "greedy",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

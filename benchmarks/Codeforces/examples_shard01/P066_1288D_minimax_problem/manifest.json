@@ -1,0 +1,21 @@
+{
+  "id": "P066_1288D_minimax_problem",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1288/D",
+    "title": "Minimax Problem",
+    "url": "https://codeforces.com/problemset/problem/1288/D",
+    "rating": 2000,
+    "tags": [
+      "binary search",
+      "bitmasks",
+      "dp"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

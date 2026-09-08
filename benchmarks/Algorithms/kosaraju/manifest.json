@@ -1,0 +1,15 @@
+{
+  "id": "kosaraju",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "kosaraju",
+    "title": "Kosaraju Strongly Connected Components",
+    "tags": ["graphs", "kosaraju"]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

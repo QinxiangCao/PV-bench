@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P026_1355A_sequence_with_digits.rocq.groundtruth Require Import P026_1355A_sequence_with_digits_goal P026_1355A_sequence_with_digits_proof_auto P026_1355A_sequence_with_digits_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P026_1355A_sequence_with_digits_proof_auto.
+  Include P026_1355A_sequence_with_digits_proof_manual.
+End VC_Correctness.

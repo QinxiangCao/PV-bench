@@ -1,0 +1,21 @@
+{
+  "id": "P023_765B_code_obfuscation",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "765/B",
+    "title": "Code obfuscation",
+    "url": "https://codeforces.com/problemset/problem/765/B",
+    "rating": 1100,
+    "tags": [
+      "greedy",
+      "implementation",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

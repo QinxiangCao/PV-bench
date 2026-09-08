@@ -1,0 +1,20 @@
+{
+  "id": "P044_545C_woodcutters",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "545/C",
+    "title": "Woodcutters",
+    "url": "https://codeforces.com/problemset/problem/545/C",
+    "rating": 1500,
+    "tags": [
+      "dp",
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

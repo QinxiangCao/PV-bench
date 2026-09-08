@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard01.P035_288A_polo_the_penguin_and_strings.rocq.groundtruth Require Import P035_288A_polo_the_penguin_and_strings_goal P035_288A_polo_the_penguin_and_strings_proof_auto P035_288A_polo_the_penguin_and_strings_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P035_288A_polo_the_penguin_and_strings_proof_auto.
+  Include P035_288A_polo_the_penguin_and_strings_proof_manual.
+End VC_Correctness.

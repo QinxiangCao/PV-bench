@@ -1,0 +1,19 @@
+{
+  "id": "P027_459A_pashmak_and_garden",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "459/A",
+    "title": "Pashmak and Garden",
+    "url": "https://codeforces.com/problemset/problem/459/A",
+    "rating": 1200,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "CHECKER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

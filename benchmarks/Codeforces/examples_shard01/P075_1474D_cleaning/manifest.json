@@ -1,0 +1,22 @@
+{
+  "id": "P075_1474D_cleaning",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1474/D",
+    "title": "Cleaning",
+    "url": "https://codeforces.com/problemset/problem/1474/D",
+    "rating": 2200,
+    "tags": [
+      "data structures",
+      "dp",
+      "greedy",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

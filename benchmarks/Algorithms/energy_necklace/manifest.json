@@ -1,0 +1,19 @@
+{
+  "id": "energy_necklace",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P1063",
+    "title": "P1063 Energy Necklace",
+    "url": "https://www.luogu.com.cn/problem/P1063",
+    "tags": [
+      "energy",
+      "necklace"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

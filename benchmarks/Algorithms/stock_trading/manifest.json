@@ -1,0 +1,19 @@
+{
+  "id": "stock_trading",
+  "source": {
+    "dataset": "luogu",
+    "problem_id": "P2569",
+    "title": "P2569 Stock Trading",
+    "url": "https://www.luogu.com.cn/problem/P2569?lang=en",
+    "tags": [
+      "stock",
+      "trading"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

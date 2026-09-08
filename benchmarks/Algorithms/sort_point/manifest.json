@@ -1,0 +1,18 @@
+{
+  "id": "sort_point",
+  "source": {
+    "dataset": "classical_algorithm",
+    "problem_id": "sort_point",
+    "title": "Polar-Angle Point Sort",
+    "tags": [
+      "sort",
+      "point"
+    ]
+  },
+  "stratification": {
+    "band": "unclassified",
+    "output_mode": "CONSTRUCT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

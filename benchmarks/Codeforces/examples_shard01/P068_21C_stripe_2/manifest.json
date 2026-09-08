@@ -1,0 +1,21 @@
+{
+  "id": "P068_21C_stripe_2",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "21/C",
+    "title": "Stripe 2",
+    "url": "https://codeforces.com/problemset/problem/21/C",
+    "rating": 2000,
+    "tags": [
+      "binary search",
+      "dp",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

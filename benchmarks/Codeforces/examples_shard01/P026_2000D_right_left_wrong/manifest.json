@@ -1,0 +1,21 @@
+{
+  "id": "P026_2000D_right_left_wrong",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "2000/D",
+    "title": "Right Left Wrong",
+    "url": "https://codeforces.com/problemset/problem/2000/D",
+    "rating": 1200,
+    "tags": [
+      "greedy",
+      "implementation",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

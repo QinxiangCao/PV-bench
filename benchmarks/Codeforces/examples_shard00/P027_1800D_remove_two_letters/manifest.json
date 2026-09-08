@@ -1,0 +1,22 @@
+{
+  "id": "P027_1800D_remove_two_letters",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1800/D",
+    "title": "Remove Two Letters",
+    "url": "https://codeforces.com/problemset/problem/1800/D",
+    "rating": 1200,
+    "tags": [
+      "data structures",
+      "greedy",
+      "hashing",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

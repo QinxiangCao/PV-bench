@@ -1,0 +1,19 @@
+{
+  "id": "P016_450A_jzzhu_and_children",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "450/A",
+    "title": "Jzzhu and Children",
+    "url": "https://codeforces.com/problemset/problem/450/A",
+    "rating": 1000,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}
