@@ -1,0 +1,41 @@
+#include "int_ptr_array2_def.h"
+
+id : 1
+priority : core(1)
+left : IntPtrArray2::full(?p, ?n, ?rows) at 0
+right : data_at(?p + (?i * sizeof(PTR)), PTR, ?v) at 1
+check : infer(0 <= i);
+        infer(i < n);
+action : right_erase(1);
+         left_erase(0);
+         left_exist_add(row_ptr);
+         left_add(IntPtrArray2::missing_i(p, n, i, row_ptr, rows));
+         left_add(IntArray::full(row_ptr, Zlength{Z}(rows[i]), rows[i]));
+         right_add(v == row_ptr);
+
+id : 2
+priority : post(1)
+left : IntPtrArray2::missing_i(?p, ?n, ?i, ?row_ptr, ?rows) at 0
+       IntArray::full(row_ptr, Zlength{Z}(rows[i]), rows[i]) at 1
+       data_at(p + i * sizeof(PTR), PTR, row_ptr) at 2
+check : infer(0 <= i);
+        infer(i < n);
+action : left_erase(2);
+         left_erase(1);
+         left_erase(0);
+         left_add(IntPtrArray2::full(p, n, rows));
+
+id : 4
+priority : core(1)
+left : IntPtrArray2::full(?p, ?n, ?rows1) at 0
+right : IntPtrArray2::full(p, n, ?rows2) at 1
+action : right_erase(1);
+         left_erase(0);
+         right_add(rows1 == rows2);
+
+id : 5
+priority : core(1)
+left : IntPtrArray2::missing_i(?p, ?n, ?i, ?row_ptr, ?rows) at 0
+right : IntPtrArray2::missing_i(p, n, i, row_ptr, rows) at 1
+action : left_erase(0);
+         right_erase(1);

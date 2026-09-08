@@ -1,0 +1,73 @@
+import SimpleC.EE.LLM_bench.Algorithms.kings_game.kings_game_goal_check
+
+open SimpleC.EE.LLM_bench.Algorithms.kings_game.kings_game_lib
+open SimpleC.EE.LLM_bench.Algorithms.kings_game.kings_game_proof_manual
+
+-- All 38 lib and 23 active manual source Qed declarations; 72 auto Admitted inherited separately.
+-- Nine obsolete split goals commented out in Coq are excluded.
+run_cmd do
+  let proved := #[
+    ``minister_flatten_Zlength__flat_bubble,
+    ``minister_flatten_Znth_pair__flat_bubble,
+    ``minister_hands_bound_Znth__flat_bubble,
+    ``flat_ministers_Zlength__flat_bubble,
+    ``flat_minister_product_bounds__flat_bubble,
+    ``flat_minister_product_eq__flat_bubble,
+    ``minister_flatten_replace_nth__flat_bubble,
+    ``minister_flatten_replace_Znth__flat_bubble,
+    ``replace_Znth_swap_form_minister__flat_bubble,
+    ``minister_swap_permutation_lt__flat_bubble,
+    ``replace_nth_comm_minister__flat_bubble,
+    ``replace_Znth_comm_minister__flat_bubble,
+    ``minister_swap_permutation__flat_bubble,
+    ``minister_swap_Zlength__flat_bubble,
+    ``minister_swap_hands_bound__flat_bubble,
+    ``minister_flatten_swap__flat_bubble,
+    ``flat_ministers_swap__flat_bubble,
+    ``minister_swap_flat_preprocess_form__flat_bubble,
+    ``minister_swap_Znth_left__flat_bubble,
+    ``minister_swap_Znth_right__flat_bubble,
+    ``minister_swap_Znth_other__flat_bubble,
+    ``bubble_outer_initial__flat_bubble,
+    ``bubble_scan_initial__flat_bubble,
+    ``bubble_scan_step_no_swap__flat_bubble,
+    ``bubble_outer_swap_prefix__flat_bubble,
+    ``bubble_scan_step_swap__flat_bubble,
+    ``bubble_outer_finish_pass__flat_bubble,
+    ``bubble_outer_final_sorted__greedy_optimum,
+    ``minister_sorted_cons__greedy_optimum,
+    ``minister_reward_cons_zero__greedy_optimum,
+    ``minister_reward_cons_succ__greedy_optimum,
+    ``minister_reward_two_cons_tail__greedy_optimum,
+    ``positive_cross_div_le__greedy_optimum,
+    ``positive_adjacent_exchange_bound__greedy_optimum,
+    ``positive_move_minimum_to_front_bound__greedy_optimum,
+    ``positive_sorted_global_bound__greedy_optimum,
+    ``finite_nonempty_index_max__greedy_optimum,
+    ``positive_sorted_realizes_kings_optimum__greedy_optimum,
+    ``proof_of_swap_ministers_return_wit_1_split_goal_1,
+    ``proof_of_swap_ministers_return_wit_1_split_goal_2,
+    ``proof_of_swap_ministers_return_wit_1_split_goal_3,
+    ``proof_of_swap_ministers_return_wit_1_split_goal_4,
+    ``proof_of_swap_ministers_return_wit_1_split_goal_5,
+    ``proof_of_swap_ministers_return_wit_1,
+    ``proof_of_kings_game_safety_wit_28_split_goal_1,
+    ``proof_of_kings_game_safety_wit_28_split_goal_2,
+    ``proof_of_kings_game_safety_wit_28,
+    ``proof_of_kings_game_safety_wit_29_split_goal_1,
+    ``proof_of_kings_game_safety_wit_29_split_goal_2,
+    ``proof_of_kings_game_safety_wit_29,
+    ``proof_of_kings_game_entail_wit_1_split_goal_1,
+    ``proof_of_kings_game_entail_wit_1_split_goal_2,
+    ``proof_of_kings_game_entail_wit_1,
+    ``proof_of_kings_game_entail_wit_2_split_goal_1,
+    ``proof_of_kings_game_entail_wit_2,
+    ``proof_of_kings_game_entail_wit_3,
+    ``proof_of_kings_game_entail_wit_4,
+    ``proof_of_kings_game_entail_wit_5_1,
+    ``proof_of_kings_game_entail_wit_5_2,
+    ``proof_of_kings_game_entail_wit_6,
+    ``proof_of_kings_game_return_wit_1]
+  for decl in proved do
+    if (← Lean.collectAxioms decl).contains ``sorryAx then
+      throwError "Completed kings_game proof {decl} depends on sorryAx"

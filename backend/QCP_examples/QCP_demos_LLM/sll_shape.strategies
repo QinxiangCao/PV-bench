@@ -1,0 +1,173 @@
+#include "sll_shape_def.h"
+
+
+
+id : 3
+priority : core(0)
+left : listrep(NULL) at 0
+action : left_erase(0);
+
+id : 4
+priority : core(0)
+right : listrep(NULL) at 0 
+action : right_erase(0);
+
+id : 5
+priority : core(0)
+left : (?p : Z == NULL || NULL == ?p : Z) at 0
+right : listrep(p) at 1
+action : right_erase(1);
+
+id : 6
+priority : core(1)
+left : listrep(?p : Z) at 0
+       (p == NULL || NULL == p) at 1
+action : left_erase(0);
+
+id : 7
+priority : core(5)
+left : listrep(?p : Z) at 0
+right : listrep(p) at 1
+action : left_erase(0);
+         right_erase(1);
+
+id : 8
+priority : core(6)
+left : listrep(?p : Z) at 0
+       (p != NULL || NULL != p) at 1
+right : (store(field_addr(p, list, data), I32, ?q : Z) || store(field_addr(p, list, next), PTR(struct list), ?q : Z)) at 2
+action : left_erase(0);
+         left_exist_add(x : Z);
+         left_exist_add(y : Z);
+         left_add(store(field_addr(p, list, data), I32, x));
+         left_add(store(field_addr(p, list, next), PTR(struct list), y));
+         left_add(listrep(y));
+ 
+id : 9
+priority : core(6)
+left : (?p : Z != NULL || NULL != ?p : Z) at 0
+right : listrep(p) at 1
+action : right_erase(1);
+         right_exist_add(x : Z);
+         right_exist_add(y : Z);
+         right_add(store(field_addr(p, list, data), I32, x));
+         right_add(store(field_addr(p, list, next), PTR(struct list), y));
+         right_add(listrep(y));
+
+id : 10
+priority : core(3)
+left : lseg(?p : Z, ?q : Z) at 0
+right : listrep(p) at 1 
+action: left_erase(0);
+        right_erase(1);
+        right_add(listrep(q));
+
+id : 11
+priority : core(4)
+left : (store(field_addr(?p, list, data), I32, ?q : Z) || store(field_addr(?p, list, next), PTR(struct list), ?q : Z)) at 0
+       (p != NULL || NULL != p) at 1
+right : listrep(p) at 2
+action : right_erase(2);
+         right_exist_add(x : Z);
+         right_exist_add(y : Z);
+         right_add(store(field_addr(p, list, data), I32, x));
+         right_add(store(field_addr(p, list, next), PTR(struct list), y));
+         right_add(listrep(y));
+
+id : 14
+priority : core(0)
+right : lseg(?p : Z, p) at 0
+        listrep(p) at 1
+action : right_erase(0);
+
+id : 15
+priority : core(0)
+right : lseg(?p : Z, p) at 0
+        (store(field_addr(p, list, data), I32, ?q : Z) || store(field_addr(p, list, next), PTR(struct list), ?q : Z)) at 1
+action : right_erase(0);
+
+id : 16
+priority : core(3)
+left : lseg(?p : Z, ?q) at 0
+        store(field_addr(q, list, next), PTR(struct list), ?z : Z) at 1
+        (q != NULL || NULL != q) at 2
+right : lseg(p, z) at 3
+action : left_erase(0);
+         left_erase(1);
+         right_erase(3);
+         right_exist_add(h : Z);
+         right_add(store(field_addr(q, list, data), I32, h)); 
+
+id : 17
+priority : core(4)
+left : store(field_addr(?p, list, next), PTR(struct list), ?q : Z) at 0
+       (p != NULL || NULL != p) at 1
+right : lseg(p, ?z) at 2
+action : right_erase(2);
+         right_exist_add(x : Z);
+         right_exist_add(y : Z);
+         right_add(store(field_addr(p, list, data), I32, x));
+         right_add(store(field_addr(p, list, next), PTR(struct list), y));
+         right_add(lseg(y, z));
+
+id : 18
+priority : core(4)
+left : lseg(?p, ?q) at 0
+right : lseg(p, ?z) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(lseg(q, z));
+
+id : 19
+priority : core(4)
+right : lseg(?p : Z, p) at 0
+        (p != NULL || NULL != p) at 1
+action : right_erase(0);
+
+id : 20
+priority : core(4)
+right : lseg(?p : Z, ?q) at 0
+check : infer(p == 0);
+        infer(q == 0);
+action : right_erase(0);
+
+
+id : 21
+priority : core(3)
+left : listrep(?p : Z) at 0
+right : lseg(p, ?q : Z) at 1
+check : infer(q == 0);
+action : left_erase(0);
+         right_erase(1);
+
+id : 22
+priority : core(6)
+left : lseg(?p : Z, ?q : Z) at 0
+       (p != q || q != p) at 1
+       (p != NULL || NULL != p) at 2
+right : (store(field_addr(p, list, data), I32, ?v : Z) || store(field_addr(p, list, next), PTR(struct list), ?n : Z)) at 3
+action : left_erase(0);
+         left_exist_add(x : Z);
+         left_exist_add(y : Z);
+         left_add(store(field_addr(p, list, data), I32, x));
+         left_add(store(field_addr(p, list, next), PTR(struct list), y));
+         left_add(lseg(y, q));
+
+id : 23
+priority : core(0)
+right : lseg(?p : Z, p) at 0
+action : right_erase(0);
+
+id : 24
+priority : core(4)
+left : lseg(?p : Z, ?q : Z) at 0
+check : infer(p == 0);
+action : left_erase(0);
+         left_add(q == 0);
+
+id : 25
+priority : core(0)
+left : lseg(?p : Z, ?q : Z) at 0
+        listrep(q) at 1
+check : infer(p == q);
+action : left_erase(0);

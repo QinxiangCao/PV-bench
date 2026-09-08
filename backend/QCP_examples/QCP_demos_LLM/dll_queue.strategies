@@ -1,0 +1,24 @@
+//test curent rules
+//max rule id:30
+
+#include "dll_queue_def.h"
+
+
+
+
+id : 0
+priority : core(2)
+left : store_queue(?p, ?l0) at 0
+right : store_queue(p, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(l0 == l1);
+
+id : 1
+priority : core(2)
+left : dllseg(?p, 0, ?q, ?r, ?l0) at 0
+right : dllseg(p, 0, q, r, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(l0 == l1);
+

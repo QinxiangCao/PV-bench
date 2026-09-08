@@ -1,0 +1,163 @@
+//test curent rules
+//max rule id:30
+
+#include "sll_def.h"
+
+
+id : 3
+priority : core(0)
+left : sll(?p, nil{Z}) at 0
+action : left_erase(0);
+         left_add(p == NULL);
+
+id : 4
+priority : core(0)
+right : sll(?p, nil{Z}) at 0
+action : right_erase(0);
+         right_add(p == NULL);
+
+id : 5
+priority : core(0)
+right : sll(NULL, ?l) at 0
+action : right_erase(0);
+         right_add(l == nil{Z});
+
+id : 6
+priority : core(0)
+left : sll(?p, cons{Z}(?x0, ?l0)) at 0
+right : sll(p, cons{Z}(?x1, ?l1)) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(x0 == x1);
+         right_add(l0 == l1);
+
+id : 7
+priority : core(2)
+left : sll(?p, ?l0) at 0
+right : sll(p, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(l0 == l1);
+
+id : 8
+priority : core(4)
+left : sll(?p, ?l) at 0
+       (p != NULL || NULL != p) at 1
+right : (store(field_addr(p, list, data), I32, ?q) || store(field_addr(p, list, next), PTR(struct list), ?q)) at 2
+action : left_erase(0);
+         left_exist_add(x);
+         left_exist_add(l0);
+         left_add(sll(p, cons{Z}(x, l0)));
+         left_add(l == cons{Z}(x, l0));
+ 
+id : 9
+priority : core(4)
+left : (?p != NULL || NULL != ?p) at 0
+right : sll(p, ?l) at 1
+action : right_erase(1);
+         right_exist_add(x);
+         right_exist_add(l0);
+         right_add(sll(p, cons{Z}(x, l0)));
+         right_add(l == cons{Z}(x, l0));
+
+id : 10
+priority : core(3)
+left : sll(?p, cons{Z}(?x, ?l)) at 0
+action : left_erase(0);
+         left_exist_add(y);
+         left_add(store(field_addr(p, list, data), I32, x));
+         left_add(store(field_addr(p, list, next), PTR(struct list), y));
+         left_add(sll(y, l));
+ 
+id : 11
+priority : core(3)
+right : sll(?p, cons{Z}(?x, ?l)) at 0
+action : right_erase(0);
+         right_exist_add(y);
+         right_add(p != 0);
+         right_add(store(field_addr(p, list, data), I32, x));
+         right_add(store(field_addr(p, list, next), PTR(struct list), y));
+         right_add(sll(y, l));
+
+id : 14
+priority : core(1)
+right : sllseg(?p, p, ?l) at 0
+        sll(p, ?l0) at 1
+action : right_erase(0);
+         right_add(l == nil{Z});
+
+id : 15
+priority : core(1)
+right : sllseg(?p, p, ?l) at 0
+        store(field_addr(p, list, data), I32, ?h) at 1
+action : right_erase(0);
+         right_add(l == nil{Z});
+
+id : 16
+priority : core(1)
+right : sllbseg(?p, p, ?l) at 0
+        store(p, PTR(struct list), ?q) at 1
+action : right_erase(0);
+         right_add(l == nil{Z});
+
+id : 17
+priority : core(1)
+right : sllbseg(?p, p, ?l) at 0
+        undef_data_at(p, ?ty) at 1
+action : right_erase(0);
+         right_add(l == nil{Z});
+
+id : 18
+priority : core(1)
+left : sllbseg(?p, ?q, ?l1) at 0
+right : sllbseg(p, q, ?l2) at 2
+left : store(q, PTR(struct list), ?v1) at 1
+right : store(q, PTR(struct list), ?v2) at 3
+action : left_erase(0);
+         right_erase(2);
+         right_add(l1 == l2);
+
+id : 19
+priority : core(1)
+left : sllbseg(?p, ?q, ?l1) at 0
+       undef_data_at(q, ?ty) at 1
+right : sllbseg(p, ?r, ?l2) at 2
+        undef_data_at(r, ty) at 3
+action : left_erase(0);
+         right_erase(2);
+         right_add(q == r);
+         right_add(l1 == l2);
+
+
+id : 20 
+priority : core(1)
+left : (?p : Z == NULL || NULL == ?p : Z) at 0
+right : sll(p, ?l) at 1
+action : right_erase(1); 
+         right_add(l == nil{Z});
+
+id : 21
+priority : unfold_sll(0)
+left : (?p : Z != NULL || NULL != ?p : Z) at 0
+       sll(p, ?l) at 1
+action : left_erase(1);
+         left_exist_add(d);
+         left_exist_add(q);
+         left_exist_add(l0);
+         left_add(store(field_addr(p, list, data), I32, d));
+         left_add(store(field_addr(p, list, next), PTR(struct list), q));
+         left_add(sll(q, l0));
+         left_add(l == cons{Z}(d, l0));
+
+id : 22
+priority : fold_sll(0)
+left : store(field_addr(?p, list, data), I32, ?d) at 0
+       store(field_addr(p, list, next), PTR(struct list), ?q) at 1
+       sll(q, ?l0) at 2
+       (p != NULL || NULL != p) at 3
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_exist_add(l);
+         left_add(sll(p, l));
+         left_add(l == cons{Z}(d, l0));

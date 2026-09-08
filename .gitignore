@@ -58,3 +58,6 @@ benchmarks/Engineering/glibc_slist/
 
 # --- working documents (not part of the published benchmark) ---
 /notes/
+
+# --- QCP binaries: fetched by tools/fetch-backend-binaries.sh, not committed ---
+/backend/binary/

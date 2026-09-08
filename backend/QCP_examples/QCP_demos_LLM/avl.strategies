@@ -1,0 +1,187 @@
+#include "avl_def.h"
+
+
+id : 0
+priority : core(1)
+left : store_tree(?p, ?tr0) at 0
+right : store_tree(p, ?tr1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(tr0 == tr1);
+
+id : 1
+priority : core(3)
+left : store_tree(?p, ?tr) at 0
+       p != NULL at 1
+action : left_erase(0);
+         left_exist_add(k);
+         left_exist_add(v);
+         left_exist_add(h);
+         left_exist_add(l);
+         left_exist_add(r);
+         left_exist_add(tr1);
+         left_exist_add(tr2);
+         left_add(single_tree_node(p,k,v,h,l,r));
+         left_add(store_tree(l,tr1));
+         left_add(store_tree(r,tr2));
+         left_add(tr == make_tree(tr1,tr2));
+
+id : 2
+priority : core(3)
+left : ?p != NULL at 0
+right : store_tree(p, ?tr) at 1
+action : right_erase(1);
+         right_exist_add(k);
+         right_exist_add(v);
+         right_exist_add(h);
+         right_exist_add(l);
+         right_exist_add(r);
+         right_exist_add(tr1);
+         right_exist_add(tr2);
+         right_add(single_tree_node(p,k,v,h,l,r));
+         right_add(store_tree(l,tr1));
+         right_add(store_tree(r,tr2));
+         right_add(tr == make_tree(tr1,tr2));
+
+id : 3
+priority : core(3)
+left : store_tree(?p, ?tr) at 0
+       p == NULL at 1
+action : left_erase(0);
+         left_add(tr == empty());
+
+id : 4
+priority : core(3)
+left : ?p == NULL at 0
+right : store_tree(p, ?tr) at 1
+action : right_erase(1);
+         right_add(tr == empty());
+
+id : 5
+priority : core(4)
+left : single_tree_node(?p,?k,?v,?h,?l,?r) at 0
+action : left_erase(0);
+         left_add(store(field_addr(p,tree,key),I32,k));
+         left_add(store(field_addr(p,tree,value),I32,v));
+         left_add(store(field_addr(p,tree,height),U8,h));
+         left_add(store(field_addr(p,tree,lchild),PTR(struct tree),l));
+         left_add(store(field_addr(p,tree,rchild),PTR(struct tree),r));
+
+id : 6
+priority : core(4)
+right : single_tree_node(?p,?k,?v,?h,?l,?r) at 0
+action : right_erase(0);
+         right_add(store(field_addr(p,tree,key),I32,k));
+         right_add(store(field_addr(p,tree,value),I32,v));
+         right_add(store(field_addr(p,tree,height),U8,h));
+         right_add(store(field_addr(p,tree,lchild),PTR(struct tree),l));
+         right_add(store(field_addr(p,tree,rchild),PTR(struct tree),r));
+
+id : 7
+priority : post(1)
+left : store(field_addr(?p,tree,key),I32,?k) at 0
+       store(field_addr(p,tree,value),I32,?v) at 1
+       store(field_addr(p,tree,height),U8,?h) at 2
+       store(field_addr(p,tree,lchild),PTR(struct tree),?l) at 3
+       store(field_addr(p,tree,rchild),PTR(struct tree),?r) at 4
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_add(single_tree_node(p,k,v,h,l,r));
+
+
+id : 8
+priority : post(1)
+right : store(field_addr(?p,tree,key),I32,?k) at 0
+       store(field_addr(p,tree,value),I32,?v) at 1
+       store(field_addr(p,tree,height),U8,?h) at 2
+       store(field_addr(p,tree,lchild),PTR(struct tree),?l) at 3
+       store(field_addr(p,tree,rchild),PTR(struct tree),?r) at 4
+action : right_erase(0);
+         right_erase(1);
+         right_erase(2);
+         right_erase(3);
+         right_erase(4);
+         right_add(single_tree_node(p,k,v,h,l,r));
+
+id : 9
+priority : core(1)
+left : store_tree_shape(?p) at 0
+right : store_tree_shape(p) at 1
+action : left_erase(0);
+         right_erase(1);
+
+id : 10
+priority : core(3)
+left : store_tree_shape(?p) at 0
+action : left_erase(0);
+         left_exist_add(tr);
+         left_add(store_tree(p,tr));
+
+id : 11
+priority: core(3)
+right : store_tree_shape(?p) at 0
+action : right_erase(0);
+         right_exist_add(tr);
+         right_add(store_tree(p, tr));
+
+id : 12
+priority: core(1)
+left: store_non_empty_tree(?p) at 0
+right: store_non_empty_tree(p) at 1
+action : left_erase(0);
+         right_erase(1);
+
+
+
+id : 13
+priority: core(3)
+left : store_non_empty_tree(?p) at 0
+action : left_erase(0);
+         left_add(p!=NULL);
+         left_add(store_tree_shape(p));
+
+id : 15
+priority : core(3)
+left : ?p != NULL at 0
+right : store_non_empty_tree(?p) at 1
+action : right_erase(1);
+         right_add(store_tree_shape(p));
+
+id : 16
+priority : core(3)
+right : store_tree(?p, ?tr) at 1
+check : infer(p != NULL);
+action : left_add(p!=NULL);
+         right_erase(1);
+         right_exist_add(k);
+         right_exist_add(v);
+         right_exist_add(h);
+         right_exist_add(l);
+         right_exist_add(r);
+         right_exist_add(tr1);
+         right_exist_add(tr2);
+         right_add(single_tree_node(p,k,v,h,l,r));
+         right_add(store_tree(l,tr1));
+         right_add(store_tree(r,tr2));
+         right_add(tr == make_tree(tr1,tr2));
+
+id: 17
+priority : core(3)
+right : exists tr,store_tree(0,tr) at 0
+action : right_erase(0);
+         right_add(tr==empty());
+
+ id : 25
+priority : core(1)
+left : store(?p : Z, U8, ?x : Z) at 0
+check : absense(x >= 0);
+action : left_add(x >= 0);
+
+id : 26
+priority : core(1)
+left : store(?p : Z, U8, ?x : Z) at 0
+check : absense(x <= 255);
+action : left_add(x <= 255);        

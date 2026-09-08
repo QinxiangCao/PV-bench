@@ -1,0 +1,16 @@
+import SimpleC.EE.LLM_bench.Codeforces.examples_shard00.P011_765A_neverending_competitions_goal
+
+set_option linter.unusedVariables false
+
+namespace SimpleC.EE.LLM_bench.Codeforces.examples_shard00.P011_765A_neverending_competitions_proof_auto
+
+-- Inherited Coq Admitted: Rocq/examples/LLM_bench/Codeforces/examples_shard00/P011_765A_neverending_competitions_proof_auto.v
+theorem proof_of_solver_safety_wit_1 : SimpleC.EE.LLM_bench.Codeforces.examples_shard00.P011_765A_neverending_competitions_goal.solver_safety_wit_1 := by
+  sorry
+
+-- Inherited Coq Admitted: Rocq/examples/LLM_bench/Codeforces/examples_shard00/P011_765A_neverending_competitions_proof_auto.v
+theorem proof_of_solver_safety_wit_2 : SimpleC.EE.LLM_bench.Codeforces.examples_shard00.P011_765A_neverending_competitions_goal.solver_safety_wit_2 := by
+  sorry
+
+
+end SimpleC.EE.LLM_bench.Codeforces.examples_shard00.P011_765A_neverending_competitions_proof_auto

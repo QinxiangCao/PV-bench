@@ -1,0 +1,73 @@
+import SimpleC.EE.LLM_bench.Algorithms.zero_one_knapsack.zero_one_knapsack_goal_check
+
+open SimpleC.EE.LLM_bench.Algorithms.zero_one_knapsack.zero_one_knapsack_lib
+open SimpleC.EE.LLM_bench.Algorithms.zero_one_knapsack.zero_one_knapsack_proof_manual
+
+-- Audit all 34 library and 27 manual source Qed declarations.
+-- The 39 auto Admitted declarations are inherited separately.
+run_cmd do
+  let proved := #[
+    ``KnapsackRowsDone_to_RowProgress0,
+    ``KnapsackRowProgress_end_to_RowsDone,
+    ``KnapsackRowProgress_index_bound,
+    ``KnapsackRowProgress_lookup_cell,
+    ``KnapsackRowsDone_index_bound,
+    ``KnapsackRowsDone_lookup_cell,
+    ``Forall_Z_lt_0_nil,
+    ``sum_map_weights_nonnegative,
+    ``KnapsackPlan_empty,
+    ``KnapsackPlan_row0_value_zero,
+    ``KnapsackPlan_col0_value_zero,
+    ``KnapsackCellCorrect_row0_zero,
+    ``KnapsackCellCorrect_col0_zero,
+    ``KnapsackRowProgress_append_cell,
+    ``append_zero_range,
+    ``Z_index_unique,
+    ``NoDup_remove_Z,
+    ``Forall_remove_Z,
+    ``sum_map_remove_NoDup,
+    ``KnapsackPlan_promote_item,
+    ``KnapsackPlan_add_item,
+    ``sum_map_nonneg,
+    ``KnapsackPlan_split_last_item,
+    ``KnapsackCellCorrect_take_better,
+    ``KnapsackCellCorrect_keep_without_when_better_or_equal,
+    ``KnapsackCellCorrect_too_heavy,
+    ``Forall_range_incl_seq,
+    ``NoDup_Forall_range_length_le,
+    ``sum_map_values_bound,
+    ``KnapsackCellCorrect_value_bound,
+    ``KnapsackRowProgress_append_cell_recurrence,
+    ``KnapsackMaxValue_parameters_nonnegative__dp_refinement_and_exit,
+    ``KnapsackRowAnnotationState_append_cell__row_state_result_refactor,
+    ``KnapsackRowsAnnotationState_to_Result__row_state_result_refactor,
+    ``proof_of_zeroOneKnapsack_safety_wit_22_split_goal_1,
+    ``proof_of_zeroOneKnapsack_safety_wit_22_split_goal_2,
+    ``proof_of_zeroOneKnapsack_safety_wit_22,
+    ``proof_of_zeroOneKnapsack_safety_wit_29_split_goal_1,
+    ``proof_of_zeroOneKnapsack_safety_wit_29_split_goal_2,
+    ``proof_of_zeroOneKnapsack_safety_wit_29,
+    ``proof_of_zeroOneKnapsack_safety_wit_30_split_goal_1,
+    ``proof_of_zeroOneKnapsack_safety_wit_30_split_goal_2,
+    ``proof_of_zeroOneKnapsack_safety_wit_30,
+    ``proof_of_zeroOneKnapsack_entail_wit_1,
+    ``proof_of_zeroOneKnapsack_entail_wit_2,
+    ``proof_of_zeroOneKnapsack_entail_wit_3_split_goal_1,
+    ``proof_of_zeroOneKnapsack_entail_wit_3,
+    ``proof_of_zeroOneKnapsack_entail_wit_5_split_goal_1,
+    ``proof_of_zeroOneKnapsack_entail_wit_5,
+    ``proof_of_zeroOneKnapsack_entail_wit_6_split_goal_1,
+    ``proof_of_zeroOneKnapsack_entail_wit_6,
+    ``proof_of_zeroOneKnapsack_entail_wit_7_1,
+    ``proof_of_zeroOneKnapsack_entail_wit_7_2,
+    ``proof_of_zeroOneKnapsack_entail_wit_7_3,
+    ``proof_of_zeroOneKnapsack_entail_wit_7_4,
+    ``proof_of_zeroOneKnapsack_entail_wit_7_5,
+    ``proof_of_zeroOneKnapsack_entail_wit_8,
+    ``proof_of_zeroOneKnapsack_entail_wit_9,
+    ``proof_of_zeroOneKnapsack_entail_wit_10_split_goal_1,
+    ``proof_of_zeroOneKnapsack_entail_wit_10_split_goal_2,
+    ``proof_of_zeroOneKnapsack_entail_wit_10]
+  for decl in proved do
+    if (← Lean.collectAxioms decl).contains ``sorryAx then
+      throwError "Completed zero_one_knapsack proof {decl} depends on sorryAx"

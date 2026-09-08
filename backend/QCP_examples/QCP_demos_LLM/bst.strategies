@@ -1,0 +1,45 @@
+//test curent rules
+//max rule id:30
+
+#include "bst_def.h"
+
+
+
+id : 0
+priority : core(1)
+left : store_tree(?p, ?tr0) at 0
+right : store_tree(p, ?tr1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(tr0 == tr1);
+
+id : 1
+priority : core(1)
+right : store_ptb(?p, p, ?pt) at 0
+        store(p, PTR(struct tree), ?q) at 1
+action : right_erase(0);
+         right_add(pt == empty_partial_tree());
+
+
+id : 2
+priority : core(1)
+left : store_ptb(?p, ?rt, ?tr0) at 0
+right : store_ptb(p, rt, ?tr1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(tr0 == tr1);
+
+id : 4
+priority : core(1)
+right : store_pt(?p, p, ?pt) at 0
+        store(p, PTR(struct tree), ?q) at 1
+action : right_erase(0);
+         right_add(pt == empty_partial_tree());
+
+id : 5
+priority : core(1)
+left : store_pt(?p, ?rt, ?tr0) at 0
+right : store_pt(p, rt, ?tr1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(tr0 == tr1);

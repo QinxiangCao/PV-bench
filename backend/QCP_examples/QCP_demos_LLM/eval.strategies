@@ -1,0 +1,22 @@
+//test curent rules
+//max rule id:30
+
+
+#include "eval_def.h"
+
+id : 0
+priority : core(1)
+left : store_expr(?p, ?l0) at 0
+right : store_expr(p, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(l0 == l1);
+
+id : 1
+priority : core(1)
+left : store_expr_aux(?p, ?q0, ?l0) at 0
+right : store_expr_aux(p, ?q1, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(q0 == q1);
+         right_add(l0 == l1);

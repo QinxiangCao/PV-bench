@@ -1,0 +1,125 @@
+//test curent rules
+//max rule id:30
+
+
+
+
+#include "poly_sll_def.h"
+
+id : 1
+priority : core(0)
+left : sll{?A}(?storeA, ?x, ?l) at 0
+check : absense(sll_para{A}(storeA));
+action : left_add(sll_para{A}(storeA));
+
+id : 2
+priority : core(0)
+left : sllseg{?A}(?storeA, ?x, ?y, ?l) at 0
+check : absense(sll_para{A}(storeA));
+action : left_add(sll_para{A}(storeA));
+
+id : 4
+priority : core(1)
+left : sll{?A}(?storeA, null, ?l) at 0
+action : left_erase(0);
+         left_add(l == nil{A});
+ 
+id : 5
+priority : core(1)
+right : sll{?A}(?storeA, null, ?l) at 0
+action : right_erase(0);
+         right_add(l == nil{A});
+
+id : 7
+priority : core(2)
+left : sll{?A}(?storeA,?p, ?l0) at 0
+right : sll{A}(storeA, p, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(l0 == l1);
+
+id : 8
+priority : core(4)
+left : sll{?A}(?storeA, ?p, ?l) at 0
+       (p != NULL || NULL != p) at 1
+action : left_erase(0);
+         left_exist_add(x : A);
+         left_exist_add(l0 : list{A});
+         left_add(sll{A}(storeA, p, cons{A}(x, l0)));
+         left_add(l == cons{A}(x, l0));
+ 
+id : 9
+priority : core(4)
+left : (?p != NULL || NULL != ?p) at 0
+right : sll{?A}(?storeA, p, ?l) at 1
+action : right_erase(1);
+         right_exist_add(x);
+         right_exist_add(l0);
+         right_add(sll{A}(storeA, p, cons{A}(x, l0)));
+         right_add(l == cons{A}(x, l0));
+ 
+ 
+id : 10
+priority : core(3)
+left : sll{?A}(?storeA, ?p, cons{A}(?x, ?l)) at 0
+action : left_erase(0);
+         left_exist_add(y);
+         left_exist_add(h);
+         left_add(store(field_addr(p, list, data), PTR(struct list), h));
+         left_add(storeA(h, x));
+         left_add(store(field_addr(p, list, next), PTR(struct list), y));
+         left_add(sll{A}(storeA, y, l));
+ 
+id : 11
+priority : core(3)
+right : sll{?A}(?storeA, ?p, cons{A}(?x, ?l)) at 0
+action : right_erase(0);
+         right_exist_add(y);
+         right_exist_add(h);
+         right_add(p != NULL);
+         right_add(store(field_addr(p, list, data), PTR(struct list), h));
+         right_add(storeA(h, x));
+         right_add(store(field_addr(p, list, next), PTR(struct list), y));
+         right_add(sll{A}(storeA, y, l));
+ 
+id : 12
+priority : core(3)
+left : sllseg{A}(?storeA, ?p, ?q, ?l0) at 0
+right : sll{A}(storeA, p, ?l1) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_exist_add(l2);
+         right_add(l1 == app{A}(l0, l2));
+         right_add(sll{A}(storeA, q, l2));
+
+id : 16
+priority : core(1)
+left : (?storeA : Z -> ?A -> asrt)(?p, ?x) at 1
+right : storeA(p, ?y) at 2
+action : left_erase(1);
+         right_erase(2);
+         right_add(x == y);
+
+id : 17
+priority : core(1)
+left : sllseg{A}(?storeA, ?p, p, ?l) at 0
+left : sll{A}(storeA, p, ?l0) at 1
+check : absense(l == nil{A});
+        absense(nil{A} == l);
+action : left_erase(0);
+         left_add(l == nil{A});
+
+id : 18
+priority : core(1)
+right : sllseg{A}(?storeA, ?p, p, ?l) at 0
+        sll{A}(storeA, p, ?l0) at 1
+check : absense(l == nil{A});
+        absense(nil{A} == l);
+action : right_erase(0);
+         right_add(l == nil{A});
+
+
+id : 19
+priority : Tagcancel(1)
+left : sll_para{?A}(?storeA) at 0
+action : left_erase(0);

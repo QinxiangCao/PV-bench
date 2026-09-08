@@ -1,0 +1,76 @@
+import SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal
+
+set_option linter.unusedVariables false
+
+namespace SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_proof_auto
+
+theorem proof_of_optimized_selection_sort_safety_wit_1 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_1 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_2 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_2 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_3 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_3 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_4 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_4 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_5 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_5 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_6 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_6 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_7 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_7 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_8 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_8 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_safety_wit_9 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_safety_wit_9 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_entail_wit_3_1 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_entail_wit_3_1 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_entail_wit_3_2 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_entail_wit_3_2 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_1 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_1 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_2 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_2 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_3 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_3 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_4 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_4 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_5 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_5 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+theorem proof_of_optimized_selection_sort_partial_solve_wit_6 : SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_goal.optimized_selection_sort_partial_solve_wit_6 := by
+  -- Corresponding Coq declaration ends in Admitted.
+  sorry
+
+
+end SimpleC.EE.LLM_bench.Algorithms.optimized_selection_sort.optimized_selection_sort_proof_auto

@@ -1,0 +1,14 @@
+//max rule id:2
+#include "string.h"
+
+id : 1
+priority : core(1)
+left : store_string(?p, ?l) at 0
+action : left_erase(0);
+         left_add(CharArray::full(p, string_length(l) + 1, c_string(l)));
+
+id : 2
+priority : core(1)
+right : store_string(?p, ?l) at 0
+action : right_erase(0);
+         right_add(CharArray::full(p, string_length(l) + 1, c_string(l)));
