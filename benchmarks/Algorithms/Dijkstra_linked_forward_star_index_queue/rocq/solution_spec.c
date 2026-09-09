@@ -1,4 +1,4 @@
-#include "Data_structures/priority_queue_index/priority_queue_index_def.h"
+#include "Data_structures/priority_queue_index/rocq/priority_queue_index_def.h"
 
 /*@ Import Coq From GraphLib Require Import Zweight */
 /*@ Import Coq Require Import PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.spec_lib */

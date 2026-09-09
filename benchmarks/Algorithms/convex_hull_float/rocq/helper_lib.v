@@ -16,17 +16,8 @@ Local Open Scope Z_scope.
 Local Open Scope sac.
 Local Open Scope string.
 
-(* Bit-level companions used by the float field projection strategies. *)
-Definition store_pointf_x_bits (p : addr) (bits : Z) : Assertion :=
-  poly_store FET_float p bits.
-Definition store_pointf_y_bits (p : addr) (bits : Z) : Assertion :=
-  poly_store FET_float p bits.
-
 Local Close Scope string_scope.
 
-Definition pointf_swap (l : list PointF) (i j : Z) : list PointF :=
-  replace_Znth j (Znth i l default_pointf)
-    (replace_Znth i (Znth j l default_pointf) l).
 Definition pointf_same_outside_range
     (before cur : list PointF) (lo hi : Z) : Prop :=
   Zlength before = Zlength cur /\

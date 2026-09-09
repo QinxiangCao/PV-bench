@@ -33,6 +33,14 @@ Import DijkstraDecreaseKey.
 Local Open Scope sac.
 From SimpleC.EE.QCP_demos_LLM Require Import safeexec_strategy_goal.
 From SimpleC.EE.QCP_demos_LLM Require Import safeexec_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import int_array_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import int_array_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import uint_array_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import uint_array_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import undef_uint_array_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import undef_uint_array_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import array_shape_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import array_shape_strategy_proof.
 
 (*----- Function dijkstra_linked_forward_star_init -----*)
 
@@ -2655,6 +2663,10 @@ EX (g_low_level_spec: G) (head_values_low_level_spec: (@list Z)) (to_values_low_
 Module Type VC_Correct.
 
 Include safeexec_Strategy_Correct.
+Include int_array_Strategy_Correct.
+Include uint_array_Strategy_Correct.
+Include undef_uint_array_Strategy_Correct.
+Include array_shape_Strategy_Correct.
 
 Axiom proof_of_dijkstra_linked_forward_star_init_safety_wit_1 : dijkstra_linked_forward_star_init_safety_wit_1.
 Axiom proof_of_dijkstra_linked_forward_star_init_safety_wit_2 : dijkstra_linked_forward_star_init_safety_wit_2.

@@ -24,11 +24,11 @@ Local Open Scope sac.
 
 Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.helper_lib.
 Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.groundtruth.common_proof_lib.
-Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.groundtruth.priority_queue_proof_lib.
+Require Export PVbench.Data_structures.priority_queue_index.rocq.groundtruth.proof_lib.
 
 Import DijkstraGraph.
 Module Import DijkstraLinkedForwardStarLocal :=
-  PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.common_helper_lib.DijkstraLinkedForwardStar.
+  PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.helper_lib.DijkstraLinkedForwardStar.
 Module Import DijkstraIndexQueueLocal :=
   PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.helper_lib.DijkstraIndexQueue.
 

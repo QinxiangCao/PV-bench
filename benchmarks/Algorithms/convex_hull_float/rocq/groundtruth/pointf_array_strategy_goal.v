@@ -5,9 +5,7 @@ Require Import Coq.Strings.String.
 Require Import Coq.micromega.Psatz.
 From SimpleC.SL Require Import SeparationLogic.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.convex_hull_float.rocq.spec_lib.
-Require Import PVbench.Algorithms.convex_hull_float.rocq.helper_lib.
-From PVbench.Algorithms.convex_hull_float.rocq.groundtruth Require Import proof_lib.
+Require Import PVbench.Algorithms.convex_hull_float.rocq.pointf_model.
 Local Open Scope Z_scope.
 Local Open Scope sac.
 Local Open Scope string.

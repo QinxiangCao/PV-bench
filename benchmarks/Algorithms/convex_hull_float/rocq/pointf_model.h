@@ -29,6 +29,8 @@
                (replace_Znth : {A} -> Z -> A -> list A -> list A)
  */
 
+/*@ Import Coq Require Import PVbench.Algorithms.convex_hull_float.rocq.pointf_model */
+
 /*@ include strategies "pointf_array.strategies" */
 
 #endif

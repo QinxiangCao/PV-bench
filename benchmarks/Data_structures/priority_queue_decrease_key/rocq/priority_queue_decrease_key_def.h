@@ -1,3 +1,7 @@
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
+
 /*@ Extern Coq (partial_map :: *) */
 /*@ Extern Coq
       (heap_capacity : Z)

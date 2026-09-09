@@ -1,4 +1,4 @@
-#include "Data_structures/priority_queue_index/priority_queue_index_def.h"
+#include "Data_structures/priority_queue_index/rocq/priority_queue_index_def.h"
 
 #define MAX_VERTEX_COUNT 10
 #define INF 1000000000

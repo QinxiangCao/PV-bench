@@ -29,10 +29,10 @@ Local Open Scope list_scope.
 Import naive_C_Rules.
 Local Open Scope sac.
 Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.helper_lib.
-Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.forward_star_helper_lib.
-Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.priority_queue_helper_lib.
+Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.helper_lib.
+Require Export PVbench.Data_structures.priority_queue_decrease_key.rocq.spec_lib.
 Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.groundtruth.forward_star_proof_lib.
-Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.groundtruth.priority_queue_proof_lib.
+Require Export PVbench.Data_structures.priority_queue_decrease_key.rocq.groundtruth.proof_lib.
 
 Lemma partial_map_empty_absent :
   forall data_x,

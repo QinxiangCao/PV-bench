@@ -24,11 +24,11 @@ Local Open Scope sac.
 
 Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.helper_lib.
 Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.groundtruth.common_proof_lib.
-Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.groundtruth.priority_queue_proof_lib.
+Require Export PVbench.Data_structures.priority_queue_decrease_key.rocq.groundtruth.proof_lib.
 
 Import DijkstraGraph.
 Module Import DijkstraLinkedForwardStarLocal :=
-  PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.common_helper_lib.DijkstraLinkedForwardStar.
+  PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.helper_lib.DijkstraLinkedForwardStar.
 Module Import DijkstraDecreaseKeyLocal :=
   PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.helper_lib.DijkstraDecreaseKey.
 

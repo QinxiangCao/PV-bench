@@ -25,13 +25,13 @@ Export MonadNotation.
 Local Open Scope monad.
 From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
-Require Import PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.groundtruth.priority_queue_proof_lib.
+Require Import PVbench.Data_structures.priority_queue_decrease_key.rocq.groundtruth.proof_lib.
 Require Import Algorithms.Dijkstra.Dijkstra.
 From GraphLib Require Import Zweight.
 Require Import PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.groundtruth.proof_lib.
 Import DijkstraGraph.
 Module Import DijkstraLinkedForwardStarDefinitions :=
-  PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.common_helper_lib.DijkstraLinkedForwardStar.
+  PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.helper_lib.DijkstraLinkedForwardStar.
 Module Import DijkstraDecreaseKeyDefinitions :=
   PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.helper_lib.DijkstraDecreaseKey.
 Import DijkstraDecreaseKey.

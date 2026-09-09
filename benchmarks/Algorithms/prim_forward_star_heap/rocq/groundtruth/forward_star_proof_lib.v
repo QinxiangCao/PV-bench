@@ -26,7 +26,7 @@ Local Open Scope Z_scope.
 Local Open Scope monad_scope.
 
 (** * 具体图模型 *)
-Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.forward_star_helper_lib.
+Require Export PVbench.Algorithms.prim_forward_star_heap.rocq.helper_lib.
 
 Lemma Znth_replace_Znth_same_local :
   forall (l : list Z) i v,
