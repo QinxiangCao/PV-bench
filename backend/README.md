@@ -16,10 +16,11 @@ QCP 证明库的最小子集，只包含 `benchmarks/` 下用例编译所需的�
 改为挂在 GitHub release 上：
 
 ```sh
-tools/fetch-backend-binaries.sh
+tools/fetch-backend-binaries.sh       # macOS / Linux / Git Bash
+tools\fetch-backend-binaries.ps1      # Windows PowerShell
 ```
 
-脚本把归档解到 `backend/binary/`，并补上可执行位。也可以自己下载解压，只要
+脚本把归档解到 `backend/binary/`（`.sh` 版还会补上可执行位；Windows 不需要）。也可以自己下载解压，只要
 `backend/binary/` 下是 `linux-binary/`、`mac-arm64-binary/`、`mac-x86-64-binary/`、
 `win-binary/` 四个目录即可。
 

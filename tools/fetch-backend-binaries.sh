@@ -9,6 +9,8 @@
 #   tools/fetch-backend-binaries.sh              # the release named below
 #   tools/fetch-backend-binaries.sh v2026.09.07  # a specific one
 #
+# On Windows without a POSIX shell, use fetch-backend-binaries.ps1 instead.
+#
 # The repo carrying the release is read from the origin remote. Override it with
 # QCP_BINARY_REPO=<owner>/<repo>, and the tag with QCP_BINARY_TAG.
 #
