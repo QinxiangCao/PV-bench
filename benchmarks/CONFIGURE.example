@@ -1,3 +1,3 @@
 # 本机配置。复制成 configure（已 gitignore），改成你的路径，然后 make。
 # QCP_ROCQ = QCP checkout 里的 Rocq/ 目录（含 sets/、SumLib/、SeparationLogic/ …）
-QCP_ROCQ = /path/to/qcp-backend/Rocq
+QCP_ROCQ = /path/to/QCP/Rocq
