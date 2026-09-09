@@ -1,4 +1,4 @@
-#include "Data_structures/priority_queue_decrease_key/priority_queue_decrease_key_def.h"
+#include "Data_structures/priority_queue_decrease_key/rocq/priority_queue_decrease_key_def.h"
 /*@ Import Coq Require Import PVbench.Algorithms.prim_forward_star_heap.rocq.spec_lib */
 /*@ Import Coq From ListLib.Base Require Import Positional */
 /*@ Extern Coq (St :: *) */

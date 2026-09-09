@@ -5,6 +5,7 @@ Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 Require Import Coq.Sorting.Permutation.
 Require Import SimpleC.EE.LLM_bench.Codeforces.SpecHelpers.
+Require Export Coq.Reals.Reals.
 
 Import ListNotations.
 Local Open Scope Z_scope.

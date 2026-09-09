@@ -97,8 +97,8 @@ QCP-written files, see [Regenerating groundtruth](#regenerating-groundtruth).
 
 ## Setup
 
-All builds run from `benchmarks/`, which holds `Makefile`, `_CoqProject.example`,
-`CONFIGURE.example`, `lakefile.lean` and `lean-toolchain`.
+All builds run from `benchmarks/`, which holds `Makefile`, `CONFIGURE.example`,
+`lakefile.lean` and `lean-toolchain`.
 
 Both backends load QCP's libraries from a checkout whose location differs per machine, so
 the resolved configuration (`_CoqProject`, `CONFIGURE`, `lake-manifest.json`) is untracked.
@@ -126,19 +126,22 @@ how the directory is kept in sync with upstream.
 ### Rocq
 
 Use Coq **8.20.1**. Put the path to QCP's `Rocq/` directory in a local `CONFIGURE`;
-`make` reads it and generates `_CoqProject` from `_CoqProject.example`:
+`make` reads it and passes the library mappings to `coqc` directly:
 
 ```sh
 cd benchmarks
-cp CONFIGURE.example CONFIGURE   # then set QCP_ROCQ to your .../qcp-backend/Rocq
+cp CONFIGURE.example CONFIGURE   # then set QCP_ROCQ to your QCP checkout's Rocq/
 make -j6                         # bounded parallelism; never a bare `make -j`
 ```
 
 `make clean` removes the build products. To check a single file:
 
 ```sh
-make -f Makefile.coq Algorithms/bubble_sort/rocq/spec_lib.vo
+make Algorithms/bubble_sort/rocq/helper_lib.vo
 ```
+
+`make _CoqProject` writes the mappings out for your editor's Rocq plugin; nothing
+in the build reads that file.
 
 ### Lean
 
@@ -200,3 +203,7 @@ generator output and is never touched.
 
 Regenerating is reproducible: for every problem in the benchmark, the goal, proof_auto and
 goal_check files come back byte-for-byte identical to the committed ones.
+
+## Contributors
+
+Kan Liu, Qi Liu, Ziting Ni, Lixiang Wang, Shushu Wu, Xiwei Wu, Lihan Xie

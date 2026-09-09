@@ -12,13 +12,18 @@
 # <stem>_goal_check.v into rocq/groundtruth/. A case that ships a .strategies
 # file also gets StrategyCheck run on it.
 #
-# symexec refuses to overwrite, so existing generated files are removed first --
-# except a proof_manual that holds real proofs (Qed./Defined.), which is kept
-# unless --force-manual is passed.
+# symexec refuses to overwrite, so existing generated files are removed first.
+# A proof_manual is removed only when it is a generated skeleton -- it carries
+# `Lemma proof_of_` lines and closes none of them with Qed./Defined. Anything
+# else, including a one-line file that just Requires _part1.._partN modules, is
+# kept unless --force-manual is passed.
+#
+# The four outputs are copied aside first and put back if the run fails, so a
+# failing case keeps the groundtruth it already had.
 
 set -uo pipefail
 source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/qcp-env.sh"
-ROOT="$(cd "$BACKEND/.." && pwd)"
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
 FORCE_MANUAL=0
 TARGETS=()
@@ -40,17 +45,28 @@ for t in "${TARGETS[@]}"; do
 done
 [ ${#cases[@]} -gt 0 ] || { echo "no cases with rocq/solution_annotated.c under: ${TARGETS[*]}" >&2; exit 1; }
 
+# A file symexec itself produced and nobody has finished: it states the
+# obligations and closes none of them.
+is_generated_skeleton() {
+  grep -q '^Lemma proof_of_' "$1" || return 1
+  ! grep -qE '^[[:space:]]*(Qed|Defined)\.' "$1"
+}
+
 ok=0; fail=0
 for case_dir in "${cases[@]}"; do
   stem="$(case_stem "$case_dir")"
   out="${OUT_DIR:-$case_dir/rocq/groundtruth}"
   mkdir -p "$out"
 
+  outputs=("${stem}_goal.v" "${stem}_proof_auto.v" "${stem}_goal_check.v" "${stem}_proof_manual.v")
+  backup="$(mktemp -d)"
+  for f in "${outputs[@]}"; do
+    [ -f "$out/$f" ] && cp "$out/$f" "$backup/$f"
+  done
+
   for suffix in goal proof_auto goal_check; do rm -f "$out/${stem}_${suffix}.v"; done
   manual="$out/${stem}_proof_manual.v"
-  if [ -f "$manual" ] && [ "$FORCE_MANUAL" -eq 0 ] && grep -qE '^\s*(Qed|Defined)\.' "$manual"; then
-    :   # holds real proofs -- leave it, symexec will skip it
-  else
+  if [ -f "$manual" ] && { [ "$FORCE_MANUAL" -eq 1 ] || is_generated_skeleton "$manual"; }; then
     rm -f "$manual"
   fi
 
@@ -75,6 +91,7 @@ for case_dir in "${cases[@]}"; do
     args+=("-slp" "$case_dir/rocq/" "$(logic_path "$case_dir" rocq.groundtruth)")
   fi
 
+  case_ok=1
   if "$QCP_BIN/symexec$EXE" "${args[@]}"; then
     for s in "$case_dir"/rocq/*.strategies; do
       [ -e "$s" ] || continue
@@ -84,15 +101,26 @@ for case_dir in "${cases[@]}"; do
         "-I$case_dir/rocq/" "-I$case_dir/" "-I${case_dir%%benchmarks/*}benchmarks/" "-slp" "$case_dir/rocq/" "$(logic_path "$case_dir" rocq.groundtruth)" \
         "${SHARED_ARGS[@]}" \
         "--input-file=$s" "--no-exec-info" \
-        || { echo "[FAIL strategy] $s" >&2; fail=$((fail+1)); continue 2; }
+        || { echo "[FAIL strategy] $s" >&2; case_ok=0; break; }
     done
-    ok=$((ok+1))
   else
     echo "[FAIL] $case_dir" >&2
-    fail=$((fail+1))
+    case_ok=0
   fi
-done
 
-find "$ROOT" -name '*.sacgen.tmp' -delete 2>/dev/null
+  if [ "$case_ok" -eq 1 ]; then
+    ok=$((ok+1))
+  else
+    fail=$((fail+1))
+    for f in "${outputs[@]}"; do
+      [ -f "$backup/$f" ] && cp "$backup/$f" "$out/$f"
+    done
+  fi
+  rm -rf "$backup"
+
+  # Only this case's staging files -- a repo-wide sweep would delete the
+  # in-flight output of a concurrent run.
+  find "$out" "$case_dir/rocq" -maxdepth 1 -name '*.sacgen.tmp' -delete 2>/dev/null
+done
 echo "rocq groundtruth: $ok ok, $fail failed"
 [ "$fail" -eq 0 ]

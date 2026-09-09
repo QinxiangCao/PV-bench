@@ -1,0 +1,5 @@
+From PVbench.Algorithms.convex_hull_float.rocq.groundtruth Require Import pointf_array_strategy_goal pointf_array_strategy_proof.
+
+Module pointf_array_Strategy_Correctness : pointf_array_Strategy_Correct.
+  Include pointf_array_strategy_proof.
+End pointf_array_Strategy_Correctness.

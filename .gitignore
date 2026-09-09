@@ -11,10 +11,9 @@
 .nia.cache
 .csdp.cache
 .coq-native/
-.Makefile.coq.d
-Makefile.coq
-Makefile.coq.conf
-.vfiles.stamp
+.depend
+.depend.tmp
+.coqdep.args.tmp
 
 # --- local machine configuration (QCP path differs per checkout) ---
 # make your own from the .example files

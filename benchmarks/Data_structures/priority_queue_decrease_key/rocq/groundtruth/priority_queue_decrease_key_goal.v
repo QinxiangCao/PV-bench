@@ -18,6 +18,14 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import PVbench.Data_structures.priority_queue_decrease_key.rocq.spec_lib.
 Local Open Scope sac.
+From SimpleC.EE.QCP_demos_LLM Require Import int_array_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import int_array_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import uint_array_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import uint_array_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import undef_uint_array_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import undef_uint_array_strategy_proof.
+From SimpleC.EE.QCP_demos_LLM Require Import array_shape_strategy_goal.
+From SimpleC.EE.QCP_demos_LLM Require Import array_shape_strategy_proof.
 
 (*----- Function pqdk_sift_up -----*)
 
@@ -4327,6 +4335,10 @@ Definition pqdk_pop_partial_solve_wit_10 := pqdk_pop_partial_solve_wit_10_pure -
 
 Module Type VC_Correct.
 
+Include int_array_Strategy_Correct.
+Include uint_array_Strategy_Correct.
+Include undef_uint_array_Strategy_Correct.
+Include array_shape_Strategy_Correct.
 
 Axiom proof_of_pqdk_sift_up_safety_wit_1 : pqdk_sift_up_safety_wit_1.
 Axiom proof_of_pqdk_sift_up_safety_wit_2 : pqdk_sift_up_safety_wit_2.

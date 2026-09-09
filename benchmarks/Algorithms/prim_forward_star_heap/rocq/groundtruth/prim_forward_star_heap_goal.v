@@ -22,7 +22,7 @@ Export MonadNotation.
 Local Open Scope monad.
 From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap relations.
 From FP Require Import PartialOrder_Setoid BourbakiWitt.
-Require Import PVbench.Algorithms.prim_forward_star_heap.rocq.priority_queue_helper_lib.
+Require Import PVbench.Data_structures.priority_queue_decrease_key.rocq.spec_lib.
 Require Import PVbench.Algorithms.prim_forward_star_heap.rocq.spec_lib.
 Require Import PVbench.Algorithms.prim_forward_star_heap.rocq.helper_lib.
 From ListLib.Base Require Import Positional.

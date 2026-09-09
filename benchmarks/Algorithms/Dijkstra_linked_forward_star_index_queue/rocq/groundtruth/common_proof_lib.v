@@ -25,9 +25,9 @@ Local Open Scope monad.
 Import naive_C_Rules.
 Local Open Scope sac.
 
-Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.common_helper_lib.
+Require Export PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.helper_lib.
 Module Import DijkstraLinkedForwardStarLocal :=
-  PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.common_helper_lib.DijkstraLinkedForwardStar.
+  PVbench.Algorithms.Dijkstra_linked_forward_star_index_queue.rocq.helper_lib.DijkstraLinkedForwardStar.
 #[local] Existing Instance DijkstraGraph.weight_instance.
 
 Lemma DijkstraGraph_step_iff : forall (g : DijkstraGraph.G)

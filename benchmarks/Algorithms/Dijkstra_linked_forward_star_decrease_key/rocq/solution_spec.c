@@ -1,4 +1,4 @@
-#include "Data_structures/priority_queue_decrease_key/priority_queue_decrease_key_def.h"
+#include "Data_structures/priority_queue_decrease_key/rocq/priority_queue_decrease_key_def.h"
 
 /*@ Import Coq From GraphLib Require Import Zweight */
 /*@ Import Coq Require Import PVbench.Algorithms.Dijkstra_linked_forward_star_decrease_key.rocq.spec_lib */
