@@ -8,12 +8,18 @@ of two backends, **Rocq** or **Lean 4**. All 215 have a Rocq version; 83 also ha
 
 The problems are in four groups, all under `benchmarks/`, next to the build files:
 
-| group | problems | source |
-|---|---:|---|
-| `benchmarks/Codeforces/` | 128 | competitive-programming problems, grouped into `examples_shard<NN>/` slices |
-| `benchmarks/Algorithms/` | 74 | classic algorithms, one directory per algorithm |
-| `benchmarks/Data_structures/` | 5 | array stack, BIT and three priority-queue interfaces |
-| `benchmarks/Engineering/` | 8 | MiniSat vectors and C string / memory routines |
+| group | problems | C lines | source |
+|---|---:|---:|---|
+| `benchmarks/Codeforces/` | 128 | 5,685 | competitive-programming problems, grouped into `examples_shard<NN>/` slices |
+| `benchmarks/Algorithms/` | 74 | 4,250 | classic algorithms, one directory per algorithm |
+| `benchmarks/Data_structures/` | 5 | 404 | array stack, BIT and three priority-queue interfaces |
+| `benchmarks/Engineering/` | 8 | 338 | MiniSat vectors and C string / memory routines |
+| total | 215 | 10,677 | |
+
+"C lines" counts the unannotated `solution.c` — the program a model is asked to specify and
+verify. They are small by design: a median of 40 lines, 50 on average, from 10 up to 189
+(`Algorithms/kosaraju`). The difficulty is in the property to be proved, not in the size of the
+code.
 
 [`docs/ROCQ_COVERAGE.md`](docs/ROCQ_COVERAGE.md) and
 [`docs/LEAN_COVERAGE.md`](docs/LEAN_COVERAGE.md) break these down by topic, difficulty and tag.
@@ -21,11 +27,11 @@ The problems are in four groups, all under `benchmarks/`, next to the build file
 
 ## The tool: QCP
 
-[**QCP**](https://www.qua.codes/en/index.html) — *Qualified C Programming* — verifies C. You
-annotate the source with contracts and loop invariants; it symbolically executes the program
-under separation logic, discharges the easy verification conditions itself, and leaves the
-rest as proof obligations for **Rocq** or **Lean 4**. Those three artifacts — contract,
-annotations, residual proofs — are the three tasks below.
+[**QCP**](https://www.qua.codes/en/index.html) verifies annotated C programs using symbolic execution and separation logic. 
+It automatically discharges verification conditions where possible and exports the remaining obligations to Rocq or Lean 4. 
+This workflow motivates PV-Bench's three tasks: writing specifications, supplying annotations, and completing residual proofs.
+
+Verification combines QCP's automatic reasoning with proof-assistant checking. The released automatic results use `Admitted` / `sorry` without exported proof certificates; they are not independently rechecked by the proof-assistant kernel. See [Verification model](docs/VERIFICATION.md) for details.
 
 ## The three tasks
 
@@ -206,4 +212,4 @@ goal_check files come back byte-for-byte identical to the committed ones.
 
 ## Contributors
 
-Kan Liu, Qi Liu, Ziting Ni, Lixiang Wang, Shushu Wu, Xiwei Wu, Lihan Xie
+Kan Liu, Qi Liu, Zitong Ni, Lixiang Wang, Shushu Wu, Xiwei Wu, Lihan Xie
