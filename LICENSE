@@ -1,0 +1,40 @@
+PV-Bench is released under the MIT License, reproduced below.
+
+The MIT terms cover this repository except for the following:
+
+  * backend/binary/
+
+    The QCP executables, symexec and StrategyCheck. They are ours but they are
+    not open source. They are distributed for running and reproducing this
+    benchmark; any other use requires permission from the QCP developers. They
+    are fetched from a release rather than stored in git.
+
+  * backend/Rocq/flocq
+  * backend/Rocq/compcert_lib
+  * backend/Rocq/coq-record-update
+
+    Third-party libraries, vendored on the with-backend branch. Each keeps the
+    license it came with; the full text is in that directory.
+
+
+                                 MIT License
+
+Copyright (c) 2026 Qinxiang Cao, Shanghai Jiao Tong University
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
