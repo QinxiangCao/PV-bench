@@ -1,7 +1,12 @@
 #include "int_ptr_array2_def.h"
 
 /*@ Extern Coq
-      (PaintHouseIIAnswer : list (list Z) -> Z -> Z -> Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (map : {A B} -> (A -> B) -> list A -> list B)
+      (eq : {A} -> A -> A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
+      (PaintHouseIIOptimalCost : list (list Z) -> Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.paint_house_ii.rocq.spec_lib */
 
@@ -12,13 +17,11 @@ int paint_house_ii(int **costs, int n, int k)
       2 <= k && k <= 1000 &&
       n * k <= 1000000 &&
       Zlength(costs_l) == n &&
-      (forall (r : Z), (0 <= r && r < n) => (Zlength(costs_l[r]) == k)) &&
-      (forall (r : Z) (c : Z),
-        (0 <= r && r < n && 0 <= c && c < k) => (0 <= costs_l[r][c] && costs_l[r][c] <= 10000)) &&
+      Forall(eq(k), map(Zlength, costs_l)) &&
+      Forall(Forall(Z::le(0)), costs_l) && Forall(Forall(Z::ge(10000)), costs_l) &&
       IntPtrArray2::full(costs, n, costs_l)
     Ensure
-      PaintHouseIIAnswer(costs_l, n, k, __return) &&
-      0 <= __return && __return <= 1000000000 &&
+      PaintHouseIIOptimalCost(costs_l, n, k, __return) &&
       IntPtrArray2::full(costs, n, costs_l)
  */
 {

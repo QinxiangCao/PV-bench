@@ -1,6 +1,12 @@
-int lengthOfLNDS(int *nums, int numsSize, int *tails)
+int lengthOfLNDS(int *nums, int numsSize)
 
 {
+  int tails[100000];
+
+  for (int fill = 0; fill < numsSize; ++fill) {
+    tails[fill] = 0;
+  }
+
   int len = 0;
 
   for (int i = 0; i < numsSize; ++i) {

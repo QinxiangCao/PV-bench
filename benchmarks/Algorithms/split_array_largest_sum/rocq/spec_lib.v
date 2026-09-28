@@ -4,25 +4,31 @@ Require Import Coq.Lists.List.
 Require Import Coq.micromega.Lia.
 From AUXLib Require Import ListLib.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+(* Facts connecting the greedy splitter state with partition semantics. *)
+Local Open Scope list_scope.
+Require Import Coq.Relations.Relation_Operators.
+Require Import AUXLib.MonotonicList.
 
 Definition SegmentPartition (l : list Z) (parts : list (list Z)) : Prop :=
   parts <> [] /\
   concat parts = l /\
   Forall (fun seg => seg <> []) parts.
+
 Definition MaxSegmentSum (parts : list (list Z)) (max_sum : Z) : Prop :=
   max_value_of_subset Z.le
     (fun seg => In seg parts)
     (fun seg => sum seg)
     max_sum.
+
 Definition PartitionMaxSegmentSum (l : list Z) (m max_sum : Z) : Prop :=
   exists parts,
     SegmentPartition l parts /\
     Zlength parts = m /\
     MaxSegmentSum parts max_sum.
+
 Definition MinimizedMaxSegmentSum (l : list Z) (m answer : Z) : Prop :=
   min_value_of_subset Z.le
     (fun max_sum => PartitionMaxSegmentSum l m max_sum)

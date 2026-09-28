@@ -1,23 +1,30 @@
-Require Import PVbench.Algorithms.sieve_of_eratosthenes.rocq.spec_lib.
-
+Require Export PVbench.Algorithms.sieve_of_eratosthenes.rocq.spec_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import AUXLib.ListLib.
-
+Require Import AUXLib.MonotonicList.
 Import ListNotations.
 Local Open Scope Z_scope.
 
+(** [HasProperDivisorBelow bound k] says that [k] has a nontrivial positive
+    divisor strictly below both [bound] and [k]. *)
+Definition HasProperDivisorBelow (bound k : Z) : Prop :=
+  exists d : Z,
+    2 <= d /\
+    d < bound /\
+    d < k /\
+    Z.divide d k.
+
+(** Exact, two-sided 0/1 interpretation of a mathematical proposition. *)
 Definition ExactZeroOne (is_zero : Prop) (value : Z) : Prop :=
   (is_zero /\ value = 0) \/ (~ is_zero /\ value = 1).
 
-(** The required final contents of the concrete segment [f[1]..f[n]].
-    Logical position [k - 1] represents the program index [k]. *)
+(** State of the first initialization loop: all program-owned indices before
+    [next] have already been written to one. *)
 Definition SieveInitPrefix (n next : Z) (values : list Z) : Prop :=
   Zlength values = n /\
-  forall k : Z,
-    1 <= k < next ->
-    Znth (k - 1) values 0 = 1.
+  Forall (fun value => value = 1) (sublist 0 (next - 1) values).
 
 (** At outer-loop bound [bound], an index greater than one is zero exactly
     when it already has a proper divisor below [bound].  Index one is always
@@ -43,8 +50,6 @@ Definition ProcessedMultiple (factor next k : Z) : Prop :=
     smaller proper divisor, plus the multiples processed in this inner loop. *)
 Definition SieveMarkState
     (n factor next : Z) (values : list Z) : Prop :=
-  2 <= factor /\
-  2 * factor <= next /\
   Z.divide factor next /\
   Zlength values = n /\
   forall k : Z,

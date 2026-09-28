@@ -1,0 +1,23 @@
+{
+  "id": "P089_1891E_brukhovich_and_exams",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1891/E",
+    "title": "Brukhovich and Exams",
+    "url": "https://codeforces.com/problemset/problem/1891/E",
+    "rating": 2500,
+    "tags": [
+      "brute force",
+      "greedy",
+      "implementation",
+      "math",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

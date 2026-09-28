@@ -1,0 +1,21 @@
+{
+  "id": "P081_1965C_folding_strip",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1965/C",
+    "title": "Folding Strip",
+    "url": "https://codeforces.com/problemset/problem/1965/C",
+    "rating": 2300,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "strings"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,14 +1,26 @@
+Require Export PVbench.Algorithms.container_with_most_water_linear.rocq.helper_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import AUXLib.ListLib.
-
+Require Import AUXLib.MonotonicList.
+Require Import MaxMinLib.MaxMin.
 Import ListNotations.
 Local Open Scope Z_scope.
 
-(** Mathematical area of the container whose endpoints are [i] and [j]. *)
-Require Import PVbench.Algorithms.container_with_most_water_linear.rocq.spec_lib.
-Require Import PVbench.Algorithms.container_with_most_water_linear.rocq.helper_lib.
+Lemma MaximumContainerArea_unfold l ans :
+  MaximumContainerArea l ans <->
+  (exists i j, LinearContainerPair l i j /\ ans = LinearContainerArea l i j) /\
+  forall i j, LinearContainerPair l i j -> LinearContainerArea l i j <= ans.
+Proof.
+  unfold MaximumContainerArea, max_value_of_subset, max_object_of_subset.
+  cbn. split.
+  - intros [[i j] [[Hp Hmax] Heq]]. cbn in *. split.
+    + exists i, j. auto.
+    + intros x y Hxy. specialize (Hmax (x,y) Hxy). cbn in Hmax. lia.
+  - intros [[i [j [Hp Heq]]] Hmax]. exists (i,j). cbn.
+    split; [split; [exact Hp | intros [x y] Hxy; cbn in *; specialize (Hmax x y Hxy); lia] | lia].
+Qed.
 
 Lemma linear_container_invariant_update_best__best_update
     (l : list Z) (left right old_best : Z) :
@@ -33,6 +45,7 @@ Proof.
       exists p, q.
       split; assumption.
 Qed.
+
 Lemma linear_container_invariant_advance_left__pointer_transitions
     (l : list Z) (left right best : Z) :
   (forall k, 0 <= k < Zlength l -> 0 <= Znth k l 0) ->
@@ -78,6 +91,7 @@ Proof.
                      Znth left l 0) by apply Z.le_min_l.
       nia.
 Qed.
+
 Lemma linear_container_invariant_retreat_right__pointer_transitions
     (l : list Z) (left right best : Z) :
   (forall k, 0 <= k < Zlength l -> 0 <= Znth k l 0) ->
@@ -123,6 +137,7 @@ Proof.
                      Znth right l 0) by apply Z.le_min_r.
       nia.
 Qed.
+
 Lemma linear_container_closed_invariant_maximum__final_result :
   forall l left right best,
     left = right ->
@@ -149,7 +164,7 @@ Proof.
       destruct Hpq as [_ [Hpq _]].
       lia.
   }
-  unfold MaximumContainerArea.
+  apply MaximumContainerArea_unfold.
   split.
   - destruct Hbest as [Hzero | [i [j [Hpair Hattained]]]].
     + exists 0, 1.

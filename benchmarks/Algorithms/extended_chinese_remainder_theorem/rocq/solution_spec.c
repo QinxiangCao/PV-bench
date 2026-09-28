@@ -1,50 +1,42 @@
 /*@ Extern Coq
-      (ExtendedCRTInputs : list Z -> list Z -> Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Forall2 : {A B} -> (A -> B -> Prop) -> list A -> list B -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
+      (Z::lt : Z -> Z -> Prop)
+      (CRTLCMPrefix : list Z -> Z -> Z)
+      (Zgcd : Z -> Z -> Z)
       (ExtendedCRTSystemCompatible : list Z -> list Z -> Z -> Prop)
-      (ExtendedCRTIntSafe : list Z -> Z -> Prop)
       (ExtendedCRTSystemResult : list Z -> list Z -> Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.spec_lib */
 
-/*
- * Interface supplied by the verified extended Euclidean algorithm case.
- * This case uses only its contract; the exgcd implementation is verified
- * separately and is intentionally not repeated here.
- */
+/*@ Import Coq Require Import PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.spec_lib */
+
 int exgcd(int a, int b, int *x, int *y)
 ;
 
-/*
- * Interface supplied by the separately verified modular-multiplication case.
- * This case uses only its contract and intentionally does not repeat its body.
- */
 int modular_mul(int a, int b, int modulus)
 ;
 
-/*
- * Solve a compatible system of congruences with the extended Chinese
- * remainder theorem:
- *
- *     answer = residues[i] (mod moduli[i]),  0 <= i < n.
- *
- * The returned answer is the least nonnegative common residue and
- * *combined_modulus is the least common multiple of all input moduli.
- *
- * This implementation intentionally mirrors 3.cpp: start from the first
- * congruence, then use exgcd and modular_mul to merge every remaining
- * congruence into the current answer/lcm pair.  It deliberately uses int
- * throughout; the long-long and data-range-engineering variants are out of
- * scope.
- */
 int extended_chinese_remainder_theorem(int n,
                                       int *residues,
                                       int *moduli,
                                       int *combined_modulus)
 /*@ With (residue_values modulus_values : list Z)
     Require
-      ExtendedCRTInputs(residue_values, modulus_values, n) &&
+      1 <= n &&
+      Forall(Z::lt(0), modulus_values) &&
+      Forall(Z::ge(INT_MAX), modulus_values) &&
+      Forall(Z::le(0), residue_values) &&
+      Forall2(Z::lt, residue_values, modulus_values) &&
+      (forall (count : Z), 1 <= count && count <= n =>
+        CRTLCMPrefix(modulus_values, count) <= INT_MAX) &&
+      (forall (index : Z), 1 <= index && index < n =>
+        2 * (Znth(index, modulus_values, 0) /
+          Zgcd(CRTLCMPrefix(modulus_values, index),
+               Znth(index, modulus_values, 0))) <= INT_MAX) &&
       ExtendedCRTSystemCompatible(residue_values, modulus_values, n) &&
-      ExtendedCRTIntSafe(modulus_values, n) &&
       IntArray::full(residues, n, residue_values) *
       IntArray::full(moduli, n, modulus_values) *
       has_int_permission(combined_modulus)
@@ -55,7 +47,6 @@ int extended_chinese_remainder_theorem(int n,
       IntArray::full(moduli, n, modulus_values)
 */
 {
-
     int answer = residues[0];
     int lcm = moduli[0];
 

@@ -1,18 +1,18 @@
 # LeetCode 265: Paint House II
 
-## Description
+## Abstract model
+
+Choose one of $k$ colors for each of $n$ houses, forbid equal colors on
+adjacent houses, and minimize the sum of the chosen matrix entries. The
+verification case evaluates the standard DP in $O(nk)$ time by retaining the
+smallest and second-smallest costs of the previous row and a color attaining
+the smallest value.
+
+## Problem statement
 
 There are $n$ houses in a row and $k$ colors. Painting house $i$ with color $c$
 costs `costs[i][c]`. Paint every house so adjacent houses have different colors
 and return the minimum total cost.
-
-## Input
-
-The function receives an $n$-by-$k$ matrix `costs`, where `costs[i][c]` is the cost of painting house $i$ with color $c$.
-
-## Output
-
-Return the minimum total cost subject to adjacent houses having different colors.
 
 ## Constraints
 

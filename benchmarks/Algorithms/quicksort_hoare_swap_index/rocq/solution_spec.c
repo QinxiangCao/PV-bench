@@ -1,3 +1,12 @@
+/*@ Extern Coq
+      (Permutation : list Z -> list Z -> Prop)
+ */
+/*@ Extern Coq
+      (increasing : list Z -> Prop)
+ */
+
+/*@ Import Coq Require Import PVbench.Algorithms.quicksort_hoare_swap_index.rocq.spec_lib */
+
 void swap(int *arr, int i, int j)
 
 {
@@ -14,11 +23,11 @@ int partition(int *arr, int low, int high)
   int j = high;
 
   while (i < j) {
-
+    
     while (i < j && arr[j] >= pivot) {
       j--;
     }
-
+    
     while (i < j && arr[i] <= pivot) {
       i++;
     }

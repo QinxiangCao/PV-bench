@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P080_1204E_natasha_sasha_and_prefix_sums.rocq.groundtruth Require Import P080_1204E_natasha_sasha_and_prefix_sums_goal P080_1204E_natasha_sasha_and_prefix_sums_proof_auto P080_1204E_natasha_sasha_and_prefix_sums_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P080_1204E_natasha_sasha_and_prefix_sums_proof_auto.
+  Include P080_1204E_natasha_sasha_and_prefix_sums_proof_manual.
+End VC_Correctness.

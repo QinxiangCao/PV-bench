@@ -13,19 +13,19 @@ From SimpleC.SL Require Import Mem SeparationLogic.
 From PVbench.Algorithms.discretize.rocq.groundtruth Require Import discretize_goal.
 From PVbench.Algorithms.discretize.rocq.groundtruth Require Import discretize_proof_auto.
 Require Import Logic.LogicGenerator.demo932.Interface.
+Require Import PVbench.Algorithms.discretize.rocq.groundtruth.proof_lib.
 Local Open Scope Z_scope.
 Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.discretize.rocq.spec_lib.
-Require Import PVbench.Algorithms.discretize.rocq.helper_lib.
-From PVbench.Algorithms.discretize.rocq.groundtruth Require Import proof_lib.
+Require Import PVbench.Algorithms.discretize.rocq.groundtruth.proof_lib.
 Local Open Scope sac.
 
 Lemma proof_of_partition_entail_wit_1 : partition_entail_wit_1.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
   Exists l.
   split_pure_spatial.
   - cancel (IntArray.full arr_pre n_pre l).
@@ -57,6 +57,7 @@ Qed.
 Lemma proof_of_partition_entail_wit_2_2 : partition_entail_wit_2_2.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
   Exists l1_2.
   split_pure_spatial.
   - cancel (IntArray.full arr_pre n_pre l1_2).
@@ -185,10 +186,12 @@ Proof.
     }
     apply sorted_range_from_both with (p := retval).
     * lia.
+    * lia.
+    * lia.
     * exact Hpart.
     * exact Hsorted_left4.
     * exact PreH3.
-Qed. 
+Qed.
 
 Lemma proof_of_quicksort_range_return_wit_2 : quicksort_range_return_wit_2.
 Proof.
@@ -227,9 +230,11 @@ Proof.
     }
     apply sorted_range_from_right with (p := retval).
     * lia.
+    * lia.
+    * lia.
     * exact Hpart.
     * exact PreH3.
-Qed. 
+Qed.
 
 Lemma proof_of_quicksort_range_return_wit_3 : quicksort_range_return_wit_3.
 Proof.
@@ -275,9 +280,11 @@ Proof.
     }
     apply sorted_range_from_left with (p := retval).
     * lia.
+    * lia.
+    * lia.
     * exact Hpart.
     * exact PreH4.
-Qed. 
+Qed.
 
 Lemma proof_of_quicksort_range_return_wit_4 : quicksort_range_return_wit_4.
 Proof.
@@ -289,7 +296,7 @@ Proof.
     + apply Permutation_refl.
     + apply same_outside_range_refl__quicksort_range.
     + apply sorted_range_base. lia.
-Qed. 
+Qed.
 
 Lemma proof_of_int_array_quicksort_return_wit_1 : int_array_quicksort_return_wit_1.
 Proof.
@@ -307,13 +314,6 @@ Proof.
       rewrite Hlen
   end.
   exact PreH3.
-Qed. 
-
-Lemma proof_of_discretize_safety_wit_8 : discretize_safety_wit_8.
-Proof.
-  LLM_pre_process ltac:(int_auto).
-  unfold discretize_result in PreH4.
-  split_pures; dump_pre_spatial; lia.
 Qed.
 
 Lemma proof_of_discretize_entail_wit_1 : discretize_entail_wit_1.
@@ -331,6 +331,7 @@ Qed.
 Lemma proof_of_discretize_entail_wit_2 : discretize_entail_wit_2.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply (IntArray.full_Zlength src_pre n_pre src_l). Intros_p Hlen_src.
   replace (sublist 0 (i + 1) src_l)
     with (sublist 0 i src_l ++ Znth i src_l 0 :: nil).
   2: {
@@ -349,9 +350,10 @@ Qed.
 Lemma proof_of_discretize_entail_wit_3 : discretize_entail_wit_3.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply (IntArray.full_Zlength src_pre n_pre src_l). Intros_p Hlen_src.
   assert (Hi : i = n_pre) by lia.
   subst i.
-  rewrite (sublist_self src_l n_pre) by exact (eq_sym PreH2).
+  rewrite (sublist_self src_l n_pre) by lia.
   rewrite IntArray.undef_seg_empty.
   split_pure_spatial.
   - cancel (IntArray.full src_pre n_pre src_l).
@@ -362,17 +364,21 @@ Qed.
 Lemma proof_of_discretize_entail_wit_4 : discretize_entail_wit_4.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply (IntArray.full_Zlength src_pre n_pre src_l). Intros_p Hlen_src.
   Exists l1. Exists l1.
   split_pure_spatial.
   - cancel (IntArray.full src_pre n_pre src_l).
     cancel (IntArray.full dest_map_pre n_pre l1).
   - split_pures; dump_pre_spatial; auto; try lia.
     eapply dedup_scan_inv_init__discretize_dedup; eauto.
-Qed. 
+Qed.
 
 Lemma proof_of_discretize_entail_wit_5_1 : discretize_entail_wit_5_1.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply (IntArray.full_Zlength src_pre n_pre src_l). Intros_p Hlen_src.
+  prop_apply (IntArray.full_Zlength dest_map_pre n_pre (replace_Znth (slow + 1) (Znth fast cur_l_2 0) cur_l_2)). Intros_p Hlen_cur.
+  rewrite ?Zlength_replace_Znth in Hlen_cur.
   Exists sorted_l_2.
   Exists (replace_Znth (slow + 1) (Znth fast cur_l_2 0) cur_l_2).
   split_pure_spatial.
@@ -380,29 +386,36 @@ Proof.
     cancel (IntArray.full dest_map_pre n_pre
       (replace_Znth (slow + 1) (Znth fast cur_l_2 0) cur_l_2)).
   - split_pures; dump_pre_spatial; auto; try lia.
-    pose proof PreH10 as Hinv.
-    unfold dedup_scan_inv in Hinv.
-    destruct Hinv as [Hsrc_sorted_len _].
+    assert (Hsrc_sorted_len : Zlength src_l = Zlength sorted_l_2).
+    { match goal with H : dedup_scan_inv _ _ _ _ _ |- _ =>
+        destruct H as [Hp _]; rewrite !Zlength_correct; now rewrite (Permutation_length Hp)
+      end. }
     eapply dedup_scan_inv_step_new__discretize_dedup; eauto; lia.
-Qed. 
+Qed.
 
 Lemma proof_of_discretize_entail_wit_5_2 : discretize_entail_wit_5_2.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply (IntArray.full_Zlength src_pre n_pre src_l). Intros_p Hlen_src.
+  prop_apply (IntArray.full_Zlength dest_map_pre n_pre cur_l_2). Intros_p Hlen_cur.
+  rewrite ?Zlength_replace_Znth in Hlen_cur.
   Exists sorted_l_2. Exists cur_l_2.
   split_pure_spatial.
   - cancel (IntArray.full src_pre n_pre src_l).
     cancel (IntArray.full dest_map_pre n_pre cur_l_2).
   - split_pures; dump_pre_spatial; auto; try lia.
-    pose proof PreH10 as Hinv.
-    unfold dedup_scan_inv in Hinv.
-    destruct Hinv as [Hsrc_sorted_len _].
+    assert (Hsrc_sorted_len : Zlength src_l = Zlength sorted_l_2).
+    { match goal with H : dedup_scan_inv _ _ _ _ _ |- _ =>
+        destruct H as [Hp _]; rewrite !Zlength_correct; now rewrite (Permutation_length Hp)
+      end. }
     eapply dedup_scan_inv_step_duplicate__discretize_dedup; eauto; lia.
-Qed. 
+Qed.
 
-Lemma proof_of_discretize_entail_wit_6 : discretize_entail_wit_6.
+Lemma proof_of_discretize_return_wit_1 : discretize_return_wit_1.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply (IntArray.full_Zlength src_pre n_pre src_l). Intros_p Hlen_src.
+  prop_apply (IntArray.full_Zlength dest_map_pre n_pre cur_l). Intros_p Hlen_cur.
   Exists cur_l.
   split_pure_spatial.
   - cancel (IntArray.full src_pre n_pre src_l).
@@ -410,7 +423,15 @@ Proof.
   - split_pures; dump_pre_spatial; auto; try lia.
     replace fast with n_pre in * by lia.
     eapply dedup_scan_inv_to_discretize_result__discretize_dedup; eauto.
-Qed. 
+Qed.
+
+Lemma proof_of_query_forward_safety_wit_2 : query_forward_safety_wit_2.
+Proof.
+  LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
+  pose proof (Zlength_nonneg map_l) as Hnonneg.
+  split_pures; dump_pre_spatial; lia.
+Qed.
 
 Lemma proof_of_query_forward_safety_wit_4 : query_forward_safety_wit_4.
 Proof.
@@ -424,101 +445,62 @@ Qed.
 Lemma proof_of_query_forward_entail_wit_1 : query_forward_entail_wit_1.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
+  pose proof (Zlength_nonneg map_l) as Hnonneg.
   split_pure_spatial.
   - cancel (IntArray.full map_pre map_size_pre map_l).
-  - split_pures.
-    + dump_pre_spatial. exact PreH1.
-    + dump_pre_spatial. exact PreH2.
-    + dump_pre_spatial. exact PreH3.
-    + dump_pre_spatial. exact PreH4.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial.
-      apply query_forward_search_inv_init__query_forward_search; lia.
+  - split_pures; dump_pre_spatial; auto; try lia.
+    apply query_forward_search_inv_init__query_forward_search; lia.
 Qed.
 
 Lemma proof_of_query_forward_entail_wit_2 : query_forward_entail_wit_2.
 Proof.
   LLM_pre_process ltac:(int_auto).
-  pose proof (midpoint_between_bounds__query_forward_search low high PreH1) as Hmid.
+  assert (Hmid : low <= low + (high - low) ÷ 2 <= high)
+    by (apply midpoint_between_bounds__query_forward_search; lia).
   split_pure_spatial.
   - cancel (IntArray.full map_pre map_size_pre map_l).
-  - split_pures.
-    + dump_pre_spatial. exact PreH2.
-    + dump_pre_spatial. exact PreH3.
-    + dump_pre_spatial. exact PreH4.
-    + dump_pre_spatial. exact PreH5.
-    + dump_pre_spatial. exact PreH6.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. exact PreH8.
-    + dump_pre_spatial. exact PreH9.
+  - split_pures; dump_pre_spatial; auto; lia.
 Qed.
 
 Lemma proof_of_query_forward_entail_wit_3_1 : query_forward_entail_wit_3_1.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
   split_pure_spatial.
   - cancel (IntArray.full map_pre map_size_pre map_l).
-  - split_pures.
-    + dump_pre_spatial. exact PreH3.
-    + dump_pre_spatial. exact PreH4.
-    + dump_pre_spatial. exact PreH5.
-    + dump_pre_spatial. exact PreH6.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. exact PreH10.
-    + dump_pre_spatial.
-      apply query_forward_search_inv_step_right__query_forward_search
-        with (low := low);
-        try eassumption; lia.
+  - split_pures; dump_pre_spatial; auto; try lia.
+    eapply query_forward_search_inv_step_right__query_forward_search
+      with (low := low); eauto; lia.
 Qed.
 
 Lemma proof_of_query_forward_entail_wit_3_2 : query_forward_entail_wit_3_2.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
   split_pure_spatial.
   - cancel (IntArray.full map_pre map_size_pre map_l).
-  - split_pures.
-    + dump_pre_spatial. exact PreH3.
-    + dump_pre_spatial. exact PreH4.
-    + dump_pre_spatial. exact PreH5.
-    + dump_pre_spatial. exact PreH6.
-    + dump_pre_spatial. exact PreH7.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial. lia.
-    + dump_pre_spatial.
-      apply query_forward_search_inv_step_left__query_forward_search
-        with (high := high);
-        try eassumption; lia.
+  - split_pures; dump_pre_spatial; auto; try lia.
+    eapply query_forward_search_inv_step_left__query_forward_search
+      with (high := high); eauto; lia.
 Qed.
 
-Lemma proof_of_query_forward_entail_wit_4 : query_forward_entail_wit_4.
+Lemma proof_of_query_forward_return_wit_1 : query_forward_return_wit_1.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
   split_pure_spatial.
   - cancel (IntArray.full map_pre map_size_pre map_l).
-  - split_pures.
-    + dump_pre_spatial. exact PreH2.
-    + dump_pre_spatial. exact PreH3.
-    + dump_pre_spatial. exact PreH4.
-    + dump_pre_spatial. exact PreH5.
-    + dump_pre_spatial. exact PreH6.
-    + dump_pre_spatial. exact PreH7.
-    + dump_pre_spatial. exact PreH8.
-    + dump_pre_spatial. exact PreH9.
-    + dump_pre_spatial.
-      apply query_forward_result_not_found__query_forward_search
-        with (low := low) (high := high); try assumption.
+  - dump_pre_spatial.
+    eapply query_forward_result_not_found__query_forward_search
+      with (low := low) (high := high); eauto; lia.
 Qed.
 
 Lemma proof_of_query_forward_return_wit_2 : query_forward_return_wit_2.
 Proof.
   LLM_pre_process ltac:(int_auto).
+  prop_apply IntArray.full_Zlength. Intros_p Hlen.
   split_pure_spatial.
   - cancel (IntArray.full map_pre map_size_pre map_l).
-  - dump_pre_spatial.
-    apply query_forward_result_found_unique__query_forward_search;
-      try eassumption; lia.
+  - dump_pre_spatial. left. split; auto; lia.
 Qed.

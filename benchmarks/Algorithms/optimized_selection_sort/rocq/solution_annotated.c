@@ -2,8 +2,9 @@
 /*@ Extern Coq (increasing : list Z -> Prop) */
 /*@ Extern Coq
       (optimized_selection_sort_result : list Z -> list Z -> Prop)
+      (selection_minimum : list Z -> Z -> Prop)
  */
-/*@ Import Coq Require Import PVbench.Algorithms.optimized_selection_sort.rocq.spec_lib */
+/*@ Import Coq Require Import PVbench.Algorithms.optimized_selection_sort.rocq.helper_lib */
 
 void optimized_selection_sort(int *a, int n)
 /*@ With (input : list Z)
@@ -14,9 +15,6 @@ void optimized_selection_sort(int *a, int n)
     Ensure
       exists output,
         optimized_selection_sort_result(input, output) &&
-        Permutation(input, output) &&
-        increasing(output) &&
-        Zlength(output) == n &&
         IntArray::full(a, n, output)
  */
 {
@@ -53,9 +51,7 @@ void optimized_selection_sort(int *a, int n)
               (forall (p : Z) (q : Z),
                  (0 <= p && p < i && i <= q && q < n) =>
                  (Znth(p, cur, 0) <= Znth(q, cur, 0))) &&
-              (forall (q : Z),
-                 (i <= q && q < j) =>
-                 (Znth(min_index, cur, 0) <= Znth(q, cur, 0))) &&
+              selection_minimum(sublist(i, j, cur), Znth(min_index, cur, 0)) &&
               IntArray::full(a, n, cur)
             by array_length
         */

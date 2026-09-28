@@ -49,21 +49,6 @@
 /*@ Extern Coq (scan_minIndex_adjacency_map_update:
       G -> St -> list Z -> list Z -> list Z -> list Z -> list Z -> V ->
       list Z -> list Z -> partial_map -> list Z -> list Z -> partial_map -> Prop) */
-/*@ Extern Coq (prim_heap_loop_state:
-      G -> V -> Z -> St -> list Z -> list Z -> list Z -> partial_map ->
-      (unit -> St -> Prop) -> Prop) */
-/*@ Extern Coq (prim_heap_after_pop_state:
-      G -> V -> Z -> St -> list Z -> list Z -> list Z ->
-      partial_map -> partial_map -> V -> Z -> (unit -> St -> Prop) -> Prop) */
-/*@ Extern Coq (prim_heap_scan_state:
-      G -> V -> Z -> St -> St ->
-      list Z -> list Z -> list Z -> list Z -> list Z ->
-      list Z -> list Z -> list Z ->
-      list Z -> list Z -> Z -> V -> Z -> partial_map ->
-      list Z -> list Z -> partial_map -> (unit -> St -> Prop) -> Prop) */
-/*@ Extern Coq (prim_heap_done_state:
-      G -> V -> St -> list Z -> list Z -> list Z -> partial_map ->
-      (unit -> St -> Prop) -> Prop) */
 #define MAX_PRIORITY_QUEUE_SIZE 100000
 #define INF 1000000000
 

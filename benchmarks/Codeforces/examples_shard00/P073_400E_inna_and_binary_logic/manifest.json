@@ -1,0 +1,21 @@
+{
+  "id": "P073_400E_inna_and_binary_logic",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "400/E",
+    "title": "Inna and Binary Logic",
+    "url": "https://codeforces.com/problemset/problem/400/E",
+    "rating": 2100,
+    "tags": [
+      "binary search",
+      "bitmasks",
+      "data structures"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

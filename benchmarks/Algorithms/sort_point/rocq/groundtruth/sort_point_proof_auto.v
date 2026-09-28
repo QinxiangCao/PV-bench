@@ -17,9 +17,47 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.sort_point.rocq.spec_lib.
 Require Import PVbench.Algorithms.sort_point.rocq.helper_lib.
 Local Open Scope sac.
+
+Lemma proof_of_cmp_polar_values_safety_wit_1 : cmp_polar_values_safety_wit_1.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_2 : cmp_polar_values_safety_wit_2.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_3 : cmp_polar_values_safety_wit_3.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_4 : cmp_polar_values_safety_wit_4.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_5 : cmp_polar_values_safety_wit_5.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_6 : cmp_polar_values_safety_wit_6.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_7 : cmp_polar_values_safety_wit_7.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_8 : cmp_polar_values_safety_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_9 : cmp_polar_values_safety_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_10 : cmp_polar_values_safety_wit_10.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_11 : cmp_polar_values_safety_wit_11.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_12 : cmp_polar_values_safety_wit_12.
+Proof. Admitted. 
+
+Lemma proof_of_cmp_polar_values_safety_wit_13 : cmp_polar_values_safety_wit_13.
+Proof. Admitted. 
 
 Lemma proof_of_cmp_polar_values_safety_wit_14 : cmp_polar_values_safety_wit_14.
 Proof. Admitted. 

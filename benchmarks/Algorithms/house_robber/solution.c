@@ -13,7 +13,6 @@ int rob(int *nums, int n)
     } else {
       cur = skip;
     }
-
     prev2 = prev1;
     prev1 = cur;
   }

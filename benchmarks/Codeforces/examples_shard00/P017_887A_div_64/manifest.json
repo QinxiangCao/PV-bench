@@ -1,0 +1,19 @@
+{
+  "id": "P017_887A_div_64",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "887/A",
+    "title": "Div. 64",
+    "url": "https://codeforces.com/problemset/problem/887/A",
+    "rating": 1000,
+    "tags": [
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "VERDICT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

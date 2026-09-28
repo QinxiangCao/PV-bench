@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P063_1977C_nikita_and_lcm.rocq.groundtruth Require Import P063_1977C_nikita_and_lcm_goal P063_1977C_nikita_and_lcm_proof_auto P063_1977C_nikita_and_lcm_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P063_1977C_nikita_and_lcm_proof_auto.
+  Include P063_1977C_nikita_and_lcm_proof_manual.
+End VC_Correctness.

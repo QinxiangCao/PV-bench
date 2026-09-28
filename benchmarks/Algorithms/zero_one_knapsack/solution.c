@@ -1,6 +1,8 @@
-int zeroOneKnapsack(int *weights, int *values, int n, int capacity, int *dp)
+int zeroOneKnapsack(int *weights, int *values, int n, int capacity)
 
 {
+  int dp[90601];
+
   int width = capacity + 1;
 
   for (int i = 0; i <= n; ++i) {
@@ -36,5 +38,7 @@ int zeroOneKnapsack(int *weights, int *values, int n, int capacity, int *dp)
     }
   }
 
-  return dp[n * width + capacity];
+  int result = dp[n * width + capacity];
+
+  return result;
 }

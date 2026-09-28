@@ -1,29 +1,25 @@
 /*@ Extern Coq
-      (ChoirDPLeftPrefix : list Z -> list Z -> Z -> Prop)
-      (ChoirDPRightSuffix : list Z -> list Z -> Z -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
       (ChoirMinimumRemovals : list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.choir_singing.rocq.spec_lib */
 
-int choir_singing(int *nums, int numsSize, int *dp_left, int *dp_right)
+int choir_singing(int *nums, int numsSize)
 /*@ With (heights : list Z)
     Require
-      1 <= numsSize && numsSize <= 100 &&
+      2 <= numsSize && numsSize <= 100 &&
       Zlength(heights) == numsSize &&
-      IntArray::full(nums, numsSize, heights) *
-      IntArray::undef_full(dp_left, numsSize) *
-      IntArray::undef_full(dp_right, numsSize)
+      Forall(Z::le(130), heights) && Forall(Z::ge(230), heights) &&
+      IntArray::full(nums, numsSize, heights)
     Ensure
-      exists left_values right_values,
       ChoirMinimumRemovals(heights, __return) &&
-      0 <= __return && __return < numsSize &&
-      ChoirDPLeftPrefix(heights, left_values, numsSize) &&
-      ChoirDPRightSuffix(heights, right_values, 0) &&
-      IntArray::full(nums, numsSize, heights) *
-      IntArray::full(dp_left, numsSize, left_values) *
-      IntArray::full(dp_right, numsSize, right_values)
+      IntArray::full(nums, numsSize, heights)
  */
 {
+  int dp_left[100];
+  int dp_right[100];
 
   for (int i = 0; i < numsSize; ++i) {
     dp_left[i] = 1;
@@ -37,7 +33,6 @@ int choir_singing(int *nums, int numsSize, int *dp_left, int *dp_right)
         dp_left[i] = dp_left[j] + 1;
       }
     }
-
   }
 
   for (int i = numsSize - 1; i >= 0; --i) {
@@ -47,7 +42,6 @@ int choir_singing(int *nums, int numsSize, int *dp_left, int *dp_right)
         dp_right[i] = dp_right[j] + 1;
       }
     }
-
   }
 
   int max_choir = 0;

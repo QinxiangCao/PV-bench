@@ -9,7 +9,6 @@ void build(int *arr, int n, int K, int *st)
   for (int i = 0; i < n; ++i) {
 
     st[i * K] = arr[i];
-
   }
 
   int half = 1;
@@ -21,15 +20,12 @@ void build(int *arr, int n, int K, int *st)
 
       int a = st[i * K + j - 1];
       int b = st[(i + half) * K + j - 1];
-
       if (a >= b) {
         st[i * K + j] = a;
       } else {
         st[i * K + j] = b;
       }
-
     }
-
     half = len;
     len = len * 2;
   }
@@ -49,12 +45,9 @@ int query(int *st, int n, int K, int left, int right)
 
   int a = st[left * K + k];
   int b = st[(right - pow + 1) * K + k];
-
   if (a >= b) {
-
     return a;
   } else {
-
     return b;
   }
 }

@@ -1,8 +1,17 @@
+
+
+
+
+/*@ Extern Coq (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+                 (Z::le : Z -> Z -> Prop)
+                 (Z::ge : Z -> Z -> Prop)
+                 (Z::lt : Z -> Z -> Prop) */
 /*@ Extern Coq (Permutation : list Z -> list Z -> Prop) */
 /*@ Extern Coq (increasing : list Z -> Prop) */
 /*@ Extern Coq (same_outside_range : list Z -> list Z -> Z -> Z -> Prop) */
 /*@ Extern Coq (partitioned_at : list Z -> Z -> Z -> Z -> Prop) */
 /*@ Extern Coq (range_nondecreasing : list Z -> Z -> Z -> Prop) */
+/*@ Import Coq Require Import PVbench.Algorithms.quicksort_hoare_fill_index2.rocq.spec_lib */
 /*@ Import Coq Require Import PVbench.Algorithms.quicksort_hoare_fill_index2.rocq.helper_lib */
 
 int partition(int *arr, int low, int high)
@@ -32,8 +41,8 @@ int partition(int *arr, int low, int high)
         low <= i && i <= j && j <= high &&
         Permutation(l, replace_Znth(i, pivot, l1)) &&
         same_outside_range(l, l1, low, high) &&
-        (forall (k: Z), (low <= k && k < i) => (l1[k] <= pivot)) &&
-        (forall (k: Z), (j < k && k <= high) => (pivot <= l1[k])) &&
+        Forall(Z::ge(pivot), sublist(low, i, l1)) &&
+        Forall(Z::le(pivot), sublist(j + 1, high + 1, l1)) &&
         IntArray::full(arr, n, l1)
       by array_length
   */
@@ -48,8 +57,8 @@ int partition(int *arr, int low, int high)
           low <= i && i <= j && j <= high &&
           Permutation(l, replace_Znth(i, pivot, l1)) &&
           same_outside_range(l, l1, low, high) &&
-          (forall (k: Z), (low <= k && k < i) => (l1[k] <= pivot)) &&
-          (forall (k: Z), (j < k && k <= high) => (pivot <= l1[k])) &&
+          Forall(Z::ge(pivot), sublist(low, i, l1)) &&
+          Forall(Z::le(pivot), sublist(j + 1, high + 1, l1)) &&
           IntArray::full(arr, n, l1)
         by array_length
     */
@@ -73,8 +82,8 @@ int partition(int *arr, int low, int high)
           low <= i && i <= j && j <= high &&
           Permutation(l, replace_Znth(j, pivot, l1)) &&
           same_outside_range(l, l1, low, high) &&
-          (forall (k: Z), (low <= k && k < i) => (l1[k] <= pivot)) &&
-          (forall (k: Z), (j < k && k <= high) => (pivot <= l1[k])) &&
+          Forall(Z::ge(pivot), sublist(low, i, l1)) &&
+          Forall(Z::le(pivot), sublist(j + 1, high + 1, l1)) &&
           IntArray::full(arr, n, l1)
         by array_length
     */

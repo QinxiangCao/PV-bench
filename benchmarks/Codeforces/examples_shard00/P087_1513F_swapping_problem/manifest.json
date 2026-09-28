@@ -1,0 +1,22 @@
+{
+  "id": "P087_1513F_swapping_problem",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1513/F",
+    "title": "Swapping Problem",
+    "url": "https://codeforces.com/problemset/problem/1513/F",
+    "rating": 2500,
+    "tags": [
+      "brute force",
+      "constructive algorithms",
+      "data structures",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

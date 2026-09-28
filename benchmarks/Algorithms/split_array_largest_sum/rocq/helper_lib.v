@@ -1,38 +1,31 @@
-Require Import PVbench.Algorithms.split_array_largest_sum.rocq.spec_lib.
-
+Require Export PVbench.Algorithms.split_array_largest_sum.rocq.spec_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Lists.List.
 Require Import Coq.micromega.Lia.
 From AUXLib Require Import ListLib.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+(* Facts connecting the greedy splitter state with partition semantics. *)
+Local Open Scope list_scope.
+Require Import Coq.Relations.Relation_Operators.
+Require Import AUXLib.MonotonicList.
 
-Inductive PrefixSplitState
-    (l : list Z) (cap : Z) : Z -> Z -> Z -> Prop :=
-  | PrefixSplitState_zero :
-      0 <= cap ->
-      PrefixSplitState l cap 0 1 0
-  | PrefixSplitState_new_segment :
-      forall i cnt cur,
-        0 <= i < Zlength l ->
-        0 <= Znth i l 0 <= cap ->
-        cur + Znth i l 0 > cap ->
-        PrefixSplitState l cap i cnt cur ->
-        PrefixSplitState l cap (i + 1) (cnt + 1) (Znth i l 0)
-  | PrefixSplitState_extend :
-      forall i cnt cur,
-        0 <= i < Zlength l ->
-        0 <= Znth i l 0 <= cap ->
-        cur + Znth i l 0 <= cap ->
-        PrefixSplitState l cap i cnt cur ->
-        PrefixSplitState l cap (i + 1) cnt (cur + Znth i l 0).
-Definition CanSplit (l : list Z) (m cap : Z) : Prop :=
-  exists cnt cur,
-    PrefixSplitState l cap (Zlength l) cnt cur /\ cnt <= m.
-Definition CannotSplit (l : list Z) (m cap : Z) : Prop :=
-  forall cnt cur,
-    PrefixSplitState l cap (Zlength l) cnt cur -> m < cnt.
+Definition SplitFeasible (l : list Z) (m cap : Z) : Prop :=
+  exists max_sum, PartitionMaxSegmentSum l m max_sum /\ max_sum <= cap.
+
+Definition SplitInfeasible (l : list Z) (m cap : Z) : Prop :=
+  ~ SplitFeasible l m cap.
+
+(** Among all legal partitions of the processed prefix, minimize the segment
+    count and then the last segment's sum.  The empty prefix has one open,
+    empty segment, matching cnt = 1 and cur = 0.  This is a property of
+    partitions, independent of a greedy execution history. *)
+Definition SplitProgress (prefix : list Z) (cap cnt cur : Z) : Prop :=
+  min_value_of_subset
+    (fun a b : Z * Z => fst a < fst b \/ (fst a = fst b /\ snd a <= snd b))
+    (fun parts : list (list Z) => concat parts = prefix /\
+      Forall (fun segment => segment <> [] /\ sum segment <= cap) parts)
+    (fun parts => (Z.max 1 (Zlength parts), sum (last parts []))) (cnt, cur).

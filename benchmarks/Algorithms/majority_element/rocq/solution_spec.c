@@ -1,3 +1,7 @@
+/*@ Extern Coq
+      (IsMajorityElement : Z -> list Z -> Prop)
+ */
+
 /*@ Import Coq Require Import PVbench.Algorithms.majority_element.rocq.spec_lib */
 
 int majorityElement(int* nums, int numsSize)
@@ -8,7 +12,7 @@ int majorityElement(int* nums, int numsSize)
 {
     int vote = 0;
     int candidate = 0;
-
+    
     for (int i = 0; i < numsSize; i++) {
         if (vote == 0) {
             candidate = nums[i];

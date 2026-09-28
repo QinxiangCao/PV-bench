@@ -13,7 +13,6 @@ void optimized_selection_sort(int *a, int n)
             }
         }
 
-        /* Avoid the three writes when the current element is already minimal. */
         if (min_index != i) {
             int tmp = a[i];
             a[i] = a[min_index];

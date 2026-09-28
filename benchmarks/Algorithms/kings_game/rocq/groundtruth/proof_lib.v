@@ -1,20 +1,55 @@
+Require Export PVbench.Algorithms.kings_game.rocq.helper_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.Sorting.Permutation.
 Require Import Coq.ZArith.ZArith.
 From AUXLib Require Import ListLib.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
-
-(** A minister is modelled independently of the flat C representation.  The
-    two components are respectively the left- and right-hand positive
-    integers. *)
-
-Require Import PVbench.Algorithms.kings_game.rocq.spec_lib.
-Require Import PVbench.Algorithms.kings_game.rocq.helper_lib.
 Require Import Coq.micromega.Lia.
+
+Definition MinisterHandsBound (ps : list minister) : Prop :=
+  Forall
+    (fun p =>
+       1 <= minister_left p <= 10 /\
+       1 <= minister_right p <= 10)
+    ps.
+
+Definition MinisterSorted (ps : list minister) : Prop :=
+  forall i j,
+    0 <= i -> i <= j -> j < Zlength ps ->
+    MinisterProductLe
+      (Znth i ps default_minister)
+      (Znth j ps default_minister).
+
+(** Predicate-first bubble-sort invariants.  [BubbleOuterFacts] says that
+    the last [pass] records are sorted and dominate the remaining prefix.
+    [BubbleScanFacts] says that position [j] contains a maximum greedy key
+    of the scanned prefix. *)
+Definition BubbleOuterFacts
+    (ps : list minister) (n pass : Z) : Prop :=
+  Zlength ps = n /\
+  (forall i j,
+      n - pass <= i -> i <= j -> j < n ->
+      MinisterProductLe
+        (Znth i ps default_minister)
+        (Znth j ps default_minister)) /\
+  (forall i j,
+      0 <= i -> i < n - pass ->
+      n - pass <= j -> j < n ->
+      MinisterProductLe
+        (Znth i ps default_minister)
+        (Znth j ps default_minister)).
+
+Definition BubbleScanFacts
+    (ps : list minister) (n pass j : Z) : Prop :=
+  0 <= j < n - pass /\
+  forall k,
+    0 <= k -> k <= j ->
+    MinisterProductLe
+      (Znth k ps default_minister)
+      (Znth j ps default_minister).
 
 Lemma minister_flatten_Zlength__flat_bubble :
   forall ps,
@@ -29,6 +64,7 @@ Proof.
     rewrite Z.mul_succ_r.
     lia.
 Qed.
+
 Lemma minister_flatten_Znth_pair__flat_bubble :
   forall ps i,
     0 <= i < Zlength ps ->
@@ -60,6 +96,7 @@ Proof.
       apply IH.
       lia.
 Qed.
+
 Lemma minister_hands_bound_Znth__flat_bubble :
   forall ps i,
     MinisterHandsBound ps ->
@@ -77,6 +114,7 @@ Proof.
     + rewrite Znth_cons by lia.
       apply IH; auto; lia.
 Qed.
+
 Lemma flat_ministers_Zlength__flat_bubble :
   forall flat ps,
     FlatMinisters flat ps ->
@@ -87,6 +125,7 @@ Proof.
   subst flat.
   apply minister_flatten_Zlength__flat_bubble.
 Qed.
+
 Lemma flat_minister_product_bounds__flat_bubble :
   forall flat ps i,
     FlatMinisters flat ps ->
@@ -104,6 +143,7 @@ Proof.
   rewrite Hleft, Hright.
   nia.
 Qed.
+
 Lemma flat_minister_product_eq__flat_bubble :
   forall flat ps i,
     FlatMinisters flat ps ->
@@ -120,6 +160,7 @@ Proof.
   rewrite Hleft, Hright.
   reflexivity.
 Qed.
+
 Lemma minister_flatten_replace_nth__flat_bubble :
   forall ps p n,
     (n < List.length ps)%nat ->
@@ -143,6 +184,7 @@ Proof.
       apply IH.
       simpl in Hn. lia.
 Qed.
+
 Lemma minister_flatten_replace_Znth__flat_bubble :
   forall ps p i,
     0 <= i < Zlength ps ->
@@ -158,6 +200,7 @@ Proof.
   rewrite Zlength_correct in Hi.
   lia.
 Qed.
+
 Lemma replace_Znth_swap_form_minister__flat_bubble :
   forall (l1 l2 l3 : list minister) (xi xj : minister),
     replace_Znth (Zlength l1 + 1 + Zlength l2) xi
@@ -189,6 +232,7 @@ Proof.
   replace (Zlength l2 - Zlength l2) with 0 by lia.
   reflexivity.
 Qed.
+
 Lemma minister_swap_permutation_lt__flat_bubble :
   forall ps i j,
     0 <= i < j ->
@@ -270,6 +314,7 @@ Proof.
     + apply Permutation_app_head. apply perm_swap.
     + apply Permutation_sym. apply Permutation_middle.
 Qed.
+
 Lemma replace_nth_comm_minister__flat_bubble :
   forall ni nj (ps : list minister) (a b : minister),
     ni <> nj ->
@@ -287,6 +332,7 @@ Proof.
     + reflexivity.
     + f_equal. apply IH. congruence.
 Qed.
+
 Lemma replace_Znth_comm_minister__flat_bubble :
   forall (ps : list minister) i j (a b : minister),
     0 <= i ->
@@ -302,6 +348,7 @@ Proof.
   apply Hij.
   apply Z2Nat.inj in Heq; lia.
 Qed.
+
 Lemma minister_swap_permutation__flat_bubble :
   forall ps i j,
     0 <= i < Zlength ps ->
@@ -320,6 +367,7 @@ Proof.
       repeat rewrite replace_Znth_Znth with (a0 := default_minister).
       apply Permutation_refl.
 Qed.
+
 Lemma minister_swap_Zlength__flat_bubble :
   forall ps i j,
     Zlength (minister_swap ps i j) = Zlength ps.
@@ -328,6 +376,7 @@ Proof.
   repeat rewrite Zlength_replace_Znth.
   reflexivity.
 Qed.
+
 Lemma minister_swap_hands_bound__flat_bubble :
   forall ps i j,
     MinisterHandsBound ps ->
@@ -340,6 +389,7 @@ Proof.
   - apply minister_swap_permutation__flat_bubble; eauto.
   - exact Hbound.
 Qed.
+
 Lemma minister_flatten_swap__flat_bubble :
   forall ps i j,
     0 <= i < Zlength ps ->
@@ -362,6 +412,7 @@ Proof.
   rewrite minister_flatten_replace_Znth__flat_bubble by exact Hi.
   reflexivity.
 Qed.
+
 Lemma flat_ministers_swap__flat_bubble :
   forall flat ps i j,
     FlatMinisters flat ps ->
@@ -381,6 +432,7 @@ Proof.
   symmetry.
   apply minister_flatten_swap__flat_bubble; assumption.
 Qed.
+
 Lemma minister_swap_flat_preprocess_form__flat_bubble :
   forall flat n i j,
     Zlength flat = 2 * n ->
@@ -402,6 +454,7 @@ Proof.
   - repeat rewrite Zlength_replace_Znth. lia.
   - lia.
 Qed.
+
 Lemma minister_swap_Znth_left__flat_bubble :
   forall ps i j,
     0 <= i < Zlength ps ->
@@ -421,6 +474,7 @@ Proof.
     + rewrite Zlength_replace_Znth. exact Hi.
     + congruence.
 Qed.
+
 Lemma minister_swap_Znth_right__flat_bubble :
   forall ps i j,
     0 <= i < Zlength ps ->
@@ -437,6 +491,7 @@ Proof.
     + apply Znth_indep. exact Hi.
     + rewrite Zlength_replace_Znth. exact Hj.
 Qed.
+
 Lemma minister_swap_Znth_other__flat_bubble :
   forall ps i j k,
     0 <= i < Zlength ps ->
@@ -455,37 +510,40 @@ Proof.
   2: congruence.
   rewrite Znth_replace_Znth_Diff with (i := i) (j := k); auto.
 Qed.
+
 Lemma bubble_outer_initial__flat_bubble :
   forall ps n,
     Zlength ps = n ->
-    BubbleOuterProperty ps n 0.
+    BubbleOuterFacts ps n 0.
 Proof.
   intros ps n Hlen.
-  unfold BubbleOuterProperty.
+  unfold BubbleOuterFacts.
   split; [exact Hlen |].
   split; intros i j; unfold MinisterProductLe; intros; lia.
 Qed.
+
 Lemma bubble_scan_initial__flat_bubble :
   forall ps n pass,
     0 < n - pass ->
-    BubbleScanProperty ps n pass 0.
+    BubbleScanFacts ps n pass 0.
 Proof.
   intros ps n pass Hrange.
-  unfold BubbleScanProperty.
+  unfold BubbleScanFacts.
   split; [lia |].
   intros k Hk Hk0.
   assert (k = 0) by lia. subst k.
   unfold MinisterProductLe. lia.
 Qed.
+
 Lemma bubble_scan_step_no_swap__flat_bubble :
   forall ps n pass j,
     Zlength ps = n ->
     j + 1 < n - pass ->
-    BubbleScanProperty ps n pass j ->
+    BubbleScanFacts ps n pass j ->
     MinisterProductLe
       (Znth j ps default_minister)
       (Znth (j + 1) ps default_minister) ->
-    BubbleScanProperty ps n pass (j + 1).
+    BubbleScanFacts ps n pass (j + 1).
 Proof.
   intros ps n pass j Hlen Hnext Hscan Hle.
   destruct Hscan as [Hj Hmax].
@@ -497,20 +555,21 @@ Proof.
     unfold MinisterProductLe in *.
     lia.
 Qed.
+
 Lemma bubble_outer_swap_prefix__flat_bubble :
   forall ps n pass j,
     Zlength ps = n ->
     0 <= pass ->
     0 <= j ->
     j + 1 < n - pass ->
-    BubbleOuterProperty ps n pass ->
-    BubbleOuterProperty (minister_swap ps j (j + 1)) n pass.
+    BubbleOuterFacts ps n pass ->
+    BubbleOuterFacts (minister_swap ps j (j + 1)) n pass.
 Proof.
   intros ps n pass j Hlen Hpass Hj Hbefore Houter.
   destruct Houter as [Houter_len [Hsuffix Hcross]].
   assert (Hj0 : 0 <= j < Zlength ps) by lia.
   assert (Hj1 : 0 <= j + 1 < Zlength ps) by lia.
-  unfold BubbleOuterProperty.
+  unfold BubbleOuterFacts.
   split.
   - rewrite minister_swap_Zlength__flat_bubble. exact Hlen.
   - split.
@@ -533,17 +592,18 @@ Proof.
              (i := j) (j := j + 1) (k := x); try lia.
            apply Hcross; lia.
 Qed.
+
 Lemma bubble_scan_step_swap__flat_bubble :
   forall ps n pass j,
     Zlength ps = n ->
     0 <= pass ->
     0 <= j ->
     j + 1 < n - pass ->
-    BubbleScanProperty ps n pass j ->
+    BubbleScanFacts ps n pass j ->
     MinisterProductLe
       (Znth (j + 1) ps default_minister)
       (Znth j ps default_minister) ->
-    BubbleScanProperty (minister_swap ps j (j + 1)) n pass (j + 1).
+    BubbleScanFacts (minister_swap ps j (j + 1)) n pass (j + 1).
 Proof.
   intros ps n pass j Hlen Hpass Hj Hnext Hscan Hguard.
   destruct Hscan as [Hscan_range Hmax].
@@ -562,18 +622,19 @@ Proof.
         (i := j) (j := j + 1) (k := k); try lia.
       apply Hmax; lia.
 Qed.
+
 Lemma bubble_outer_finish_pass__flat_bubble :
   forall ps n pass j,
     j = n - 1 - pass ->
-    BubbleOuterProperty ps n pass ->
-    BubbleScanProperty ps n pass j ->
-    BubbleOuterProperty ps n (pass + 1).
+    BubbleOuterFacts ps n pass ->
+    BubbleScanFacts ps n pass j ->
+    BubbleOuterFacts ps n (pass + 1).
 Proof.
   intros ps n pass j Hj Houter Hscan.
   subst j.
   destruct Houter as [Hlen [Hsuffix Hcross]].
   destruct Hscan as [Hscan_range Hmax].
-  unfold BubbleOuterProperty.
+  unfold BubbleOuterFacts.
   split; [exact Hlen |].
   split.
   - intros i j Hi Hij Hjlen.
@@ -588,11 +649,12 @@ Proof.
       apply Hmax; lia.
     + apply Hcross; lia.
 Qed.
+
 Lemma bubble_outer_final_sorted__greedy_optimum :
   forall ps n pass,
     pass >= n - 1 ->
     pass <= n - 1 ->
-    BubbleOuterProperty ps n pass ->
+    BubbleOuterFacts ps n pass ->
     MinisterSorted ps.
 Proof.
   intros ps n pass Hge Hle [Hlen [Hsuffix Hcross]].
@@ -606,6 +668,7 @@ Proof.
     + apply Hcross; lia.
   - apply Hsuffix; lia.
 Qed.
+
 Lemma minister_sorted_cons__greedy_optimum :
   forall x xs,
     MinisterSorted (x :: xs) ->
@@ -637,6 +700,7 @@ Proof.
     replace (j + 1 - 1) with j in Hsorted by lia.
     apply Hsorted; lia.
 Qed.
+
 Lemma minister_reward_cons_zero__greedy_optimum :
   forall king x xs,
     MinisterReward king (x :: xs) 0 = king / minister_right x.
@@ -649,6 +713,7 @@ Proof.
   rewrite Z.mul_1_r.
   reflexivity.
 Qed.
+
 Lemma minister_reward_cons_succ__greedy_optimum :
   forall king x xs i,
     0 <= i < Zlength xs ->
@@ -664,6 +729,7 @@ Proof.
   f_equal.
   ring.
 Qed.
+
 Lemma minister_reward_two_cons_tail__greedy_optimum :
   forall king x y xs i,
     0 <= i < Zlength xs ->
@@ -678,6 +744,7 @@ Proof.
   rewrite minister_reward_cons_succ__greedy_optimum by exact Hi.
   f_equal.
 Qed.
+
 Lemma positive_cross_div_le__greedy_optimum :
   forall king lx rx ly ry,
     0 <= king ->
@@ -692,6 +759,7 @@ Proof.
   replace (rx * ry) with (ry * rx) by ring.
   apply Z.div_le_mono; nia.
 Qed.
+
 Lemma positive_adjacent_exchange_bound__greedy_optimum :
   forall king x y xs cap,
     0 <= king ->
@@ -738,6 +806,7 @@ Proof.
         with (king * minister_left y * minister_left x) by ring.
       exact Hbound.
 Qed.
+
 Lemma positive_move_minimum_to_front_bound__greedy_optimum :
   forall pre x post king cap,
     0 <= king ->
@@ -803,6 +872,7 @@ Proof.
     }
     eapply positive_adjacent_exchange_bound__greedy_optimum; eauto.
 Qed.
+
 Lemma positive_sorted_global_bound__greedy_optimum :
   forall sorted other king cap,
     0 <= king ->
@@ -886,6 +956,7 @@ Proof.
       rewrite Zlength_cons in Hi.
       lia.
 Qed.
+
 Lemma finite_nonempty_index_max__greedy_optimum :
   forall n (f : Z -> Z),
     1 <= n ->
@@ -950,6 +1021,7 @@ Proof.
   - lia.
   - apply Hfinite.
 Qed.
+
 Lemma positive_sorted_realizes_kings_optimum__greedy_optimum :
   forall input output king,
     0 <= king ->
@@ -962,7 +1034,6 @@ Proof.
   intros input output king Hking Hnonempty Hhands Hsorted Hperm.
   unfold KingsGameResult.
   split; [exact Hperm |].
-  split; [exact Hsorted |].
   destruct
     (finite_nonempty_index_max__greedy_optimum
       (Zlength output) (fun i => MinisterReward king output i) Hnonempty)
@@ -1012,4 +1083,38 @@ Proof.
       rewrite Hj_reward in Hsorted_bound.
       exact Hsorted_bound.
   - reflexivity.
+Qed.
+
+Lemma bubble_outer_facts ps n pass :
+  Zlength ps = n ->
+  (BubbleOuterProperty ps n pass <-> BubbleOuterFacts ps n pass).
+Proof. unfold BubbleOuterProperty, BubbleOuterFacts. tauto. Qed.
+
+Lemma bubble_scan_facts ps n pass j :
+  0 <= j < n - pass ->
+  (BubbleScanProperty ps n pass j <-> BubbleScanFacts ps n pass j).
+Proof.
+  intros Hj. unfold BubbleScanProperty, BubbleScanFacts, MinisterProductLe,
+    max_value_of_subset, max_object_of_subset.
+  split.
+  - intros [k [[Hk Hmax] Heq]]. split; [exact Hj|].
+    intros i Hi Hij. rewrite <- Heq. apply Hmax. change (0 <= i <= j). lia.
+  - intros [_ Hmax]. exists j. split; [split|reflexivity].
+    + change (0 <= j <= j). lia.
+    + intros i Hi. change (0 <= i <= j) in Hi. apply Hmax; lia.
+Qed.
+
+Lemma minister_hands_explicit ps :
+  MinisterHandsBound ps <->
+  Forall (Z.le 1) (map minister_left ps) /\
+  Forall (Z.ge 10) (map minister_left ps) /\
+  Forall (Z.le 1) (map minister_right ps) /\
+  Forall (Z.ge 10) (map minister_right ps).
+Proof.
+  unfold MinisterHandsBound. rewrite !Forall_map, !Forall_forall.
+  split.
+  - intros H. repeat split; intros p Hp; specialize (H p Hp); lia.
+  - intros [Hll [Hlh [Hrl Hrh]]] p Hp.
+    specialize (Hll p Hp); specialize (Hlh p Hp);
+    specialize (Hrl p Hp); specialize (Hrh p Hp); lia.
 Qed.

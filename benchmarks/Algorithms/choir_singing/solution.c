@@ -1,6 +1,8 @@
-int choir_singing(int *nums, int numsSize, int *dp_left, int *dp_right)
+int choir_singing(int *nums, int numsSize)
 
 {
+  int dp_left[100];
+  int dp_right[100];
 
   for (int i = 0; i < numsSize; ++i) {
     dp_left[i] = 1;
@@ -14,7 +16,6 @@ int choir_singing(int *nums, int numsSize, int *dp_left, int *dp_right)
         dp_left[i] = dp_left[j] + 1;
       }
     }
-
   }
 
   for (int i = numsSize - 1; i >= 0; --i) {
@@ -24,7 +25,6 @@ int choir_singing(int *nums, int numsSize, int *dp_left, int *dp_right)
         dp_right[i] = dp_right[j] + 1;
       }
     }
-
   }
 
   int max_choir = 0;

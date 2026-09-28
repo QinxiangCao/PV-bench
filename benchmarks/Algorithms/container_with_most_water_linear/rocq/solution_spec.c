@@ -1,12 +1,15 @@
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
+
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (MaximumContainerArea : list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.container_with_most_water_linear.rocq.spec_lib */
 
-/*
- * Linear-time two-pointer implementation of Container With Most Water.
- * The input array is only read and is never modified.
- */
 int maxAreaLinear(const int *height, int heightSize)
 /*@ With (l : list Z)
     Require
@@ -14,12 +17,9 @@ int maxAreaLinear(const int *height, int heightSize)
       height != 0 &&
       Zlength(l) == heightSize &&
       IntArray::full(height, heightSize, l) &&
-      (forall (k : Z),
-        (0 <= k && k < heightSize) =>
-        (0 <= l[k] && l[k] <= 10000))
+      Forall(Z::le(0), l) && Forall(Z::ge(10000), l)
     Ensure
       MaximumContainerArea(l, __return) &&
-      0 <= __return && __return <= 999990000 &&
       IntArray::full(height, heightSize, l)
  */
 {
@@ -51,11 +51,6 @@ int maxAreaLinear(const int *height, int heightSize)
             maximumArea = area;
         }
 
-        /*
-         * Moving the taller side cannot improve the current shorter side:
-         * the width becomes smaller while the usable height cannot exceed
-         * the shorter endpoint.  Therefore discard the shorter endpoint.
-         */
         if (height[left] < height[right]) {
             ++left;
         } else {

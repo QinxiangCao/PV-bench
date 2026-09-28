@@ -14,11 +14,11 @@ int partition(int *arr, int low, int high)
   int j = high;
 
   while (i < j) {
-
+    
     while (i < j && arr[j] >= pivot) {
       j--;
     }
-
+    
     while (i < j && arr[i] <= pivot) {
       i++;
     }

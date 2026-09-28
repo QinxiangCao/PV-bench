@@ -31,27 +31,27 @@ int partition(int *arr, int low, int high)
   }
 
   arr[i] = pivot;
-  return i ;
+  return i  ;
 }
 
 void quicksort_range(int *arr, int left, int right)
 
 {
-  int p = partition(arr, left, right) ;
+  int p = partition(arr, left, right)  ;
   if (p > left) {
-    quicksort_range(arr, left, p - 1) ;
+    quicksort_range(arr, left, p - 1)  ;
   }
   if (p < right) {
-    quicksort_range(arr, p + 1, right) ;
+    quicksort_range(arr, p + 1, right)  ;
   }
-  return ;
+  return  ;
 }
 
 void quicksort(int *arr, int n)
 
 {
   if (n > 0) {
-    quicksort_range(arr, 0, n - 1) ;
+    quicksort_range(arr, 0, n - 1)  ;
   }
-  return ;
+  return  ;
 }

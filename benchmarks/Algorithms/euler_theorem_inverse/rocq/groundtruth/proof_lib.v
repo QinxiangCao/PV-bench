@@ -1,19 +1,54 @@
+Require Export PVbench.Algorithms.euler_theorem_inverse.rocq.helper_lib.
 From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
 
 Require Import
-  SimpleC.EE.LLM_bench.Algorithms.modular_power.modular_power_lib.
+  PVbench.Algorithms.modular_power.rocq.groundtruth.proof_lib.
 
 (** The canonical Euler totient is the cardinality of the positive residues
     [1, n] that are coprime to [n].  This finite count is independent of the
     trial-division implementation used by the C program. *)
+Require Import AUXLib.ListLib SumLib.ZRange.
 
-Require Import PVbench.Algorithms.euler_theorem_inverse.rocq.spec_lib.
-Require Import PVbench.Algorithms.euler_theorem_inverse.rocq.helper_lib.
-From Coq Require Import Lia Psatz ZArith.Znumtheory ZArith.Zpow_facts ZArith.Zquot Sorting.Permutation.
+(** Compatibility with the original counting helpers, whose internal
+    natural-number enumeration is retained only for proof reuse. *)
+Definition EulerTotientCountLegacy (n : Z) : Z :=
+  Z.of_nat
+    (length
+       (filter
+          (fun k : nat => Z.eqb (Z.gcd (Z.of_nat k) n) 1)
+          (seq 1 (Z.to_nat n)))).
+
+From Coq Require Import Lia Sorting.Permutation.
+Lemma EulerTotientValue_compat n :
+  EulerTotientValue n = EulerTotientCountLegacy n.
+Proof.
+  unfold EulerTotientValue, EulerTotientCountLegacy.
+  assert (Henum : Zrange 1 (n + 1) = map Z.of_nat (seq 1 (Z.to_nat n))).
+  { unfold Zrange. replace (n + 1 - 1) with n by lia.
+    generalize (Z.to_nat n). intros count.
+    change 1 with (Z.of_nat 1).
+    generalize 1%nat. intros offset.
+    revert offset. induction count as [|count IH]; intros offset; cbn [seq map Zrange_aux].
+    - reflexivity.
+    - f_equal. replace (Z.of_nat offset + 1) with (Z.of_nat (S offset)) by lia.
+      apply IH. }
+  rewrite Henum, Zlength_correct.
+  generalize (seq 1 (Z.to_nat n)); intros l.
+  induction l as [|k l IH]; cbn [filter map length]; [reflexivity|].
+  destruct (Z.eqb (Z.gcd (Z.of_nat k) n) 1); cbn [length].
+  - rewrite !Nat2Z.inj_succ. f_equal. exact IH.
+  - exact IH.
+Qed.
+
+(** Proof-only arithmetic support for the structural transport lemmas below. *)
+Require Import Coq.micromega.Lia.
 Require Import Coq.setoid_ring.Ring.
 
+(** Exact division preserves every terminal descendant: a decomposition of the
+    quotient with exponent [removed] is a decomposition of the pre-state with
+    exponent [removed + 1]. *)
 Lemma EulerPhiFactorCompletion_divide :
   forall original factor current result,
     factor <> 0 ->
@@ -32,6 +67,8 @@ Proof.
   nia.
 Qed.
 
+(** The factor-completion phase consumes the invariant's semantic interface by
+    choosing the current value itself with exponent zero. *)
 Lemma EulerPhiRemovalProgress_complete :
   forall original factor current result,
     EulerPhiRemovalProgress original factor current result ->
@@ -49,6 +86,10 @@ Proof.
   - exact Hfree.
 Qed.
 
+From Coq Require Import Lia Psatz ZArith.Znumtheory ZArith.Zpow_facts
+  Sorting.Permutation.
+From Coq Require Import Lia Psatz ZArith.Znumtheory ZArith.Zquot.
+From Coq Require Import ZArith.Znumtheory Sorting.Permutation.
 Lemma euler_prime_from_prime__euler_phi_final_results :
   forall p,
     prime p -> EulerPrime p.
@@ -60,7 +101,6 @@ Proof.
   destruct (prime_divisors p Hp d Hdivide)
     as [Hd | [Hd | [Hd | Hd]]]; subst; lia.
 Qed.
-
 Lemma euler_prime_divisor_exists__euler_phi_final_results :
   forall k,
     1 < k ->
@@ -88,7 +128,6 @@ Proof.
     nia.
   - exact Hk_nonnegative.
 Qed.
-
 Lemma euler_residue_bounds__inverse_final_result :
   forall n k,
     2 <= n ->
@@ -123,7 +162,6 @@ Proof.
     + lia.
   - exact Hcoprime.
 Qed.
-
 Lemma euler_factor_prime__euler_phi_setup_removal :
   forall factor value,
     2 <= factor ->
@@ -150,7 +188,6 @@ Proof.
     exists (a * b * c).
     nia.
 Qed.
-
 Lemma euler_prime_power_relprime_iff__euler_phi_setup_removal :
   forall p exponent x,
     prime p ->
@@ -195,7 +232,6 @@ Proof.
     apply Zdivide_mod.
     exact Hp_x.
 Qed.
-
 Lemma euler_prime_power_multiple_count__euler_phi_setup_removal :
   forall p exponent,
     prime p ->
@@ -316,7 +352,6 @@ Proof.
         exists (Z.of_nat y).
         ring.
 Qed.
-
 Lemma euler_totient_prime_power__euler_phi_setup_removal :
   forall p exponent,
     prime p ->
@@ -333,7 +368,7 @@ Proof.
     rewrite Z.pow_1_r.
     ring.
   }
-  unfold EulerTotientValue.
+  rewrite !EulerTotientValue_compat. unfold EulerTotientCountLegacy.
   rewrite
     (filter_ext_in
        (fun j : nat => Z.eqb (Z.gcd (Z.of_nat j) (p ^ exponent)) 1)
@@ -384,7 +419,6 @@ Proof.
       assert (0 <= p ^ (exponent - 1)) by (apply Z.pow_nonneg; lia).
       nia.
 Qed.
-
 Lemma euler_relprime_product_divide__euler_phi_setup_removal :
   forall a b x,
     rel_prime a b ->
@@ -407,7 +441,6 @@ Proof.
   exists r.
   nia.
 Qed.
-
 Lemma euler_list_prod_nodup__euler_phi_setup_removal :
   forall (A B : Type) (l1 : list A) (l2 : list B),
     NoDup l1 ->
@@ -433,7 +466,6 @@ Proof.
       destruct Hpair_product as [Hxl1 Hyl2].
       contradiction.
 Qed.
-
 Lemma euler_residue_mod_member__euler_phi_setup_removal :
   forall total modulus k,
     2 <= total ->
@@ -501,7 +533,6 @@ Proof.
     apply Zgcd_1_rel_prime.
     exact Hrel_remainder.
 Qed.
-
 Lemma euler_crt_solution_mod_left__euler_phi_setup_removal :
   forall a b x y u v,
     2 <= a ->
@@ -523,7 +554,6 @@ Proof.
   - exists b.
     ring.
 Qed.
-
 Lemma euler_crt_solution_mod_right__euler_phi_setup_removal :
   forall a b x y u v,
     2 <= a ->
@@ -545,7 +575,6 @@ Proof.
   - exists a.
     ring.
 Qed.
-
 Lemma euler_crt_residue_pair_injective__euler_phi_setup_removal :
   forall a b x y,
     2 <= a ->
@@ -609,7 +638,6 @@ Proof.
   apply Nat2Z.inj.
   nia.
 Qed.
-
 Lemma euler_totient_multiplicative__euler_phi_setup_removal :
   forall a b,
     2 <= a ->
@@ -789,11 +817,10 @@ Proof.
   }
   pose proof (Permutation_length Hpermutation) as Hlength.
   rewrite length_map, length_prod in Hlength.
-  unfold EulerTotientValue, lab, la, lb in *.
+  rewrite !EulerTotientValue_compat. unfold EulerTotientCountLegacy, lab, la, lb in *.
   rewrite Hlength.
   apply Nat2Z.inj_mul.
 Qed.
-
 Lemma euler_totient_coprime_prime_power__euler_phi_setup_removal :
   forall terminal factor exponent,
     1 <= terminal ->
@@ -840,7 +867,6 @@ Proof.
         by assumption.
     ring.
 Qed.
-
 Lemma euler_phi_removal_start__euler_phi_setup_removal :
   forall original factor current result,
     2 <= original ->
@@ -961,7 +987,6 @@ Proof.
         rewrite Horiginal_phi, Htotient, Hresult_div_factor.
         ring.
 Qed.
-
 Lemma euler_prime_two__euler_phi_factor_completion :
   EulerPrime 2.
 Proof.
@@ -972,7 +997,6 @@ Proof.
   assert (d = 1 \/ d = 2) by nia.
   exact H0.
 Qed.
-
 Lemma euler_exact_positive_quotient_bounds__euler_phi_factor_completion :
   forall result factor,
     1 <= result ->
@@ -986,7 +1010,6 @@ Proof.
   rewrite Hq, Z.quot_mul by lia.
   nia.
 Qed.
-
 Lemma euler_progress_advance_nondivisor__euler_phi_factor_completion :
   forall original factor remaining result,
     2 <= factor ->
@@ -1006,7 +1029,6 @@ Proof.
     apply (proj2 (Z.rem_divide remaining factor ltac:(lia))).
     exact Hdivide.
 Qed.
-
 Lemma euler_completed_progress__euler_phi_factor_completion :
   forall original factor current result,
     1 <= current ->
@@ -1048,7 +1070,6 @@ Proof.
     apply (proj2 (Z.rem_divide current factor ltac:(lia))).
     exact Hdivide.
 Qed.
-
 Lemma euler_active_frontier_bound__euler_phi_factor_completion :
   forall original factor current result,
     2 <= factor ->
@@ -1072,7 +1093,6 @@ Proof.
   exists (108 * q).
   nia.
 Qed.
-
 Lemma euler_prime_to_prime__euler_phi_final_results :
   forall p,
     EulerPrime p -> prime p.
@@ -1084,7 +1104,6 @@ Proof.
   intros d Hd_range Hd_divide.
   destruct (Hp_divisors d ltac:(lia) Hd_divide) as [-> | ->]; lia.
 Qed.
-
 Lemma euler_remaining_prime__euler_phi_final_results :
   forall frontier remaining,
     1 < remaining ->
@@ -1129,7 +1148,6 @@ Proof.
         exists (d * a).
         nia.
 Qed.
-
 Lemma euler_filter_all_true__euler_phi_final_results :
   forall (A : Type) (f : A -> bool) (l : list A),
     (forall x, In x l -> f x = true) ->
@@ -1146,7 +1164,6 @@ Proof.
     right.
     exact Hx.
 Qed.
-
 Lemma euler_totient_of_prime__euler_phi_final_results :
   forall p,
     prime p ->
@@ -1154,7 +1171,7 @@ Lemma euler_totient_of_prime__euler_phi_final_results :
 Proof.
   intros p Hp.
   pose proof (prime_ge_2 p Hp) as Hp_ge.
-  unfold EulerTotientValue.
+  rewrite !EulerTotientValue_compat. unfold EulerTotientCountLegacy.
   assert (Hnat : Z.of_nat (Z.to_nat p) = p).
   { rewrite Z2Nat.id; lia. }
   remember (Z.to_nat p) as n eqn:Hn.
@@ -1214,7 +1231,6 @@ Proof.
     rewrite Nat2Z.inj_succ in Hnat.
     lia.
 Qed.
-
 Lemma euler_progress_terminal_prime__euler_phi_final_results :
   forall original frontier remaining result,
     1 < remaining ->
@@ -1250,7 +1266,6 @@ Proof.
   rewrite Hresult, Z.quot_mul by lia.
   nia.
 Qed.
-
 Lemma euler_progress_terminal_one__euler_phi_final_results :
   forall original frontier remaining result,
     remaining = 1 ->
@@ -1269,7 +1284,6 @@ Proof.
   symmetry.
   exact Hresidual.
 Qed.
-
 Lemma euler_modular_progress_odd_step__modular_power_loop :
   forall original_base original_exponent modulus base exponent accumulator,
     0 < modulus ->
@@ -1287,7 +1301,6 @@ Proof.
   unfold EulerModularPowerProgress in *.
   eapply modular_power_progress_odd_step__loop_transitions; eauto; lia.
 Qed.
-
 Lemma euler_modular_progress_even_step__modular_power_loop :
   forall original_base original_exponent modulus base exponent accumulator,
     0 < modulus ->
@@ -1306,7 +1319,6 @@ Proof.
   unfold EulerModularPowerProgress in *.
   eapply modular_power_progress_even_step__loop_transitions; eauto; lia.
 Qed.
-
 Lemma bounded_residue_product_int__modular_power_loop :
   forall modulus x y,
     2 <= modulus ->
@@ -1321,7 +1333,6 @@ Proof.
     Hx_min Hx_max Hy_min Hy_max.
   nia.
 Qed.
-
 Lemma euler_modular_progress_zero_finish__modular_power_final :
   forall original_base original_exponent modulus current_base accumulator,
     0 <= accumulator ->
@@ -1338,7 +1349,6 @@ Proof.
   rewrite Z.mod_small in Hprogress by lia.
   lia.
 Qed.
-
 Lemma euler_coprime_residue_member__inverse_final_result :
   forall n x,
     2 <= n ->
@@ -1368,7 +1378,6 @@ Proof.
     rewrite Z2Nat.id by lia.
     exact Hgcd.
 Qed.
-
 Lemma euler_residue_map_member__inverse_final_result :
   forall n a k,
     2 <= n ->
@@ -1432,7 +1441,6 @@ Proof.
     rewrite Z2Nat.id by lia.
     exact Hrgcd.
 Qed.
-
 Lemma euler_residue_map_injective__inverse_final_result :
   forall n a x y,
     2 <= n ->
@@ -1488,7 +1496,6 @@ Proof.
   apply Nat2Z.inj.
   nia.
 Qed.
-
 Lemma euler_residue_map_nodup__inverse_final_result :
   forall n a,
     2 <= n ->
@@ -1507,7 +1514,6 @@ Proof.
   - apply NoDup_filter.
     apply seq_NoDup.
 Qed.
-
 Lemma euler_residue_map_permutation__inverse_final_result :
   forall n a,
     2 <= n ->
@@ -1533,7 +1539,6 @@ Proof.
     subst x.
     eapply euler_residue_map_member__inverse_final_result; eauto.
 Qed.
-
 Lemma euler_product_permutation__inverse_final_result :
   forall l1 l2,
     Permutation l1 l2 ->
@@ -1543,7 +1548,6 @@ Proof.
   intros l1 l2 Hperm.
   induction Hperm; simpl; try ring; congruence.
 Qed.
-
 Lemma euler_mapped_product_mod__inverse_final_result :
   forall n a l,
     0 < n ->
@@ -1575,7 +1579,6 @@ Proof.
     + apply (f_equal (fun z => z mod n)).
       ring.
 Qed.
-
 Lemma euler_residue_product_coprime__inverse_final_result :
   forall n l,
     (forall k, In k l -> Z.gcd (Z.of_nat k) n = 1) ->
@@ -1601,7 +1604,6 @@ Proof.
       right.
       exact Hj.
 Qed.
-
 Lemma euler_power_totient_mod__inverse_final_result :
   forall a n,
     0 < a ->
@@ -1611,7 +1613,7 @@ Lemma euler_power_totient_mod__inverse_final_result :
     (a ^ EulerTotientValue n) mod n = 1.
 Proof.
   intros a n Ha Han Hn Hagcd.
-  unfold EulerTotientValue.
+  rewrite !EulerTotientValue_compat. unfold EulerTotientCountLegacy.
   set (residues :=
     filter
       (fun k : nat => Z.eqb (Z.gcd (Z.of_nat k) n) 1)
@@ -1665,7 +1667,6 @@ Proof.
   - lia.
   - exact Hdivpower.
 Qed.
-
 Lemma euler_totient_inverse_theorem__inverse_final_result :
   forall a n phi inverse,
     0 < a ->
@@ -1680,7 +1681,7 @@ Proof.
   intros a n phi inverse Ha Han Hn Hagcd Hphi Hpower.
   assert (Hphipos : 1 <= phi).
   {
-    unfold EulerPhi, EulerTotientValue in Hphi.
+    unfold EulerPhi in Hphi. rewrite EulerTotientValue_compat in Hphi. unfold EulerTotientCountLegacy in Hphi.
     subst phi.
     assert (Hin :
       In (Z.to_nat a)
@@ -1716,8 +1717,5 @@ Proof.
   }
   split.
   - exact Hinverse.
-  - unfold EulerTheoremInverse.
-    exists phi.
-    repeat split; assumption.
+  - exact Hinverse.
 Qed.
-

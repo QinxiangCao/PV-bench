@@ -1,32 +1,218 @@
+Require Export PVbench.Algorithms.concatenating_numbers_dp.rocq.helper_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import Coq.Sorting.Permutation.
+Require Import MaxMinLib.MaxMin.
+Require Import SumLib.ZRange.
 Require Import AUXLib.ListLib.
-
+Require Import AUXLib.MonotonicList.
+Local Notation sum := AUXLib.ListLib.sum.
 Import ListNotations.
 Local Open Scope Z_scope.
-
-Require Import PVbench.Algorithms.concatenating_numbers_dp.rocq.spec_lib.
-Require Import PVbench.Algorithms.concatenating_numbers_dp.rocq.helper_lib.
 Require Import Coq.ZArith.Zpow_facts.
 Require Import Coq.ZArith.Zbitwise.
 Require Import Coq.Logic.ClassicalDescription.
+(* The annotation parser emits Zlength as a higher-order argument to map. *)
+Arguments Zlength {A}.
+
+From Coq Require Import ZArith List Lia.
+
+From AUXLib Require Import ListLib.
+
+Import ListNotations.
+
+Local Open Scope Z_scope.
+
+Example decimal_row_upper_boundary :
+  DecimalRowValues [[1;0;0;0;0;0;0;0;0;0]; [9;9;9;9;9;9;9;9;9;9]] [10;10] =
+  [1000000000; 9999999999].
+Proof. reflexivity. Qed.
+
+From SimpleC.SL Require Import Mem SeparationLogic ArrayLib Array2Lib.
+
+Require Import Logic.LogicGenerator.demo932.Interface.
+
+Import naive_C_Rules.
+
+Local Open Scope sac.
+
+Lemma decimal_rows_flat_length rows width :
+  Forall (fun row : list Z => Zlength row = width) rows ->
+  Zlength (concat rows) = Zlength rows * width.
+Proof.
+  intros Hrows. induction Hrows; cbn [concat].
+  - rewrite !Zlength_nil. lia.
+  - rewrite Zlength_app, Zlength_cons, H, IHHrows. ring.
+Qed.
+
+Lemma decimal_rows_flatten_at rows x lo hi width :
+  Zlength rows = hi - lo -> 0 <= width ->
+  store_array_rec (IntArray2.row_store width) x lo hi rows |--
+  IntArray.full (x + lo * width * sizeof(INT)) ((hi - lo) * width) (concat rows).
+Proof.
+  revert x lo hi width. induction rows as [|row rows IH]; intros x lo hi width Hlen Hw.
+  - rewrite Zlength_nil in Hlen. cbn [store_array_rec concat].
+    replace ((hi - lo) * width) with 0 by nia.
+    rewrite IntArray.full_empty. entailer!.
+  - rewrite Zlength_cons in Hlen. cbn [store_array_rec concat].
+    unfold IntArray2.row_store, IntArray2.row_addr.
+    sep_apply (IH x (lo + 1) hi width ltac:(lia) Hw).
+    change (IntArray.full (x + lo * width * sizeof(INT)) width row **
+      IntArray.full (x + (lo + 1) * width * sizeof(INT)) ((hi - (lo + 1)) * width) (concat rows) |--
+      IntArray.full (x + lo * width * sizeof(INT)) ((hi - lo) * width) (row ++ concat rows)).
+    replace (x + (lo + 1) * width * sizeof(INT)) with
+      (x + lo * width * sizeof(INT) + width * sizeof(INT)) by ring.
+    replace ((hi - (lo + 1)) * width) with ((hi - lo) * width - width) by ring.
+    apply IntArray.full_merge_to_full.
+    pose proof (Zlength_nonneg rows). nia.
+Qed.
+
+Lemma decimal_rows_flatten rows x count width :
+  Zlength rows = count -> 0 <= width ->
+  IntArray2.full x count width rows |-- IntArray.full x (count * width) (concat rows).
+Proof.
+  intros Hlen Hw. unfold IntArray2.full, store_array.
+  pose proof (decimal_rows_flatten_at rows x 0 count width ltac:(lia) Hw) as H.
+  replace (x + 0 * width * sizeof(INT)) with x in H by lia.
+  replace ((count - 0) * width) with (count * width) in H by ring. exact H.
+Qed.
+
+Lemma decimal_rows_unflatten_at rows x lo width :
+  Forall (fun row : list Z => Zlength row = width) rows -> 0 <= width ->
+  IntArray.full (x + lo * width * sizeof(INT)) (Zlength rows * width) (concat rows) |--
+  store_array_rec (IntArray2.row_store width) x lo (lo + Zlength rows) rows.
+Proof.
+  intros Hrows Hw. revert x lo. induction Hrows as [|row rows Hrow Hrows IH]; intros x lo.
+  - cbn [concat store_array_rec]. rewrite Zlength_nil.
+    replace (0 * width) with 0 by lia. rewrite IntArray.full_empty. entailer!.
+  - cbn [concat store_array_rec]. rewrite Zlength_cons.
+    sep_apply (IntArray.full_split_to_full (x + lo * width * sizeof(INT)) width
+      ((Zlength rows + 1) * width) (row ++ concat rows)
+      ltac:(pose proof (Zlength_nonneg rows); nia)).
+    assert (Htail_length : Zlength (concat rows) = Zlength rows * width)
+      by (apply decimal_rows_flat_length; exact Hrows).
+    replace (sublist 0 width (row ++ concat rows)) with row.
+    2: { rewrite <- Hrow. symmetry. apply sublist_app_exact1. }
+    replace (sublist width ((Zlength rows + 1) * width) (row ++ concat rows)) with (concat rows).
+    2: { replace ((Zlength rows + 1) * width) with (Zlength (row ++ concat rows))
+           by (rewrite Zlength_app; nia).
+         rewrite <- Hrow. symmetry.
+         rewrite sublist_split_app_r with (len := Zlength row)
+           by (try reflexivity; rewrite Zlength_app; pose proof (Zlength_nonneg (concat rows)); lia).
+         rewrite Zlength_app.
+         replace (Zlength row - Zlength row) with 0 by lia.
+         replace (Zlength row + Zlength (concat rows) - Zlength row) with (Zlength (concat rows)) by lia.
+         apply sublist_self. reflexivity. }
+    replace ((Zlength rows + 1) * width - width) with (Zlength rows * width) by ring.
+    replace (x + lo * width * sizeof(INT) + width * sizeof(INT)) with
+      (x + (lo + 1) * width * sizeof(INT)) by ring.
+    sep_apply (IH x (lo + 1)).
+    replace (lo + (Zlength rows + 1)) with (lo + 1 + Zlength rows) by lia.
+    replace (lo + Z.succ (Zlength rows)) with (lo + 1 + Zlength rows) by lia.
+    unfold IntArray2.row_store, IntArray2.row_addr. repeat cancel.
+    apply derivable1_refl.
+Qed.
+
+Lemma decimal_rows_unflatten rows x count width :
+  Zlength rows = count ->
+  Forall (fun row : list Z => Zlength row = width) rows -> 0 <= width ->
+  IntArray.full x (count * width) (concat rows) |-- IntArray2.full x count width rows.
+Proof.
+  intros Hcount Hrows Hw.
+  pose proof (decimal_rows_unflatten_at rows x 0 width Hrows Hw) as H.
+  replace (x + 0 * width * sizeof(INT)) with x in H by lia.
+  rewrite Hcount, Z.add_0_l in H. exact H.
+Qed.
+
+Lemma decimal_rows_lengths_from_map rows width :
+  Forall (eq width) (map (@Zlength Z) rows) ->
+  Forall (fun row : list Z => Zlength row = width) rows.
+Proof.
+  induction rows; cbn; intros H.
+  - constructor.
+  - inversion H; subst. constructor; [congruence | apply IHrows; assumption].
+Qed.
+
+Lemma decimal_rows_flat_row rows width i :
+  Forall (fun row : list Z => Zlength row = width) rows -> 0 <= width ->
+  0 <= i < Zlength rows ->
+  Znth i rows [] = sublist (i * width) ((i + 1) * width) (concat rows).
+Proof.
+  intros Hrows Hw. revert i. induction Hrows as [|row rows Hrow Hrows IH]; intros i Hi.
+  - rewrite Zlength_nil in Hi. lia.
+  - rewrite Zlength_cons in Hi. cbn [concat].
+    destruct (Z.eq_dec i 0) as [-> | Hpos].
+    + rewrite Znth0_cons. replace (0 * width) with 0 by lia.
+      replace ((0 + 1) * width) with width by lia.
+      rewrite <- Hrow. symmetry. apply sublist_app_exact1.
+    + rewrite Znth_cons by lia. rewrite IH by lia.
+      rewrite sublist_split_app_r with (len := width) by (try assumption; nia).
+      replace (i * width - width) with ((i - 1) * width) by ring.
+      replace ((i + 1) * width - width) with ((i - 1 + 1) * width) by ring. reflexivity.
+Qed.
+
+Lemma decimal_rows_concat_unique rows flat count width :
+  0 < width -> Zlength rows = count -> Zlength flat = count * width ->
+  Forall (fun row : list Z => Zlength row = width) rows ->
+  (forall i, 0 <= i < count ->
+    Znth i rows [] = sublist (i * width) ((i + 1) * width) flat) ->
+  flat = concat rows.
+Proof.
+  intros Hw Hrows Hflat Hwidth Hview.
+  apply (proj2 (list_eq_ext _ _ 0)). split.
+  - rewrite decimal_rows_flat_length with (width := width) by exact Hwidth. lia.
+  - intros k Hk.
+    assert (Hr : 0 <= k / width < count).
+    { split; [apply Z.div_pos; lia |]. apply Z.div_lt_upper_bound; nia. }
+    pose proof (Z.div_mod k width ltac:(lia)) as Hdivide.
+    pose proof (Z.mod_pos_bound k width ltac:(lia)) as Hmod.
+    pose proof (Hview (k / width) Hr) as Hold.
+    pose proof (decimal_rows_flat_row rows width (k / width) Hwidth ltac:(lia) ltac:(lia)) as Hnew.
+    assert (Hlength : Zlength (concat rows) = count * width)
+      by (rewrite decimal_rows_flat_length with (width := width) by exact Hwidth; lia).
+    apply (f_equal (fun row => Znth (k mod width) row 0)) in Hold, Hnew.
+    rewrite Znth_sublist in Hold by nia.
+    rewrite Znth_sublist in Hnew by nia.
+    replace (k mod width + k / width * width) with k in Hold, Hnew by nia.
+    congruence.
+Qed.
+Local Close Scope sac.
+
+Lemma BestIndexForMask_spec rows lens count mask index :
+  BestIndexForMask rows lens count mask index <->
+  0 <= index < count /\ Z.testbit mask index = true /\
+  forall other, 0 <= other < count -> Z.testbit mask other = true ->
+    item_before_or_equal rows lens index other.
+Proof.
+  unfold BestIndexForMask, max_value_of_subset, max_object_of_subset.
+  cbn. split.
+  - intros [i [[Hi Hmax] Heq]]. subst i. destruct Hi as [Hi Hbit].
+    split; [exact Hi |]. split; [exact Hbit |].
+    intros j Hj Hset. apply Hmax. change (0 <= j < count /\ Z.testbit mask j = true). auto.
+  - intros [Hi [Hbit Hmax]]. exists index. split; [split | reflexivity].
+    + change (0 <= index < count /\ Z.testbit mask index = true). auto.
+    + intros j [Hj Hset]. auto.
+Qed.
+
+Lemma LargestConcatenation_spec rows lens output :
+  LargestConcatenation rows lens output <->
+  exists order, Permutation (all_indices (Zlength rows)) order /\
+    output = concatenate_indices rows lens order /\
+    forall alternative,
+      Permutation (all_indices (Zlength rows)) alternative ->
+      digit_lex_ge output (concatenate_indices rows lens alternative).
+Proof.
+  unfold LargestConcatenation, max_value_of_subset, max_object_of_subset.
+  cbn. split.
+  - intros [order [[Hperm Hmax] Heq]]. exists order. subst output. auto.
+  - intros [order [Hperm [Heq Hmax]]]. exists order. subst output. auto.
+Qed.
 
 Lemma ConcatComparePrefix_zero__compare_bounds :
-  forall rows lens i j,
-    ConcatComparePrefix rows lens i j 0.
-Proof.
-  intros rows lens i j.
-  unfold ConcatComparePrefix.
-  repeat split.
-  - lia.
-  - apply Zlength_nonneg.
-  - rewrite !Zlength_app.
-    lia.
-  - intros k Hk.
-    lia.
-Qed.
+  forall rows lens i j, ConcatComparePrefix rows lens i j 0.
+Proof. unfold ConcatComparePrefix; intros; lia. Qed.
+
 Lemma flat_rows_cell_lookup__compare_digits :
   forall flat rows count width row offset,
     FlatRows flat rows count width ->
@@ -48,9 +234,16 @@ Proof.
        lia. }
   f_equal; lia.
 Qed.
+
 Lemma concat_digit_lookup__compare_digits :
   forall flat rows lens count width left right left_length right_length position,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     FlatRows flat rows count width ->
     0 <= left < count ->
     0 <= right < count ->
@@ -148,14 +341,20 @@ Proof.
     rewrite Hright_digits_length.
     reflexivity.
 Qed.
+
 Lemma item_digits_Zlength__compare_semantics :
   forall rows lens count width index,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= index < count ->
     Zlength (item_digits (item_at rows lens index)) = Znth index lens 0.
 Proof.
   intros rows lens count width index Hwf Hindex.
-  unfold RowsWellFormed in Hwf.
   destruct Hwf as (_ & _ & Hrow).
   specialize (Hrow index Hindex).
   destruct Hrow as (Hrow_length & Hitem_length & _).
@@ -164,9 +363,16 @@ Proof.
   rewrite Zlength_sublist by lia.
   lia.
 Qed.
+
 Lemma concat_pair_Zlength__compare_semantics :
   forall rows lens count width left right,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= left < count ->
     0 <= right < count ->
     Zlength
@@ -182,9 +388,16 @@ Proof.
     rows lens count width right Hwf Hright).
   reflexivity.
 Qed.
+
 Lemma concat_compare_prefix_step__compare_semantics :
   forall rows lens count width left right left_length right_length position,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= left < count ->
     0 <= right < count ->
     ConcatCompareLoopState
@@ -202,13 +415,11 @@ Proof.
   split; [exact Hleft_length |].
   split; [exact Hright_length |].
   unfold ConcatComparePrefix in *.
-  destruct Hprefix as (Hposition_bounds & Hsame_length & Hbefore).
-  split.
-  - pose proof (concat_pair_Zlength__compare_semantics
-      rows lens count width left right Hwf Hleft Hright) as Hlength.
-    rewrite <- Hleft_length, <- Hright_length in Hlength.
-    lia.
-  - split; [exact Hsame_length |].
+  rename Hprefix into Hbefore.
+  assert (Hsame_length :
+    Zlength (item_digits (item_at rows lens left) ++ item_digits (item_at rows lens right)) =
+    Zlength (item_digits (item_at rows lens right) ++ item_digits (item_at rows lens left)))
+    by (rewrite !Zlength_app; lia).
     intros k Hk.
     destruct (Z_lt_ge_dec k position) as [Hbefore_position | Hat_position].
     + apply Hbefore; lia.
@@ -217,15 +428,22 @@ Proof.
       unfold ConcatLeftDigit, ConcatRightDigit in Hequal.
       exact Hequal.
 Qed.
+
 Lemma concat_compare_outcome_at_difference__compare_semantics :
   forall rows lens count width left right left_length right_length
     position comparison,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= left < count ->
     0 <= right < count ->
     ConcatCompareLoopState
       rows lens left right left_length right_length position ->
-    position < left_length + right_length ->
+    0 <= position < left_length + right_length ->
     ((comparison = -1 /\
       ConcatLeftDigit rows lens left right position <
         ConcatRightDigit rows lens left right position) \/
@@ -239,7 +457,11 @@ Proof.
   unfold ConcatCompareLoopState in Hstate.
   destruct Hstate as (Hleft_length & Hright_length & Hprefix).
   unfold ConcatComparePrefix in Hprefix.
-  destruct Hprefix as (Hposition_bounds & Hsame_length & Hbefore).
+  rename Hprefix into Hbefore.
+  assert (Hsame_length :
+    Zlength (item_digits (item_at rows lens left) ++ item_digits (item_at rows lens right)) =
+    Zlength (item_digits (item_at rows lens right) ++ item_digits (item_at rows lens left)))
+    by (rewrite !Zlength_app; lia).
   pose proof (concat_pair_Zlength__compare_semantics
     rows lens count width left right Hwf Hleft Hright) as Hlength.
   rewrite <- Hleft_length, <- Hright_length in Hlength.
@@ -267,9 +489,16 @@ Proof.
     + unfold ConcatLeftDigit, ConcatRightDigit in Hdigit.
       exact Hdigit.
 Qed.
+
 Lemma concat_compare_outcome_at_end__compare_semantics :
   forall rows lens count width left right left_length right_length position,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= left < count ->
     0 <= right < count ->
     ConcatCompareLoopState
@@ -283,7 +512,11 @@ Proof.
   unfold ConcatCompareLoopState in Hstate.
   destruct Hstate as (Hleft_length & Hright_length & Hprefix).
   unfold ConcatComparePrefix in Hprefix.
-  destruct Hprefix as (Hposition_bounds & Hsame_length & Hbefore).
+  rename Hprefix into Hbefore.
+  assert (Hsame_length :
+    Zlength (item_digits (item_at rows lens left) ++ item_digits (item_at rows lens right)) =
+    Zlength (item_digits (item_at rows lens right) ++ item_digits (item_at rows lens left)))
+    by (rewrite !Zlength_app; lia).
   pose proof (concat_pair_Zlength__compare_semantics
     rows lens count width left right Hwf Hleft Hright) as Hlength.
   rewrite <- Hleft_length, <- Hright_length in Hlength.
@@ -309,6 +542,7 @@ Proof.
     rewrite Hposition, Zlength_correct.
     lia.
 Qed.
+
 Lemma dp_table_prefix_singleton__dp_initialization :
   forall rows lens count,
     1 <= Z.shiftl 1 count ->
@@ -318,6 +552,7 @@ Proof.
   unfold DPTablePrefix.
   repeat split; cbn; try lia.
 Qed.
+
 Lemma signed_last_nbits_double_power__bit_scan :
   forall bit_value state_count count,
     1 <= bit_value ->
@@ -342,8 +577,11 @@ Proof.
     { apply Z.mul_le_mono_nonneg_r; lia. }
     lia.
 Qed.
+
 Lemma bit_scan_advance__bit_scan :
   forall mask count bit bit_value,
+    1 <= mask < Z.shiftl 1 count ->
+    0 <= bit <= count ->
     BitScanState mask count bit bit_value ->
     Z.land mask bit_value = 0 ->
     bit < count /\
@@ -354,9 +592,9 @@ Lemma bit_scan_advance__bit_scan :
     (forall lower,
        0 <= lower < bit + 1 -> Z.testbit mask lower = false).
 Proof.
-  intros mask count bit bit_value Hscan Hland.
+  intros mask count bit bit_value Hmask Hbit Hscan Hland.
   unfold BitScanState in Hscan.
-  destruct Hscan as (Hmask & Hbit & Hvalue & Hlower).
+  destruct Hscan as (Hvalue & Hlower).
   assert (Hlog : Z.log2 mask < count).
   { apply (proj1 (Z.log2_lt_pow2 mask count ltac:(lia))).
     rewrite <- Z.shiftl_1_l.
@@ -400,6 +638,7 @@ Proof.
   - replace lower with bit by lia.
     exact Hmaskbit.
 Qed.
+
 Lemma testbit_shiftl_one__bit_scan :
   forall bit n,
     0 <= bit ->
@@ -423,8 +662,11 @@ Proof.
       change (0 < n - bit).
       lia.
 Qed.
+
 Lemma selected_bit_state_from_scan__bit_scan :
   forall mask count bit bit_value,
+    1 <= mask < Z.shiftl 1 count ->
+    0 <= bit <= count ->
     BitScanState mask count bit bit_value ->
     Z.land mask bit_value <> 0 ->
     bit < count /\
@@ -433,9 +675,9 @@ Lemma selected_bit_state_from_scan__bit_scan :
     0 <= Z.lxor mask bit_value < mask /\
     bit_value < Z.shiftl 1 count.
 Proof.
-  intros mask count bit bit_value Hscan Hland_nonzero.
+  intros mask count bit bit_value Hmask Hbit Hscan Hland_nonzero.
   unfold BitScanState in Hscan.
-  destruct Hscan as (Hmask & Hbit & Hvalue & Hlower).
+  destruct Hscan as (Hvalue & Hlower).
   assert (Honehot :
     Z.testbit mask bit = true /\
     Z.land mask bit_value = bit_value).
@@ -481,6 +723,7 @@ Proof.
     apply Z.pow_lt_mono_r; lia. }
   repeat split; assumption.
 Qed.
+
 Lemma digit_lex_ge_refl__dp_table_transition :
   forall xs, digit_lex_ge xs xs.
 Proof.
@@ -489,6 +732,7 @@ Proof.
   split; [reflexivity |].
   left; reflexivity.
 Qed.
+
 Lemma decimal_fold_acc__dp_table_transition :
   forall xs acc,
     fold_left (fun value digit => 10 * value + digit) xs acc =
@@ -506,6 +750,7 @@ Proof.
     rewrite Z.pow_succ_r by apply Zlength_nonneg.
     ring.
 Qed.
+
 Lemma decimal_fold_app__dp_table_transition :
   forall xs ys,
     fold_left (fun value digit => 10 * value + digit) (xs ++ ys) 0 =
@@ -517,6 +762,7 @@ Proof.
   rewrite fold_left_app.
   apply decimal_fold_acc__dp_table_transition.
 Qed.
+
 Lemma decimal_fold_bounds__dp_table_transition :
   forall xs,
     Forall (fun digit => 0 <= digit < 10) xs ->
@@ -532,6 +778,7 @@ Proof.
     rewrite Zlength_cons, Z.pow_succ_r by apply Zlength_nonneg.
     nia.
 Qed.
+
 Lemma digit_lex_ge_cons_iff__dp_table_transition :
   forall x y xs ys,
     Zlength xs = Zlength ys ->
@@ -600,6 +847,7 @@ Proof.
         replace (k + 1 - 1) with k by lia.
         exact Hdiff.
 Qed.
+
 Lemma digit_lex_ge_decimal_iff__dp_table_transition :
   forall xs ys,
     Zlength xs = Zlength ys ->
@@ -647,6 +895,7 @@ Proof.
         apply IH. subst y. nia.
       * left. exact Hyx.
 Qed.
+
 Lemma concat_digit_order_cross_iff__dp_table_transition :
   forall xs ys,
     Forall (fun digit => 0 <= digit < 10) xs ->
@@ -665,6 +914,7 @@ Proof.
   - apply Forall_app. split; assumption.
   - apply Forall_app. split; assumption.
 Qed.
+
 Lemma concat_digit_order_trans__dp_table_transition :
   forall xs ys zs,
     Forall (fun digit => 0 <= digit < 10) xs ->
@@ -692,6 +942,7 @@ Proof.
   pose proof (Zpower_gt_1 10 (Zlength zs) ltac:(lia) Hlenz) as Hpowz.
   nia.
 Qed.
+
 Lemma Forall_sublist_by_Znth__dp_table_transition :
   forall (P : Z -> Prop) (l : list Z) lo hi,
     0 <= lo <= hi ->
@@ -719,9 +970,16 @@ Proof.
       * assert (Hn' : Z.to_nat (hi - (lo + 1)) = n) by lia.
         symmetry. exact Hn'.
 Qed.
+
 Lemma item_digits_properties__dp_table_transition :
   forall rows lens count width i,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= i < count ->
     0 < Zlength (item_digits (item_at rows lens i)) /\
     Forall (fun digit => 0 <= digit < 10)
@@ -740,9 +998,16 @@ Proof.
     + rewrite Hrowlen. lia.
     + intros k Hk. specialize (Hdigits k ltac:(lia)). lia.
 Qed.
+
 Lemma item_before_or_equal_transitive__dp_table_transition :
   forall rows lens count width i j k,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= i < count ->
     0 <= j < count ->
     0 <= k < count ->
@@ -763,6 +1028,7 @@ Proof.
     (item_digits (item_at rows lens j))
     (item_digits (item_at rows lens k))); eauto.
 Qed.
+
 Lemma item_before_or_equal_refl__dp_table_transition :
   forall rows lens i,
     item_before_or_equal rows lens i i.
@@ -771,6 +1037,7 @@ Proof.
   unfold item_before_or_equal.
   apply digit_lex_ge_refl__dp_table_transition.
 Qed.
+
 Lemma testbit_shiftl_one__dp_table_transition :
   forall bit index,
     0 <= bit ->
@@ -792,19 +1059,21 @@ Proof.
     rewrite Z.testbit_0_l.
     split; [discriminate | lia].
 Qed.
+
 Lemma selected_mask_partition__dp_table_transition :
   forall mask count bit bit_value rest index,
+    0 <= bit < count ->
     SelectedBitState mask count bit bit_value rest ->
     0 <= index < count ->
     (Z.testbit mask index = true <->
      index = bit \/ Z.testbit rest index = true).
 Proof.
-  intros mask count bit bit_value rest index Hselected Hindex.
+  intros mask count bit bit_value rest index Hbit_bounds Hselected Hindex.
   unfold SelectedBitState in Hselected.
   destruct Hselected as
-    [Hscan [Hland [Hbit_bounds [Hmask_bit [Hrest Hrest_bounds]]]]].
+    [Hscan [Hland [Hmask_bit Hrest]]].
   unfold BitScanState in Hscan.
-  destruct Hscan as [Hmask_bounds [Hscan_bit [Hbit_value Hlower]]].
+  destruct Hscan as [Hbit_value Hlower].
   subst bit_value rest.
   destruct (Z.eq_dec index bit) as [Heq | Hneq].
   - subst index. split; intros _.
@@ -821,21 +1090,20 @@ Proof.
     rewrite Z.lxor_spec, Hshift.
     destruct (Z.testbit mask index); simpl; tauto.
 Qed.
+
 Lemma dp_table_prefix_extend__dp_table_transition :
   forall rows lens count mask choices index,
+    1 <= mask ->
+    Zlength choices = mask ->
     DPTablePrefix rows lens count mask choices ->
     mask < Z.shiftl 1 count ->
     BestIndexForMask rows lens count mask index ->
     DPTablePrefix rows lens count (mask + 1) (choices ++ [index]).
 Proof.
   intros rows lens count mask choices index
-    [Hcomputed [Hlength [Hzero Hall]]] Hmask Hbest.
+    Hcomputed Hlength [Hzero Hall] Hmask Hbest.
   unfold DPTablePrefix.
   split.
-  - lia.
-  - split.
-    + rewrite Zlength_app, Zlength_cons, Zlength_nil. lia.
-    + split.
       * rewrite app_Znth1.
         -- exact Hzero.
         -- rewrite Hlength. lia.
@@ -851,6 +1119,7 @@ Proof.
            ++ rewrite Hlength. lia.
         -- lia.
 Qed.
+
 Lemma compare_outcome_nonpositive__dp_table_transition :
   forall rows lens bit previous comparison,
     comparison <= 0 ->
@@ -876,6 +1145,7 @@ Proof.
     + intros p Hp. symmetry. apply Hprefix. exact Hp.
     + exact Hdigit.
 Qed.
+
 Lemma compare_outcome_positive__dp_table_transition :
   forall rows lens bit previous comparison,
     comparison > 0 ->
@@ -897,8 +1167,10 @@ Proof.
     split; assumption.
   - lia.
 Qed.
+
 Lemma best_index_keep_previous__dp_table_transition :
   forall rows lens count mask bit bit_value rest previous comparison,
+    0 <= bit < count ->
     SelectedBitState mask count bit bit_value rest ->
     BestIndexForMask rows lens count rest previous ->
     comparison <= 0 ->
@@ -906,26 +1178,34 @@ Lemma best_index_keep_previous__dp_table_transition :
     BestIndexForMask rows lens count mask previous.
 Proof.
   intros rows lens count mask bit bit_value rest previous comparison
-    Hselected Hbest Hcomparison Houtcome.
-  unfold BestIndexForMask in *.
+    Hbit_bounds Hselected Hbest Hcomparison Houtcome.
+  rewrite !BestIndexForMask_spec in *.
   destruct Hbest as [Hprevious_bounds [Hprevious_rest Hprevious_best]].
   split.
   - exact Hprevious_bounds.
   - split.
     + apply (proj2 (selected_mask_partition__dp_table_transition
-        mask count bit bit_value rest previous Hselected Hprevious_bounds)).
+        mask count bit bit_value rest previous Hbit_bounds Hselected Hprevious_bounds)).
       right; exact Hprevious_rest.
     + intros other Hother_bounds Hother_mask.
       apply (proj1 (selected_mask_partition__dp_table_transition
-        mask count bit bit_value rest other Hselected Hother_bounds))
+        mask count bit bit_value rest other Hbit_bounds Hselected Hother_bounds))
         in Hother_mask.
       destruct Hother_mask as [-> | Hother_rest].
       * eapply compare_outcome_nonpositive__dp_table_transition; eauto.
       * eapply Hprevious_best; eauto.
 Qed.
+
 Lemma best_index_choose_bit__dp_table_transition :
   forall rows lens count width mask bit bit_value rest previous comparison,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
+    0 <= bit < count ->
     SelectedBitState mask count bit bit_value rest ->
     BestIndexForMask rows lens count rest previous ->
     comparison > 0 ->
@@ -933,20 +1213,18 @@ Lemma best_index_choose_bit__dp_table_transition :
     BestIndexForMask rows lens count mask bit.
 Proof.
   intros rows lens count width mask bit bit_value rest previous comparison
-    Hrows Hselected Hbest Hcomparison Houtcome.
+    Hrows Hbit_bounds Hselected Hbest Hcomparison Houtcome.
   unfold SelectedBitState in Hselected at 1.
   destruct Hselected as
-    [Hscan [Hland [Hbit_bounds [Hmask_bit [Hrest Hrest_bounds]]]]].
+    [Hscan [Hland [Hmask_bit Hrest]]].
   assert (Hselected_full :
     SelectedBitState mask count bit bit_value rest).
   {
     unfold SelectedBitState.
     exact (conj Hscan
-      (conj Hland
-        (conj Hbit_bounds
-          (conj Hmask_bit (conj Hrest Hrest_bounds))))).
+      (conj Hland (conj Hmask_bit Hrest))).
   }
-  unfold BestIndexForMask in *.
+  rewrite !BestIndexForMask_spec in *.
   destruct Hbest as [Hprevious_bounds [Hprevious_rest Hprevious_best]].
   split.
   - exact Hbit_bounds.
@@ -954,7 +1232,7 @@ Proof.
     + exact Hmask_bit.
     + intros other Hother_bounds Hother_mask.
       apply (proj1 (selected_mask_partition__dp_table_transition
-        mask count bit bit_value rest other Hselected_full Hother_bounds))
+        mask count bit bit_value rest other Hbit_bounds Hselected_full Hother_bounds))
         in Hother_mask.
       destruct Hother_mask as [-> | Hother_rest].
       * apply item_before_or_equal_refl__dp_table_transition.
@@ -962,38 +1240,39 @@ Proof.
           with (j := previous) (count := count) (width := width); eauto.
         eapply compare_outcome_positive__dp_table_transition; eauto.
 Qed.
+
 Lemma best_index_singleton__dp_table_transition :
   forall rows lens count mask bit bit_value rest,
+    0 <= bit < count ->
     SelectedBitState mask count bit bit_value rest ->
     rest = 0 ->
     BestIndexForMask rows lens count mask bit.
 Proof.
-  intros rows lens count mask bit bit_value rest Hselected Hrest_zero.
+  intros rows lens count mask bit bit_value rest Hbit_bounds Hselected Hrest_zero.
   unfold SelectedBitState in Hselected at 1.
   destruct Hselected as
-    [Hscan [Hland [Hbit_bounds [Hmask_bit [Hrest Hrest_bounds]]]]].
+    [Hscan [Hland [Hmask_bit Hrest]]].
   assert (Hselected_full :
     SelectedBitState mask count bit bit_value rest).
   {
     unfold SelectedBitState.
     exact (conj Hscan
-      (conj Hland
-        (conj Hbit_bounds
-          (conj Hmask_bit (conj Hrest Hrest_bounds))))).
+      (conj Hland (conj Hmask_bit Hrest))).
   }
-  unfold BestIndexForMask.
+  apply BestIndexForMask_spec.
   split.
   - exact Hbit_bounds.
   - split.
     + exact Hmask_bit.
     + intros other Hother_bounds Hother_mask.
       apply (proj1 (selected_mask_partition__dp_table_transition
-        mask count bit bit_value rest other Hselected_full Hother_bounds))
+        mask count bit bit_value rest other Hbit_bounds Hselected_full Hother_bounds))
         in Hother_mask.
       destruct Hother_mask as [-> | Hother_rest].
       * apply item_before_or_equal_refl__dp_table_transition.
       * rewrite Hrest_zero, Z.testbit_0_l in Hother_rest. discriminate.
 Qed.
+
 Lemma digit_lex_ge_refl__output_initialization :
   forall xs, digit_lex_ge xs xs.
 Proof.
@@ -1001,6 +1280,7 @@ Proof.
   unfold digit_lex_ge.
   split; [reflexivity | left; reflexivity].
 Qed.
+
 Lemma digit_lex_ge_cons_strict__output_initialization :
   forall x y xs ys,
     Zlength xs = Zlength ys ->
@@ -1018,6 +1298,7 @@ Proof.
       * intros j Hj. lia.
       * rewrite !Znth0_cons. exact Hlt.
 Qed.
+
 Lemma digit_lex_ge_cons_same__output_initialization :
   forall x xs ys,
     digit_lex_ge xs ys ->
@@ -1044,6 +1325,7 @@ Proof.
            replace (k + 1 - 1) with k by lia.
            exact Hlt.
 Qed.
+
 Lemma digit_lex_ge_cons_inv__output_initialization :
   forall x y xs ys,
     digit_lex_ge (x :: xs) (y :: ys) ->
@@ -1081,6 +1363,7 @@ Proof.
               ** rewrite !Znth_cons in Hlt by lia.
                  exact Hlt.
 Qed.
+
 Lemma digit_lex_ge_trans__output_initialization :
   forall xs ys zs,
     digit_lex_ge xs ys ->
@@ -1133,6 +1416,7 @@ Proof.
         apply digit_lex_ge_cons_same__output_initialization.
         eapply IH; eauto.
 Qed.
+
 Lemma digit_lex_ge_total__output_initialization :
   forall xs ys,
     Zlength xs = Zlength ys ->
@@ -1156,6 +1440,7 @@ Proof.
            ++ right. apply digit_lex_ge_cons_same__output_initialization. exact Hge.
         -- left. apply digit_lex_ge_cons_strict__output_initialization; lia.
 Qed.
+
 Lemma finite_list_maximum_on__output_initialization :
   forall (A : Type) (R : A -> A -> Prop) candidates,
     candidates <> nil ->
@@ -1211,6 +1496,7 @@ Proof.
         -- exact Hba.
         -- apply Hbestmax. exact Hcandidate.
 Qed.
+
 Lemma list_power_snd_complete__output_initialization :
   forall (A B : Type) (positions : list A) (values output : list B),
     length positions = length output ->
@@ -1243,6 +1529,7 @@ Proof.
       exists x. split; [reflexivity |].
       apply Hin. left. reflexivity.
 Qed.
+
 Lemma permutation_candidate_in__output_initialization :
   forall (base order : list Z),
     Permutation base order ->
@@ -1262,6 +1549,7 @@ Proof.
   - destruct (excluded_middle_informative (Permutation base order))
       as [H | H]; [reflexivity | contradiction].
 Qed.
+
 Lemma permutation_candidate_sound__output_initialization :
   forall (base order : list Z),
     In order
@@ -1279,6 +1567,7 @@ Proof.
   destruct (excluded_middle_informative (Permutation base order))
     as [H | H]; [exact H | discriminate].
 Qed.
+
 Lemma concatenate_indices_length_permutation__output_initialization :
   forall rows lens first second,
     Permutation first second ->
@@ -1294,6 +1583,7 @@ Proof.
     rewrite !Zlength_app. lia.
   - etransitivity; eauto.
 Qed.
+
 Lemma largest_concatenation_exists__output_initialization :
   forall rows lens,
     exists order,
@@ -1345,30 +1635,15 @@ Proof.
       apply permutation_candidate_in__output_initialization.
       subst base. exact Halternative.
 Qed.
+
 Lemma all_indices_spec__output_initialization :
   forall count index,
     0 <= count ->
     (In index (all_indices count) <-> 0 <= index < count).
 Proof.
-  intros count index Hcount.
-  unfold all_indices.
-  split.
-  - intros Hin. apply in_map_iff in Hin.
-    destruct Hin as [n [Hindex Hn]].
-    apply in_seq in Hn.
-    subst index.
-    destruct Hn as [_ Hn].
-    split; [apply Nat2Z.is_nonneg |].
-    replace count with (Z.of_nat (Z.to_nat count)).
-    2: { apply Z2Nat.id. exact Hcount. }
-    apply Nat2Z.inj_lt. exact Hn.
-  - intros Hindex. apply in_map_iff.
-    exists (Z.to_nat index). split.
-    + rewrite Z2Nat.id by lia. reflexivity.
-    + apply in_seq.
-      split; [lia |].
-      apply Z2Nat.inj_lt; lia.
+  intros. unfold all_indices. symmetry. apply In_Zrange.
 Qed.
+
 Lemma full_mask_indexes__output_initialization :
   forall count,
     0 <= count ->
@@ -1384,6 +1659,7 @@ Proof.
     apply Z.ltb_lt. lia.
   - intros [Hindex _]. exact Hindex.
 Qed.
+
 Lemma greedy_output_full_mask__output_initialization :
   forall rows lens count,
     Zlength rows = count ->
@@ -1408,28 +1684,41 @@ Proof.
     + intros Hbit. eapply Permutation_in; [exact Hperm |].
       apply Hfull. exact Hbit.
   - split; [reflexivity |].
-    unfold LargestConcatenation.
+    apply LargestConcatenation_spec.
     exists order. split; [exact HpermRows |].
     split; [reflexivity |].
     intros alternative Halternative. apply Hmax. exact Halternative.
 Qed.
+
 Lemma item_digits_length__output_initialization :
   forall rows lens count width index,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= index < count ->
     Zlength (item_digits (item_at rows lens index)) = Znth index lens 0.
 Proof.
   intros rows lens count width index Hwf Hindex.
-  unfold RowsWellFormed in Hwf.
   destruct Hwf as [_ [_ Hrows]].
   specialize (Hrows index Hindex).
   destruct Hrows as [Hrowlen [Hlen _]].
   unfold item_digits, item_at. simpl.
   rewrite Zlength_sublist by lia. lia.
 Qed.
+
 Lemma concatenate_indices_length__output_initialization :
   forall rows lens count width indices,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     (forall index, In index indices -> 0 <= index < count) ->
     Zlength (concatenate_indices rows lens indices) =
     sum (map (fun index => Znth index lens 0) indices).
@@ -1446,35 +1735,35 @@ Proof.
     + exact Hwf.
     + apply Hindices. left. reflexivity.
 Qed.
+
+Lemma Zrange_snoc__annotation lo hi :
+  lo <= hi -> Zrange lo (hi + 1) = Zrange lo hi ++ [hi].
+Proof.
+  intros H. unfold Zrange.
+  replace (Z.to_nat (hi + 1 - lo)) with (Z.to_nat (hi - lo) + 1)%nat by lia.
+  rewrite Zrange_aux_app. cbn.
+  rewrite Z2Nat.id by lia.
+  replace (lo + (hi - lo)) with hi by lia. reflexivity.
+Qed.
+
 Lemma map_lens_all_indices__output_initialization :
   forall lens,
     map (fun index => Znth index lens 0) (all_indices (Zlength lens)) = lens.
 Proof.
-  intros lens.
-  apply (list_eq_nth Z _ _ 0).
-  - unfold all_indices.
-    rewrite !length_map, length_seq.
-    rewrite Zlength_correct, Nat2Z.id. reflexivity.
-  - intros n Hn.
-    assert (HnLens : (n < length lens)%nat).
-    { unfold all_indices in Hn.
-      rewrite !length_map, length_seq, Zlength_correct, Nat2Z.id in Hn.
-      exact Hn. }
-    unfold all_indices.
-    rewrite (map_nth_len Z Z (fun index => Znth index lens 0)
-      (map Z.of_nat (seq 0 (Z.to_nat (Zlength lens)))) n 0 0).
-    2: { rewrite length_map, length_seq, Zlength_correct, Nat2Z.id.
-         exact HnLens. }
-    rewrite (map_nth_len nat Z Z.of_nat
-      (seq 0 (Z.to_nat (Zlength lens))) n 0 (0%nat)).
-    2: { rewrite length_seq, Zlength_correct, Nat2Z.id. exact HnLens. }
-    rewrite seq_nth by
-      (rewrite Zlength_correct, Nat2Z.id; exact HnLens).
-    simpl.
-    unfold Znth.
-    rewrite Nat2Z.id.
-    reflexivity.
+  intros lens. induction lens using rev_ind.
+  - reflexivity.
+  - unfold all_indices in *.
+    rewrite Zlength_app, Zlength_cons, Zlength_nil.
+    replace (Zlength lens + (1 + 0)) with (Zlength lens + 1) by lia.
+    rewrite Zrange_snoc__annotation by apply Zlength_nonneg.
+    rewrite map_app. cbn [map].
+    rewrite app_Znth2 by lia.
+    replace (Zlength lens - Zlength lens) with 0 by lia.
+    rewrite Znth0_cons. f_equal.
+    rewrite <- IHlens at 2. apply map_ext_in.
+    intros i Hi. apply app_Znth1. apply In_Zrange in Hi. exact Hi.
 Qed.
+
 Lemma sum_permutation__output_initialization :
   forall first second,
     Permutation first second ->
@@ -1483,6 +1772,7 @@ Proof.
   intros first second Hperm.
   induction Hperm; simpl; lia.
 Qed.
+
 Lemma sum_nonnegative__output_initialization :
   forall values,
     (forall value, In value values -> 0 <= value) ->
@@ -1495,6 +1785,7 @@ Proof.
   { intros x Hx. apply Hnonneg. right. exact Hx. }
   specialize (IH Htail). lia.
 Qed.
+
 Lemma sum_member_le__output_initialization :
   forall values value,
     In value values ->
@@ -1513,9 +1804,16 @@ Proof.
     intros x Hx. apply Hnonneg. apply in_or_app. right. right. exact Hx. }
   lia.
 Qed.
+
 Lemma greedy_output_remaining_length__output_initialization :
   forall rows lens count width mask output index,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     GreedyOutputPrefix rows lens count mask output ->
     0 <= index < count ->
     Z.testbit mask index = true ->
@@ -1527,8 +1825,7 @@ Proof.
   destruct Hgreedy as
     [done [todo [Hperm [Hmask [Houtput Hlargest]]]]].
   assert (Hcount : 0 <= count).
-  { unfold RowsWellFormed in Hwf.
-    destruct Hwf as [Hrowslen _].
+  { destruct Hwf as [Hrowslen _].
     pose proof (Zlength_nonneg rows). lia. }
   assert (HinTodo : In index todo).
   { apply Hmask. split; assumption. }
@@ -1548,7 +1845,7 @@ Proof.
       sum (map (fun i => Znth i lens 0) done) +
       sum (map (fun i => Znth i lens 0) todo)).
   { assert (Hlenslen : Zlength lens = count).
-    { unfold RowsWellFormed in Hwf. tauto. }
+    { tauto. }
     assert (Hmapped :
       map (fun i => Znth i lens 0) (all_indices count) = lens).
     { rewrite <- Hlenslen.
@@ -1564,7 +1861,6 @@ Proof.
     - apply in_map_iff. exists index. split; [reflexivity | exact HinTodo].
     - intros x Hx. apply in_map_iff in Hx.
       destruct Hx as [i [Hx Hi]]. subst x.
-      unfold RowsWellFormed in Hwf.
       destruct Hwf as [_ [_ Hrows]].
       specialize (Hrows i).
       assert (0 <= i < count).
@@ -1572,9 +1868,16 @@ Proof.
       specialize (Hrows H). lia. }
   lia.
 Qed.
+
 Lemma append_row_prefix_step__output_row_copy :
   forall flat rows lens count width prior output index position,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     FlatRows flat rows count width ->
     0 <= index < count ->
     0 <= position < Znth index lens 0 ->
@@ -1613,6 +1916,7 @@ Proof.
   rewrite app_assoc.
   reflexivity.
 Qed.
+
 Lemma row_output_capacity__output_row_copy :
   forall result_length lens first position,
     0 <= position ->
@@ -1622,6 +1926,7 @@ Lemma row_output_capacity__output_row_copy :
 Proof.
   intros; lia.
 Qed.
+
 Lemma log2_lt_pow2__output_finalization :
   forall x n,
     0 <= x < 2 ^ n ->
@@ -1636,20 +1941,27 @@ Proof.
     pose proof (Z.pow_le_mono_r 2 n (Z.log2 x) ltac:(lia) ltac:(lia)).
     lia.
 Qed.
+
 Lemma item_digits_length_for_output__output_finalization :
   forall rows lens count width index,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= index < count ->
     Zlength (item_digits (item_at rows lens index)) = Znth index lens 0.
 Proof.
   intros rows lens count width index Hwf Hindex.
-  unfold RowsWellFormed in Hwf.
   destruct Hwf as [_ [_ Hrows]].
   specialize (Hrows index Hindex).
   destruct Hrows as [Hrowlen [Hitemlen _]].
   unfold item_digits, item_at; simpl.
   rewrite Zlength_sublist; lia.
 Qed.
+
 Lemma sum_permutation__output_finalization :
   forall left right,
     Permutation left right ->
@@ -1659,6 +1971,7 @@ Proof.
   unfold sum.
   induction Hpermutation; simpl; lia.
 Qed.
+
 Lemma all_indices_bounds__output_finalization :
   forall count index,
     0 <= count ->
@@ -1666,39 +1979,17 @@ Lemma all_indices_bounds__output_finalization :
     0 <= index < count.
 Proof.
   intros count index Hcount Hin.
-  unfold all_indices in Hin.
-  apply in_map_iff in Hin.
-  destruct Hin as [n [<- Hin]].
-  apply in_seq in Hin.
-  simpl in Hin.
-  split; [lia |].
-  rewrite <- (Z2Nat.id count) by lia.
-  apply Nat2Z.inj_lt.
-  lia.
+  apply (proj1 (all_indices_spec__output_initialization count index Hcount)); exact Hin.
 Qed.
+
 Lemma all_indices_lookup_lens__output_finalization :
   forall lens,
     map (fun index => Znth index lens 0) (all_indices (Zlength lens)) =
     lens.
 Proof.
-  intros lens.
-  unfold all_indices.
-  rewrite Zlength_correct, Nat2Z.id.
-  rewrite map_map.
-  apply (list_eq_nth Z _ _ 0).
-  - rewrite length_map, length_seq; reflexivity.
-  - intros n Hn.
-    rewrite length_map, length_seq in Hn.
-    rewrite
-      (map_nth_len nat Z
-         (fun index : nat => Znth (Z.of_nat index) lens 0)
-         (seq 0 (length lens)) n 0 0%nat)
-      by (rewrite length_seq; exact Hn).
-    rewrite seq_nth by exact Hn.
-    unfold Znth.
-    rewrite Nat2Z.id.
-    reflexivity.
+  apply map_lens_all_indices__output_initialization.
 Qed.
+
 Lemma concatenate_indices_length__output_finalization :
   forall rows lens indices,
     Zlength (concatenate_indices rows lens indices) =
@@ -1714,15 +2005,21 @@ Proof.
   - simpl. rewrite Zlength_app, IH.
     reflexivity.
 Qed.
+
 Lemma concatenate_indices_permutation_length__output_finalization :
   forall rows lens count width order,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     Permutation (all_indices count) order ->
     Zlength (concatenate_indices rows lens order) = sum lens.
 Proof.
   intros rows lens count width order Hwf Hpermutation.
   pose proof Hwf as Hwf_copy.
-  unfold RowsWellFormed in Hwf_copy.
   destruct Hwf_copy as [Hrows_length [Hlens_length Hrows]].
   assert (Hcount : 0 <= count).
   { pose proof (Zlength_nonneg rows); lia. }
@@ -1754,14 +2051,21 @@ Proof.
   rewrite <- Hsum, Hlookup.
   reflexivity.
 Qed.
+
 Lemma largest_concatenation_length__output_finalization :
   forall rows lens count width output,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     LargestConcatenation rows lens output ->
     Zlength output = sum lens.
 Proof.
   intros rows lens count width output Hwf Hlargest.
-  unfold LargestConcatenation in Hlargest.
+  apply LargestConcatenation_spec in Hlargest.
   destruct Hlargest as
     [order [Hpermutation [Houtput Hgreatest]]].
   rewrite Houtput.
@@ -1770,9 +2074,16 @@ Proof.
   rewrite <- (proj1 Hwf).
   exact Hpermutation.
 Qed.
+
 Lemma greedy_output_empty_mask__output_finalization :
   forall rows lens count width output,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     GreedyOutputPrefix rows lens count 0 output ->
     LargestConcatenation rows lens output /\
     Zlength output = sum lens.
@@ -1796,6 +2107,7 @@ Proof.
     apply concatenate_indices_permutation_length__output_finalization
       with (count := count) (width := width); assumption.
 Qed.
+
 Lemma lxor_lt_pow2__output_finalization :
   forall x y n,
     0 <= x < 2 ^ n ->
@@ -1814,6 +2126,7 @@ Proof.
     + apply Z.max_lub_lt;
         eapply log2_lt_pow2__output_finalization; eauto.
 Qed.
+
 Lemma testbit_one_positive__output_finalization :
   forall k,
     0 < k ->
@@ -1823,6 +2136,7 @@ Proof.
   destruct k; try lia.
   destruct p; reflexivity.
 Qed.
+
 Lemma shifted_one_testbit__output_finalization :
   forall first index,
     0 <= first ->
@@ -1840,6 +2154,7 @@ Proof.
     + rewrite Z.testbit_neg_r by lia; reflexivity.
     + apply testbit_one_positive__output_finalization; lia.
 Qed.
+
 Lemma lxor_shifted_one_true__output_finalization :
   forall mask first index,
     0 <= first ->
@@ -1866,17 +2181,14 @@ Proof.
       rewrite Heqb.
       destruct (Z.testbit mask index); simpl; tauto.
 Qed.
+
 Lemma all_indices_nodup__output_finalization :
   forall count,
     NoDup (all_indices count).
 Proof.
-  intros count.
-  unfold all_indices.
-  apply NoDup_map_NoDup_ForallPairs.
-  - intros x y _ _ Heq.
-    apply Nat2Z.inj; exact Heq.
-  - apply seq_NoDup.
+  intros. apply NoDup_Zrange.
 Qed.
+
 Lemma concatenate_indices_app__output_finalization :
   forall rows lens left right,
     concatenate_indices rows lens (left ++ right) =
@@ -1888,6 +2200,7 @@ Proof.
   rewrite map_app, concat_app.
   reflexivity.
 Qed.
+
 Lemma digit_lex_ge_refl__output_finalization :
   forall xs,
     digit_lex_ge xs xs.
@@ -1896,6 +2209,7 @@ Proof.
   unfold digit_lex_ge.
   split; [reflexivity | left; reflexivity].
 Qed.
+
 Lemma digit_lex_ge_antisym__output_finalization :
   forall xs ys,
     digit_lex_ge xs ys ->
@@ -1913,6 +2227,7 @@ Proof.
   - specialize (Hpre j ltac:(lia)).
     lia.
 Qed.
+
 Lemma digit_lex_ge_trans__output_finalization :
   forall xs ys zs,
     digit_lex_ge xs ys ->
@@ -1953,6 +2268,7 @@ Proof.
         -- rewrite (Hprexy j) by lia.
            exact Hgtyz.
 Qed.
+
 Lemma digit_lex_ge_append_right__output_finalization :
   forall xs ys suffix,
     digit_lex_ge xs ys ->
@@ -1977,6 +2293,7 @@ Proof.
       * rewrite !app_Znth1 by lia.
         exact Hgt.
 Qed.
+
 Lemma digit_lex_ge_append_left__output_finalization :
   forall prefix xs ys,
     digit_lex_ge xs ys ->
@@ -2004,20 +2321,27 @@ Proof.
         replace (Zlength prefix + k - Zlength prefix) with k by lia.
         exact Hgt.
 Qed.
+
 Lemma item_digits_length__output_finalization :
   forall rows lens count width index,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     0 <= index < count ->
     Zlength (item_digits (item_at rows lens index)) = Znth index lens 0.
 Proof.
   intros rows lens count width index Hwf Hindex.
-  unfold RowsWellFormed in Hwf.
   destruct Hwf as [_ [_ Hrows]].
   specialize (Hrows index Hindex).
   destruct Hrows as [Hrowlen [Hitemlen _]].
   unfold item_digits, item_at; simpl.
   rewrite Zlength_sublist; lia.
 Qed.
+
 Lemma concatenate_indices_cons__output_finalization :
   forall rows lens index rest,
     concatenate_indices rows lens (index :: rest) =
@@ -2026,6 +2350,7 @@ Lemma concatenate_indices_cons__output_finalization :
 Proof.
   reflexivity.
 Qed.
+
 Lemma concatenate_indices_singleton__output_finalization :
   forall rows lens index,
     concatenate_indices rows lens [index] =
@@ -2034,6 +2359,7 @@ Proof.
   intros; unfold concatenate_indices; simpl.
   apply app_nil_r.
 Qed.
+
 Lemma concatenate_move_best_front_ge__output_finalization :
   forall rows lens first before after,
     (forall index,
@@ -2066,9 +2392,16 @@ Proof.
       intros other Hother.
       apply Hbest; simpl; auto.
 Qed.
+
 Lemma greedy_output_consume_best__output_finalization :
   forall rows lens count width mask first prior current position,
-    RowsWellFormed rows lens count width ->
+    (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9) ->
     BestIndexForMask rows lens count mask first ->
     GreedyOutputPrefix rows lens count mask prior ->
     AppendRowPrefix rows lens prior first position current ->
@@ -2079,7 +2412,7 @@ Lemma greedy_output_consume_best__output_finalization :
 Proof.
   intros rows lens count width mask first prior current position
     Hwf Hbest Hgreedy Happend Hpositionlo Hpositionhi.
-  unfold BestIndexForMask in Hbest.
+  apply BestIndexForMask_spec in Hbest.
   destruct Hbest as [Hfirst [Hselected Hbest]].
   unfold GreedyOutputPrefix in Hgreedy.
   destruct Hgreedy as
@@ -2170,6 +2503,7 @@ Proof.
         apply Permutation_sym.
         apply Permutation_middle. }
       pose proof Hlargest as Hlargest_copy.
+      apply LargestConcatenation_spec in Hlargest.
       destruct Hlargest as
         [optimal_order [Hoptimal_permutation [Hoptimal_output Hoptimal]]].
       assert (Hnew_permutation_rows :
@@ -2185,4 +2519,53 @@ Proof.
       rewrite <- app_assoc; simpl.
       rewrite Hequal.
       exact Hlargest_copy.
+Qed.
+
+(* Reconstruct the hypotheses of the existing helper proofs from the
+   independent facts exposed in the C annotation. *)
+Lemma rows_explicit_facts__annotation rows lens count width :
+  Zlength rows = count -> Zlength lens = count ->
+  Forall (eq width) (map (@Zlength Z) rows) ->
+  Forall (Z.le 1) lens -> Forall (Z.ge width) lens ->
+  Forall (Z.le 1) (map (hd 0) rows) ->
+  Forall (Z.ge 9) (map (hd 0) rows) ->
+  Forall (Z.le 0) (concatenate_indices rows lens (all_indices (Zlength rows))) ->
+  Forall (Z.ge 9) (concatenate_indices rows lens (all_indices (Zlength rows))) ->
+  (Zlength rows = count /\ Zlength lens = count /\
+     forall i, 0 <= i < count ->
+       Zlength (Znth i rows nil) = width /\
+       1 <= Znth i lens 0 <= width /\
+       1 <= Znth 0 (Znth i rows nil) 0 <= 9 /\
+       forall j, 0 <= j < Znth i lens 0 ->
+         0 <= Znth j (Znth i rows nil) 0 <= 9).
+Proof.
+  intros Hr Hl Hw Hlo Hhi Hheadlo Hheadhi Hdlo Hdhi.
+  rewrite Forall_map in Hw, Hheadlo, Hheadhi.
+  rewrite (Forall_Znth _ nil _) in Hw.
+  rewrite (Forall_Znth _ nil _) in Hheadlo.
+  rewrite (Forall_Znth _ nil _) in Hheadhi.
+  rewrite (Forall_Znth _ 0 _) in Hlo.
+  rewrite (Forall_Znth _ 0 _) in Hhi.
+  unfold concatenate_indices in Hdlo, Hdhi.
+  rewrite Forall_concat, Forall_map, Forall_forall in Hdlo, Hdhi.
+  split; [exact Hr |]. split; [exact Hl |].
+  intros i Hi.
+  specialize (Hw i ltac:(lia)); specialize (Hlo i ltac:(lia));
+    specialize (Hhi i ltac:(lia)); specialize (Hheadlo i ltac:(lia));
+    specialize (Hheadhi i ltac:(lia)).
+  assert (Hhead : hd 0 (Znth i rows nil) = Znth 0 (Znth i rows nil) 0).
+  { destruct (Znth i rows nil); reflexivity. }
+  rewrite Hhead in Hheadlo, Hheadhi.
+  assert (Hin : In i (all_indices (Zlength rows))).
+  { apply In_Zrange. lia. }
+  specialize (Hdlo i Hin); specialize (Hdhi i Hin).
+  split; [lia |]. split; [lia |]. split; [lia |].
+  intros j Hj.
+  rewrite (Forall_Znth _ 0 _) in Hdlo.
+  rewrite (Forall_Znth _ 0 _) in Hdhi.
+  unfold item_digits, item_at in Hdlo, Hdhi. cbn [fst snd] in Hdlo, Hdhi.
+  specialize (Hdlo j ltac:(rewrite Zlength_sublist by lia; lia)).
+  specialize (Hdhi j ltac:(rewrite Zlength_sublist by lia; lia)).
+  rewrite Znth_sublist in Hdlo, Hdhi by lia.
+  replace (j + 0) with j in * by lia. lia.
 Qed.

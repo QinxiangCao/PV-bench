@@ -1,7 +1,7 @@
-/*
- * Linear-time two-pointer implementation of Container With Most Water.
- * The input array is only read and is never modified.
- */
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
+
 int maxAreaLinear(const int *height, int heightSize)
 
 {
@@ -33,11 +33,6 @@ int maxAreaLinear(const int *height, int heightSize)
             maximumArea = area;
         }
 
-        /*
-         * Moving the taller side cannot improve the current shorter side:
-         * the width becomes smaller while the usable height cannot exceed
-         * the shorter endpoint.  Therefore discard the shorter endpoint.
-         */
         if (height[left] < height[right]) {
             ++left;
         } else {

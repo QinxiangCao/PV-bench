@@ -1,3 +1,5 @@
+Require Export PVbench.Algorithms.quicksort_hoare_swap_index.rocq.helper_lib.
+Require Import SumLib.ZRange.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Strings.String.
@@ -19,7 +21,36 @@ Local Open Scope string.
 Local Open Scope list.
 Import naive_C_Rules.
 Local Open Scope sac.
-Require Export PVbench.Algorithms.quicksort_hoare_swap_index.rocq.helper_lib.
+
+Lemma outside_quicksort_Forall2_filtered {A B : Type} (R : A -> B -> Prop)
+    (f : Z -> A) (g : Z -> B) (keep : Z -> bool) lo hi :
+  Forall2 R (map f (filter keep (Zrange lo hi)))
+    (map g (filter keep (Zrange lo hi))) <->
+  forall p, lo <= p < hi -> keep p = true -> R (f p) (g p).
+Proof.
+  assert (Hmap : forall xs, Forall2 R (map f xs) (map g xs) <->
+    Forall (fun p => R (f p) (g p)) xs).
+  { induction xs as [|x xs IH]; cbn.
+    - split; intros; constructor.
+    - split; intro H; inversion H; subst; constructor; try assumption;
+      apply IH; assumption. }
+  rewrite Hmap, Forall_forall. split; intros H p Hp.
+  - intro Hkeep. apply H. apply filter_In. split; [apply In_Zrange|]; assumption.
+  - apply filter_In in Hp. destruct Hp as [Hp Hkeep].
+    apply H; [apply In_Zrange|]; assumption.
+Qed.
+Lemma same_outside_range_unfold l l1 left right :
+  same_outside_range l l1 left right <->
+  Zlength l = Zlength l1 /\
+  forall k,
+    0 <= k < Zlength l ->
+    k < left \/ right < k ->
+    Znth k l1 0 = Znth k l 0.
+Proof.
+  unfold same_outside_range. rewrite outside_quicksort_Forall2_filtered.
+  setoid_rewrite Bool.orb_true_iff. setoid_rewrite Z.ltb_lt.
+  firstorder.
+Qed.
 
 Lemma same_outside_range_trans_local :
   forall l l1 l2 left right,
@@ -27,6 +58,7 @@ Lemma same_outside_range_trans_local :
     same_outside_range l1 l2 left right ->
     same_outside_range l l2 left right.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 l2 left right [Hlen1 Heq1] [Hlen2 Heq2].
   split.
   - rewrite Hlen1. exact Hlen2.
@@ -97,6 +129,7 @@ Lemma same_outside_range_swap_inside_local :
       (replace_Znth j (Znth i l 0) (replace_Znth i (Znth j l 0) l))
       low high.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l low high i j Hlow Hi Hj Hhigh.
   split.
   - rewrite !Zlength_replace_Znth. reflexivity.
@@ -123,6 +156,7 @@ Lemma same_outside_range_replace_inside_local :
     high < Zlength l ->
     same_outside_range l (replace_Znth i v l) low high.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l low high i v Hlow Hi Hhigh.
   split.
   - rewrite Zlength_replace_Znth. reflexivity.
@@ -287,6 +321,7 @@ Lemma partition_outer_exit_swap_yields_partitioned_at :
       (replace_Znth i (Znth low l1 0) (replace_Znth low (Znth i l1 0) l1))
       low high i.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 low high pivot i j Hlow Hhigh Hbounds Hjhigh Hpivot
     Hperm Hsame Hile Hmid Hright Hexit.
   assert (Hij_eq : i = j) by lia.
@@ -381,6 +416,7 @@ Lemma same_outside_range_weaken_local :
     same_outside_range l l1 left1 right1 ->
     same_outside_range l l1 left2 right2.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left1 right1 left2 right2 Hleft Hright [Hlen Heq].
   split.
   - exact Hlen.
@@ -473,6 +509,7 @@ Lemma same_outside_range_prefix_local :
     0 <= left <= Zlength l ->
     sublist 0 left l1 = sublist 0 left l.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left right Hsame Hrange.
   destruct Hsame as [Hlen Heq].
   apply sublist_eq_from_Znth_local.
@@ -491,6 +528,7 @@ Lemma same_outside_range_suffix_local :
     0 <= right + 1 <= Zlength l ->
     sublist (right + 1) (Zlength l1) l1 = sublist (right + 1) (Zlength l) l.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left right Hsame Hrange.
   destruct Hsame as [Hlen Heq].
   rewrite <- Hlen.
@@ -537,6 +575,7 @@ Lemma partitioned_at_preserved_by_left_local :
     partitioned_at l left right p ->
     partitioned_at l1 left right p.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left right p Hperm Hleft0 Hsame Hlen Hpart.
   destruct Hsame as [Hlen' Heq].
   destruct Hpart as [Hrange [Hleft Hright]].
@@ -559,7 +598,7 @@ Proof.
           eapply middle_permutation_of_same_outside_local
             with (left := left) (right := p - 1).
           - exact Hperm.
-          - exact (conj Hlen' Heq).
+          - apply (proj2 (same_outside_range_unfold _ _ _ _)). exact (conj Hlen' Heq).
           - lia.
           - lia.
         }
@@ -600,6 +639,7 @@ Lemma partitioned_at_preserved_by_right_local :
     partitioned_at l left right p ->
     partitioned_at l1 left right p.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left right p Hperm Hleft0 Hsame Hlen Hpart.
   destruct Hsame as [Hlen' Heq].
   destruct Hpart as [Hrange [Hleft Hright]].
@@ -636,7 +676,7 @@ Proof.
           eapply middle_permutation_of_same_outside_local
             with (left := p + 1) (right := right).
           - exact Hperm.
-          - exact (conj Hlen' Heq).
+          - apply (proj2 (same_outside_range_unfold _ _ _ _)). exact (conj Hlen' Heq).
           - lia.
           - lia.
         }
@@ -885,6 +925,7 @@ Lemma partition_hole_outer_fill_left_perm_split_local :
     Permutation l
       (replace_Znth j pivot (replace_Znth i (Znth j l1 0) l1)).
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 low high pivot i j Hlow Hhigh Hperm Hsame Hloi Hijle Hjhi Hij.
   destruct Hsame as [Hlen Hsame].
   set (old := replace_Znth i pivot l1).
@@ -928,6 +969,7 @@ Lemma partition_hole_left_fill_right_perm_split_local :
     Permutation l
       (replace_Znth i pivot (replace_Znth j (Znth i l1 0) l1)).
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 low high pivot i j Hlow Hhigh Hperm Hsame Hloi Hijle Hjhi Hij.
   destruct Hsame as [Hlen Hsame].
   set (old := replace_Znth j pivot l1).
@@ -973,6 +1015,7 @@ Lemma partition_hole_outer_exit_partitioned_split_local :
     i >= j ->
     partitioned_at (replace_Znth i pivot l1) low high i.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 low high pivot i j Hlow Hhigh Hsame Hloi Hij Hjhi Hleft Hright Hexit.
   assert (Hij_eq : i = j) by lia.
   subst j.
@@ -1465,13 +1508,13 @@ Proof.
 Qed.
 
 (* Helper lemmas migrated from quicksort_proof_manual.v. *)
-
 Lemma same_outside_range_refl :
   forall (l: list Z) left right,
     same_outside_range l l left right.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l left right.
-  unfold same_outside_range.
+  try rewrite same_outside_range_unfold.
   split.
   - reflexivity.
   - intros k Hk _.
@@ -1484,8 +1527,9 @@ Lemma same_outside_range_trans :
     same_outside_range l1 l2 left right ->
     same_outside_range l l2 left right.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 l2 left right [Hlen1 Heq1] [Hlen2 Heq2].
-  unfold same_outside_range.
+  try rewrite same_outside_range_unfold.
   split.
   - rewrite Hlen1. exact Hlen2.
   - intros k Hk Hout.
@@ -1501,8 +1545,9 @@ Lemma same_outside_range_weaken :
     same_outside_range l l1 left1 right1 ->
     same_outside_range l l1 left2 right2.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left1 right1 left2 right2 Hleft Hright [Hlen Heq].
-  unfold same_outside_range.
+  try rewrite same_outside_range_unfold.
   split.
   - exact Hlen.
   - intros k Hk Hout.
@@ -1669,6 +1714,7 @@ Lemma same_outside_range_prefix :
     0 <= left <= Zlength l ->
     sublist 0 left l1 = sublist 0 left l.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left right Hsame Hrange.
   destruct Hsame as [Hlen Heq].
   apply sublist_eq_from_Znth.
@@ -1687,6 +1733,7 @@ Lemma same_outside_range_suffix :
     0 <= right + 1 <= Zlength l ->
     sublist (right + 1) (Zlength l1) l1 = sublist (right + 1) (Zlength l) l.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l l1 left right Hsame Hrange.
   destruct Hsame as [Hlen Heq].
   rewrite <- Hlen.
@@ -1768,8 +1815,9 @@ Lemma same_outside_range_swap_inside :
       (replace_Znth j (Znth i l 0) (replace_Znth i (Znth j l 0) l))
       low high.
 Proof.
+  setoid_rewrite same_outside_range_unfold.
   intros l low high i j Hlow Hi Hj Hhigh.
-  unfold same_outside_range.
+  try rewrite same_outside_range_unfold.
   split.
   - rewrite !Zlength_replace_Znth. reflexivity.
   - intros k Hk Hout.
@@ -1881,4 +1929,24 @@ Proof.
            apply Z.lt_le_incl.
            apply Hgt.
            lia.
+Qed.
+
+
+(** Forall on a mathematical segment, including empty scan segments. *)
+Lemma quicksort_Forall_sublist : forall (P : Z -> Prop) values lo hi,
+  0 <= lo -> hi <= Zlength values ->
+  (Forall P (sublist lo hi values) <->
+    forall index, lo <= index < hi -> P (Znth index values 0)).
+Proof.
+  intros P values lo hi Hlo Hhi.
+  destruct (Z_le_dec lo hi) as [Horder | Hempty].
+  - rewrite (Forall_Znth P 0).
+    rewrite Zlength_sublist by lia.
+    split; intros Hall index Hindex.
+    + specialize (Hall (index - lo) ltac:(lia)).
+      rewrite Znth_sublist in Hall by lia.
+      replace (index - lo + lo) with index in Hall by lia. exact Hall.
+    + rewrite Znth_sublist by lia. apply Hall. lia.
+  - rewrite Zsublist_nil by lia.
+    split; [intros _ index Hindex; lia | intros _; constructor].
 Qed.

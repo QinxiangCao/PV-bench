@@ -1,6 +1,8 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (MaximumContainerArea : list Z -> Z -> Prop)
-      (SortedHeightIndexWorkspaceNLogN : list Z -> list Z -> list Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.container_with_most_water_nlogn.rocq.spec_lib */
 
@@ -71,33 +73,22 @@ void sortHeightIndexRangeNLogN(
 }
 
 int maxAreaNLogN(
-    const int *height, int heightSize,
-    int *workHeight, int *workIndex,
-    int *bufferHeight, int *bufferIndex)
+    const int *height, int heightSize)
 /*@ With (l : list Z)
     Require
       2 <= heightSize && heightSize <= 100000 &&
       Zlength(l) == heightSize &&
-      (forall (k : Z),
-        (0 <= k && k < heightSize) =>
-        (0 <= l[k] && l[k] <= 10000)) &&
-      IntArray::full(height, heightSize, l) *
-      IntArray::undef_full(workHeight, heightSize) *
-      IntArray::undef_full(workIndex, heightSize) *
-      IntArray::undef_full(bufferHeight, heightSize) *
-      IntArray::undef_full(bufferIndex, heightSize)
+      Forall(Z::le(0), l) && Forall(Z::ge(10000), l) &&
+      IntArray::full(height, heightSize, l)
     Ensure
-      exists sorted_h sorted_i buffer_h buffer_i,
       MaximumContainerArea(l, __return) &&
-      0 <= __return && __return <= 999990000 &&
-      SortedHeightIndexWorkspaceNLogN(l, sorted_h, sorted_i) &&
-      IntArray::full(height, heightSize, l) *
-      IntArray::full(workHeight, heightSize, sorted_h) *
-      IntArray::full(workIndex, heightSize, sorted_i) *
-      IntArray::full(bufferHeight, heightSize, buffer_h) *
-      IntArray::full(bufferIndex, heightSize, buffer_i)
+      IntArray::full(height, heightSize, l)
  */
 {
+    int workHeight[100000];
+    int workIndex[100000];
+    int bufferHeight[100000];
+    int bufferIndex[100000];
 
     for (int k = 0; k < heightSize; ++k) {
         int h = height[k];
@@ -141,11 +132,11 @@ int maxAreaNLogN(
         }
 
         if (index < minimumIndex) {
-
+            
             minimumIndex = index;
         }
         if (index > maximumIndex) {
-
+            
             maximumIndex = index;
         }
     }

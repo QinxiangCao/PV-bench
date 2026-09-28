@@ -1,10 +1,11 @@
+Require Export PVbench.Algorithms.linear_modular_inverse.rocq.helper_lib.
 From Coq Require Import ZArith List.
 From AUXLib Require Import ListLib.
+
 Import ListNotations.
 Local Open Scope Z_scope.
-From Coq Require Import Lia Psatz.
-Require Export PVbench.Algorithms.linear_modular_inverse.rocq.spec_lib.
 
+From Coq Require Import Lia Psatz.
 Lemma linear_inverse_division_facts__recurrence_core :
   forall p i,
     PrimeForLinearInverse p ->
@@ -29,7 +30,6 @@ Proof.
     nia. }
   repeat split; try nia.
 Qed.
-
 Lemma linear_inverse_product_bound__recurrence_core :
   forall p a b,
     2 <= p <= 46340 ->
@@ -40,18 +40,18 @@ Proof.
   intros p a b Hp Ha Hb.
   nia.
 Qed.
-
 Lemma linear_inverse_prefix_extend__recurrence_core :
   forall p i q r values,
     PrimeForLinearInverse p ->
     2 <= i < p ->
     q = p / i ->
     r = p mod i ->
+    Zlength values = i - 1 ->
     ModularInversePrefix p i values ->
     ModularInversePrefix p (i + 1)
       (values ++ [((p - q) * Znth (r - 1) values 0) mod p]).
 Proof.
-  intros p i q r values Hprime Hi Hq Hr [Hlen Hprefix].
+  intros p i q r values Hprime Hi Hq Hr Hlen Hprefix.
   subst q r.
   destruct (linear_inverse_division_facts__recurrence_core p i Hprime Hi)
     as [Hdiv [Hquot [[Hrem_pos Hrem_lt] Hdiff]]].
@@ -60,11 +60,8 @@ Proof.
         (Znth (p mod i - 1) values 0)).
   { apply Hprefix. lia. }
   destruct Hcanonical as
-    [[Hindex_lo Hindex_hi] [[Hvalue_pos Hvalue_hi] [coefficient Hbezout]]].
-  split.
-  - rewrite Zlength_app, Zlength_cons, Zlength_nil, Hlen.
-    lia.
-  - intros index Hindex.
+    [[Hvalue_pos Hvalue_hi] [coefficient Hbezout]].
+  intros index Hindex.
     destruct (Z_lt_ge_dec index i) as [Hindex_old | Hindex_new].
     + specialize (Hprefix index ltac:(lia)).
       rewrite app_Znth1 by lia.
@@ -95,7 +92,6 @@ Proof.
           p * (coefficient - i * value + value + i * (raw / p)) = 1).
       { rewrite Hraw_div in Hraw_inverse.
         nia. }
-      split; [lia |].
       split.
       * split; [|lia].
         destruct (Z.eq_dec (raw mod p) 0) as [Hzero | Hnonzero].
@@ -112,4 +108,3 @@ Proof.
       * exists (coefficient - i * value + value + i * (raw / p)).
         exact Hinverse.
 Qed.
-

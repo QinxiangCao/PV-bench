@@ -12,9 +12,6 @@ void optimized_selection_sort(int *a, int n)
     Ensure
       exists output,
         optimized_selection_sort_result(input, output) &&
-        Permutation(input, output) &&
-        increasing(output) &&
-        Zlength(output) == n &&
         IntArray::full(a, n, output)
  */
 {
@@ -30,7 +27,6 @@ void optimized_selection_sort(int *a, int n)
             }
         }
 
-        /* Avoid the three writes when the current element is already minimal. */
         if (min_index != i) {
             int tmp = a[i];
             a[i] = a[min_index];

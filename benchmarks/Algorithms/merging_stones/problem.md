@@ -1,18 +1,21 @@
 # P1775 Merging Stones (Simplified Version)
 
-## Description
+## Abstract model
+
+For every interval $[i,j]$, minimize the cost of merging it into one pile. A
+split after $k$ contributes the optimal costs of $[i,k]$ and $[k+1,j]$ plus
+the total mass in $[i,j]$. Prefix sums and interval DP evaluate all splits.
+
+## Problem statement
 
 $N$ stone piles are arranged in a line. One operation merges two adjacent
 piles and costs their combined mass. Continue until one pile remains. Output
 the minimum possible total cost over all merge orders.
 
-## Input
+## Input and output
 
-The first line contains $N$. The second line contains the masses of the $N$ piles.
-
-## Output
-
-Print the minimum total merge cost.
+The first line contains $N$ and the second contains the pile masses $m_i$.
+Output the minimum total merge cost.
 
 ## Constraints
 

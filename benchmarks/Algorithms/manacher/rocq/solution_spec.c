@@ -1,7 +1,8 @@
 #include "string.h"
 
 /*@ Extern Coq
-      (AlnumString : list Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (AlnumCode : Z -> Prop)
       (LongestPalindromeResult : list Z -> list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.manacher.rocq.spec_lib */
@@ -9,16 +10,12 @@
 int longestPalindrom(char *s, int n, char *output)
 /*@ With (str : list Z)
     Require
-      valid_string(str) &&
-      AlnumString(str) &&
-      string_length(str) == n &&
-      1 <= n && n <= 1000 &&
-      store_string(s, str) *
-      CharArray::undef_full(output, n + 1)
+      valid_string(str) && Forall(AlnumCode, str) &&
+      string_length(str) == n && 1 <= n && n <= 1000 &&
+      store_string(s, str) * CharArray::undef_full(output, n + 1)
     Ensure
       exists out,
       LongestPalindromeResult(str, out, __return) &&
-      1 <= __return && __return <= n &&
       store_string(s, str) *
       CharArray::full(output, __return + 1, app(out, cons(0, nil))) *
       CharArray::undef_seg(output, __return + 1, n + 1)
@@ -86,7 +83,6 @@ int longestPalindrom(char *s, int n, char *output)
         r = 0;
         mirror = 0;
         i++;
-
     }
     j = 0;
     i = maxId - maxLen;
@@ -98,8 +94,8 @@ int longestPalindrom(char *s, int n, char *output)
         }
         i++;
     }
+
     output[j] = 0;
     ret = maxLen;
-
     return ret;
 }

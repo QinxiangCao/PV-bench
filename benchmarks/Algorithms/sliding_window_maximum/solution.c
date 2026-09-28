@@ -1,6 +1,12 @@
-void maxSlidingWindow(int *nums, int n, int k, int *out, int *q)
+void maxSlidingWindow(int *nums, int n, int k, int *out)
 
 {
+  int q[100000];
+
+  for (int z = 0; z < n; ++z) {
+    q[z] = 0;
+  }
+
   int head = 0;
   int tail = 0;
   int out_idx = 0;

@@ -1,8 +1,3 @@
-/*
- * Stable decimal-bucket radix sort for non-negative integers.
- * Each pass distributes the input by one decimal digit and writes the
- * buckets back in order.  Processing from right to left keeps a pass stable.
- */
 void sort(int *a, int n)
 
 {
@@ -38,18 +33,14 @@ void sort(int *a, int n)
         }
 
         for (int i = n - 1; i >= 0; --i) {
-
             int digit = (a[i] / exponent) % 10;
 
             --count[digit];
-
             output[count[digit]] = a[i];
         }
 
         for (int i = 0; i < n; ++i) {
             a[i] = output[i];
         }
-
     }
-
 }

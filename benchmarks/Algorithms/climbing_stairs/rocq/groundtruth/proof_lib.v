@@ -1,13 +1,11 @@
+Require Export PVbench.Algorithms.climbing_stairs.rocq.helper_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import AUXLib.ListLib.
 From SumLib Require Import Sum.
-
 Import ListNotations.
 Local Open Scope Z_scope.
-
-Require Import PVbench.Algorithms.climbing_stairs.rocq.spec_lib.
 
 Lemma climbing_way_enum_nonnegative :
   forall n,
@@ -282,4 +280,3 @@ Proof.
   - apply Hupto45; assumption.
   - exact Hmax.
 Qed.
-

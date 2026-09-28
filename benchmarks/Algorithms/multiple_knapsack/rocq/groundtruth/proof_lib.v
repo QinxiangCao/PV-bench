@@ -1,3 +1,4 @@
+Require Export PVbench.Algorithms.multiple_knapsack.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 From AUXLib Require Import ListLib.
@@ -5,6 +6,7 @@ From MaxMinLib Require Import MaxMin Interface.
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+(* Helper imports migrated from multiple_knapsack__vc_proving_round9_merged_proof_manual.v. *)
 Require Import Coq.micromega.Lia.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Strings.String.
@@ -17,8 +19,12 @@ From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 Require Import SetsClass.SetsClass.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
-Require Export PVbench.Algorithms.multiple_knapsack.rocq.spec_lib.
-Require Export PVbench.Algorithms.multiple_knapsack.rocq.helper_lib.
+
+Definition MKDPValueBound (dp : list Z) (capacity : Z) : Prop :=
+  Zlength dp = capacity + 1 /\
+  forall cap,
+    0 <= cap <= capacity ->
+    0 <= Znth cap dp 0 <= 1000000.
 
 Definition MKDPTable
     (weights values counts : list Z) (i capacity : Z) (dp : list Z) : Prop :=
@@ -39,6 +45,27 @@ Definition MKCopyPrefix (src dst : list Z) (j capacity : Z) : Prop :=
   Zlength src = capacity + 1 /\
   Zlength dst = capacity + 1 /\
   forall cap, 0 <= cap < j -> Znth cap dst 0 = Znth cap src 0.
+
+Definition MKTransitionValue
+    (old : list Z) (w v cnt capacity pos ans : Z) : Prop :=
+  0 < w /\
+  0 <= cnt /\
+  0 <= pos <= capacity /\
+  Zlength old = capacity + 1 /\
+  max_value_of_subset Z.le
+    (fun take =>
+       0 <= take <= cnt /\
+       take * w <= pos /\
+       0 <= pos - take * w <= capacity)
+    (fun take => Znth (pos - take * w) old 0 + take * v)
+    ans.
+
+Definition MKTransitionValueBound
+    (old : list Z) (w v cnt capacity : Z) : Prop :=
+  forall pos ans,
+    0 <= pos <= capacity ->
+    MKTransitionValue old w v cnt capacity pos ans ->
+    0 <= ans <= 1000000.
 
 Definition MKItemResidueProgress
     (old dp : list Z) (r w v cnt capacity : Z) : Prop :=
@@ -98,13 +125,11 @@ Definition MKItemResiduePrefixProgress
        (r < rem \/ (rem = r /\ k <= t)) ->
        Znth pos dp 0 = Znth pos old 0).
 
-Definition MKQueueEntriesValid
-    (old q_idx q_val : list Z) (head tail r w v k cnt : Z) : Prop :=
+Definition MKQueueResultValueBound
+    (q_val : list Z) (head tail v k : Z) : Prop :=
   forall pos,
     head <= pos < tail ->
-    k - cnt <= Znth pos q_idx 0 /\
-    Znth pos q_idx 0 < k /\
-    MKQueueEntryValue old q_idx q_val r w v pos.
+    0 <= Znth pos q_val 0 + k * v <= 1000000.
 
 Definition MKQueueDropLoopState
     (old q_idx q_val : list Z)
@@ -191,6 +216,112 @@ Definition MKResidueLoopState
   Zlength q_val = capacity + 1 /\
   MKResiduePrefix old dp r w v cnt k capacity /\
   MKQueueState old q_idx q_val head tail r w v cnt k capacity.
+
+(** Proof support separates table/transition mathematics from the historical
+    Safety interfaces used by the retained helper lemmas. Only mathematical
+    predicates are declared in the C annotations; execution bounds stay in C. *)
+
+Definition MKDPTableSafety
+    (weights : list Z) (i capacity : Z) (dp : list Z) : Prop :=
+  0 <= i <= Zlength weights /\
+  0 <= capacity /\
+  Zlength dp = capacity + 1.
+
+Definition MKTransitionSafety
+    (old : list Z) (w cnt capacity pos : Z) : Prop :=
+  0 < w /\
+  0 <= cnt /\
+  0 <= pos <= capacity /\
+  Zlength old = capacity + 1.
+
+Definition MKItemResidueProgressSafety
+    (old dp : list Z) (r w cnt capacity : Z) : Prop :=
+  0 < w /\
+  0 <= cnt /\
+  0 <= r /\
+  r <= w /\
+  r <= capacity + 1 /\
+  Zlength old = capacity + 1 /\
+  Zlength dp = capacity + 1.
+
+Definition MKItemResiduePrefixSafety
+    (old dp : list Z) (r w cnt k capacity : Z) : Prop :=
+  0 < w /\
+  0 <= cnt /\
+  0 <= r < w /\
+  0 <= k /\
+  r <= capacity /\
+  Zlength old = capacity + 1 /\
+  Zlength dp = capacity + 1.
+
+Definition MKQueueStorageSafety
+    (old q_idx q_val : list Z) (head tail limit capacity : Z) : Prop :=
+  0 <= head <= tail /\
+  tail <= limit /\
+  tail <= Zlength q_idx /\
+  Zlength q_idx = capacity + 1 /\
+  Zlength q_val = capacity + 1 /\
+  Zlength old = capacity + 1.
+
+Definition MKQueueDropSafety
+    (old q_idx q_val : list Z)
+    (head tail r w k capacity : Z) : Prop :=
+  0 <= r < w /\
+  0 <= k /\
+  MKQueueStorageSafety old q_idx q_val head tail k capacity.
+
+Definition MKQueuePendingProofFacts
+    (old q_idx q_val : list Z)
+    (head tail r w v cnt k current : Z) : Prop :=
+  MKQueueEntriesValidAfterDrop old q_idx q_val head tail r w v k cnt /\
+  MKQueueIndexIncreasing q_idx head tail /\
+  MKQueueValueDecreasing q_val head tail /\
+  MKQueueCoversWithPending old q_idx q_val head tail r w v k cnt current /\
+  MKQueueResultValueBound q_val head tail v k /\
+  0 <= current + k * v <= 1000000.
+
+Definition MKQueueResultSafety
+    (old q_idx q_val : list Z)
+    (head tail r w processed capacity : Z) : Prop :=
+  0 <= r < w /\
+  0 <= processed /\
+  MKQueueStorageSafety old q_idx q_val head tail processed capacity.
+
+Definition MKQueueResultProofFacts
+    (old q_idx q_val : list Z)
+    (head tail r w v cnt processed capacity : Z) : Prop :=
+  MKQueueEntriesValidForResult old q_idx q_val head tail r w v processed cnt /\
+  MKQueueIndexIncreasing q_idx head tail /\
+  MKQueueValueDecreasing q_val head tail /\
+  MKQueueCoversResultWindow old q_idx q_val head tail r w v processed cnt /\
+  MKQueueResultValueBound q_val head tail v (processed - 1) /\
+  (head < tail ->
+     MKTransitionSemantics old w v cnt capacity (r + (processed - 1) * w)
+       (Znth head q_val 0 + (processed - 1) * v)).
+
+Definition MKResidueLoopSafety
+    (old dp q_idx q_val : list Z)
+    (r w k head tail capacity : Z) : Prop :=
+  0 <= r < w /\
+  0 <= k /\
+  0 <= head <= tail /\
+  tail <= k /\
+  Zlength old = capacity + 1 /\
+  Zlength dp = capacity + 1 /\
+  Zlength q_idx = capacity + 1 /\
+  Zlength q_val = capacity + 1.
+
+Definition MKResidueLoopProofFacts
+    (old dp q_idx q_val : list Z)
+    (r w v cnt k head tail capacity : Z) : Prop :=
+  (forall t,
+     0 <= t < k ->
+     r + t * w <= capacity ->
+     MKTransitionSemantics old w v cnt capacity (r + t * w)
+       (Znth (r + t * w) dp 0)) /\
+  MKQueueResultProofFacts old q_idx q_val head tail r w v cnt k capacity.
+
+(* Helper lemmas migrated from multiple_knapsack__vc_proving_round9_merged_proof_manual.v. *)
 
 Lemma MKZeroPrefix_extend_by_zero :
   forall dp hi,
@@ -393,7 +524,7 @@ Proof.
   intros weights values counts capacity picks Hcap Hbounds Hbounded.
   unfold BoundedPickList in Hbounded.
   destruct Hbounded as
-    (Hwv & _Hwc & Hpicks_len & _Hcap' & HFor & _Hweight_nonneg & Hweight_cap).
+    (Hwv & _Hwc & Hpicks_len & HFor & Hweight_cap).
   assert (Hpick_nonneg :
     forall idx, 0 <= idx < Zlength picks -> 0 <= Znth idx picks 0).
   {
@@ -1352,16 +1483,13 @@ Proof.
   intros pweights pvalues pcounts picks rem capacity w v cnt take
     Hbounded Hw Htake Hcapacity.
   unfold BoundedPickList in *.
-  destruct Hbounded as (Hwv & Hwc & Hpicks & Hrem & Hforall & Hweight).
+  destruct Hbounded as (Hwv & Hwc & Hpicks & Hforall & Hweight).
   repeat split.
   - rewrite !Zlength_app_cons. lia.
   - rewrite !Zlength_app_cons. lia.
   - rewrite !Zlength_app_cons. lia.
-  - lia.
   - apply Forall2_app; [exact Hforall |].
     constructor; [lia | constructor].
-  - rewrite worker_PickWeight_app_single by exact Hpicks.
-    lia.
   - rewrite worker_PickWeight_app_single by exact Hpicks.
     lia.
 Qed.
@@ -1446,7 +1574,7 @@ Proof.
     + intros picks Hpicks_bounded.
       unfold BoundedPickList in Hpicks_bounded.
       destruct Hpicks_bounded as
-        (Hwv_app & Hwc_app & Hpicks_len & Hpos_nonneg & Hforall_app & Hweight_app).
+        (Hwv_app & Hwc_app & Hpicks_len & Hforall_app & Hweight_app).
       destruct (Forall2_app_inv_r (sublist 0 i counts) (cnt :: nil) Hforall_app)
         as [prefix [last (Hforall_prefix & Hforall_last & Hpicks_eq)]].
       inversion Hforall_last as [| take ? ? ? Htake_bounds Hlast_nil]; subst.
@@ -1497,12 +1625,10 @@ Proof.
           (sublist 0 i counts) (pos - take * w) prefix).
       { unfold BoundedPickList.
         repeat split.
-        - rewrite !Zlength_sublist0 by lia. lia.
-        - rewrite !Zlength_sublist0 by lia. lia.
+        - exact Hprefix_len_values.
+        - exact Hprefix_len_counts.
         - exact Hprefix_len_weights.
-        - lia.
         - exact Hforall_prefix.
-        - exact Hprefix_weight_nonneg.
         - lia.
       }
       specialize (Hprefix_max prefix Hprefix_bounded).
@@ -1612,7 +1738,7 @@ Qed.
 Lemma MKQueuePending_layers_push__g08 :
   forall old q_idx q_val head tail r w v cnt k capacity current,
     MKQueueDropSafety old q_idx q_val head tail r w k capacity ->
-    MKQueuePendingSemantics old q_idx q_val head tail r w v cnt k current ->
+    MKQueuePendingProofFacts old q_idx q_val head tail r w v cnt k current ->
     current = Znth (r + k * w) old 0 - k * v ->
     0 <= r + k * w <= capacity ->
     0 <= cnt ->
@@ -1621,7 +1747,7 @@ Lemma MKQueuePending_layers_push__g08 :
     MKQueueResultSafety old
       (replace_Znth tail k q_idx) (replace_Znth tail current q_val)
       head (tail + 1) r w (k + 1) capacity /\
-    MKQueueResultSemantics old
+    MKQueueResultProofFacts old
       (replace_Znth tail k q_idx) (replace_Znth tail current q_val)
       head (tail + 1) r w v cnt (k + 1) capacity.
 Proof.
@@ -1631,14 +1757,14 @@ Proof.
     MKQueuePendingState old q_idx q_val head tail r w v cnt k capacity current).
   {
     unfold MKQueuePendingState, MKQueueDropSafety, MKQueueStorageSafety,
-      MKQueuePendingSemantics in *.
+      MKQueuePendingProofFacts in *.
     tauto.
   }
   pose proof (MKQueuePendingState_push_to_MKQueueState
     old q_idx q_val head tail r w v cnt k capacity current
     Hpending Hcurrent Hpos Hcnt Hk Htail) as Hstate.
   unfold MKQueueState, MKQueueResultSafety, MKQueueStorageSafety,
-    MKQueueResultSemantics, MKTransitionValue, MKTransitionSafety,
+    MKQueueResultProofFacts, MKTransitionValue, MKTransitionSafety,
     MKTransitionSemantics in *.
   tauto.
 Qed.
@@ -1651,15 +1777,15 @@ Lemma MKResidueLoopSemantics_after_dp_write__g09 :
     0 <= pos <= capacity ->
     Zlength dp = capacity + 1 ->
     MKItemResiduePrefixSemantics old dp r w v cnt k capacity ->
-    MKQueueResultSemantics old qidx qval head tail r w v cnt (k + 1) capacity ->
+    MKQueueResultProofFacts old qidx qval head tail r w v cnt (k + 1) capacity ->
     MKTransitionSemantics old w v cnt capacity pos ans ->
-    MKResidueLoopSemantics old (replace_Znth pos ans dp) qidx qval
+    MKResidueLoopProofFacts old (replace_Znth pos ans dp) qidx qval
       r w v cnt (k + 1) head tail capacity.
 Proof.
   intros old dp qidx qval r w v cnt k head tail capacity pos ans
     Hr Hw Hpos Hpos_range Hdp_len Hprefix Hqueue Htrans.
   unfold MKItemResiduePrefixSemantics in Hprefix.
-  unfold MKResidueLoopSemantics.
+  unfold MKResidueLoopProofFacts.
   destruct Hprefix as [Hpref _].
   split; [|exact Hqueue].
   intros t Ht Hcap.
@@ -1862,7 +1988,7 @@ Lemma MKQueuePending_push_complete_outcome__g06 :
   forall old q_idx q_val head tail r w v cnt k capacity current pos,
     pos = r + k * w ->
     MKQueueDropSafety old q_idx q_val head tail r w k capacity ->
-    MKQueuePendingSemantics old q_idx q_val head tail r w v cnt k current ->
+    MKQueuePendingProofFacts old q_idx q_val head tail r w v cnt k current ->
     current = Znth pos old 0 - k * v ->
     0 <= pos <= capacity ->
     0 <= cnt ->
@@ -1871,7 +1997,7 @@ Lemma MKQueuePending_push_complete_outcome__g06 :
     MKQueueResultSafety old
       (replace_Znth tail k q_idx) (replace_Znth tail current q_val)
       head (tail + 1) r w (k + 1) capacity /\
-    MKQueueResultSemantics old
+    MKQueueResultProofFacts old
       (replace_Znth tail k q_idx) (replace_Znth tail current q_val)
       head (tail + 1) r w v cnt (k + 1) capacity /\
     0 <= Znth head (replace_Znth tail current q_val) 0 + k * v <= 1000000 /\
@@ -1903,7 +2029,7 @@ Proof.
     repeat split; try lia; assumption.
   }
   pose proof Hresult_sem as Hresult_sem_full.
-  unfold MKQueueResultSemantics in Hresult_sem.
+  unfold MKQueueResultProofFacts in Hresult_sem.
   destruct Hresult_sem as
     (Hvalid & Hinc & Hdec & Hcovers & Hbound & Htransition).
   specialize (Hbound head (conj (Z.le_refl head) Hnonempty)).
@@ -1949,4 +2075,3 @@ Proof.
   unfold MKDPTableSafety, MKDPTableSemantics.
   tauto.
 Qed.
-

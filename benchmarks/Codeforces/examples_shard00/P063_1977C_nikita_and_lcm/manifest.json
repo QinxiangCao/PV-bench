@@ -1,0 +1,25 @@
+{
+  "id": "P063_1977C_nikita_and_lcm",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1977/C",
+    "title": "Nikita and LCM",
+    "url": "https://codeforces.com/problemset/problem/1977/C",
+    "rating": 1900,
+    "tags": [
+      "brute force",
+      "data structures",
+      "dp",
+      "greedy",
+      "math",
+      "number theory",
+      "sortings"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

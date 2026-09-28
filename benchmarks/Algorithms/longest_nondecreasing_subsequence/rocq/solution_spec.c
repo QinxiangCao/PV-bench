@@ -3,23 +3,23 @@
  */
 /*@ Import Coq Require Import PVbench.Algorithms.longest_nondecreasing_subsequence.rocq.spec_lib */
 
-int lengthOfLNDS(int *nums, int numsSize, int *tails)
-/*@ With (l : list Z) (tails_l : list Z)
+int lengthOfLNDS(int *nums, int numsSize)
+/*@ With (l : list Z)
     Require
       0 <= numsSize && numsSize <= 100000 &&
       Zlength(l) == numsSize &&
-      Zlength(tails_l) == numsSize &&
-      IntArray::full(nums, numsSize, l) *
-      IntArray::full(tails, numsSize, tails_l)
+      IntArray::full(nums, numsSize, l)
     Ensure
-      exists tails_ret,
       LNDSLength(l, __return) &&
-      0 <= __return && __return <= numsSize &&
-      Zlength(tails_ret) == numsSize &&
-      IntArray::full(nums, numsSize, l) *
-      IntArray::full(tails, numsSize, tails_ret)
+      IntArray::full(nums, numsSize, l)
  */
 {
+  int tails[100000];
+
+  for (int fill = 0; fill < numsSize; ++fill) {
+    tails[fill] = 0;
+  }
+
   int len = 0;
 
   for (int i = 0; i < numsSize; ++i) {

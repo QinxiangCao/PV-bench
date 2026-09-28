@@ -1,26 +1,60 @@
-From Coq Require Import ZArith List.
+Require Export PVbench.Algorithms.modular_mul.rocq.groundtruth.proof_lib.
+Require Export PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.helper_lib.
+From Coq Require Import ZArith List Lia.
+Require Import MaxMinLib.MaxMin AUXLib.MonotonicList.
 Require Import AUXLib.ListLib.
 Import ListNotations.
 Local Open Scope Z_scope.
-
-
-Require Import PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.spec_lib.
-Require Import PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.helper_lib.
+From Coq Require Import Lia.
 From Coq Require Import Lia Ring.
+
+Lemma crt_forall2_Znth_iff (P : Z -> Z -> Prop) xs ys :
+  Forall2 P xs ys <->
+  Zlength xs = Zlength ys /\
+  forall i, 0 <= i < Zlength xs -> P (Znth i xs 0) (Znth i ys 0).
+Proof.
+  rewrite (Forall2_nth_iff _ _ _ _ _ 0 0).
+  rewrite !Zlength_correct. split.
+  - intros [Hlen Hnth]. split; [lia |]. intros i Hi.
+    apply Hnth. apply Nat2Z.inj_lt. rewrite Z2Nat.id by lia. lia.
+  - intros [Hlen Hnth]. split; [lia |]. intros i Hi.
+    specialize (Hnth (Z.of_nat i) ltac:(lia)).
+    unfold Znth in Hnth. now rewrite Nat2Z.id in Hnth.
+Qed.
+
+Lemma crt_all_congruences_indexed residues moduli count value :
+  0 <= count -> count <= Zlength residues -> count <= Zlength moduli ->
+  (CRTAllCongruences residues moduli count value <->
+   forall index, 0 <= index < count ->
+     CRTCongruent value (Znth index residues 0) (Znth index moduli 0)).
+Proof.
+  intros Hcount Hr Hm. unfold CRTAllCongruences.
+  rewrite crt_forall2_Znth_iff.
+  rewrite !Zlength_sublist by lia.
+  replace (count - 0) with count by lia.
+  split.
+  - intros [_ H] i Hi. specialize (H i Hi).
+    rewrite !Znth_sublist0 in H by lia. exact H.
+  - intros H. split; [reflexivity |]. intros i Hi.
+    rewrite !Znth_sublist0 by lia. apply H. exact Hi.
+Qed.
 
 Lemma extended_crt_index_bounds__machine_bounds :
   forall residues moduli n index,
-    ExtendedCRTInputs residues moduli n ->
+    (1 <= n /\ Zlength residues = n /\ Zlength moduli = n /\
+     forall index, 0 <= index < n ->
+       0 < Znth index moduli 0 <= 2147483647 /\
+       0 <= Znth index residues 0 < Znth index moduli 0) ->
     0 <= index < n ->
     (0 < Znth index moduli 0 <= 2147483647 /\
      0 <= Znth index residues 0 < Znth index moduli 0).
 Proof.
   intros residues moduli n index Hinputs Hindex.
-  unfold ExtendedCRTInputs in Hinputs.
   destruct Hinputs as [_ [_ [_ Hbounds]]].
   apply Hbounds.
   exact Hindex.
 Qed.
+
 Lemma positive_gcd_quotient_bounds__machine_bounds :
   forall current_modulus modulus gcd,
     0 < modulus <= 2147483647 ->
@@ -43,6 +77,7 @@ Proof.
   - lia.
   - exact Hdivide.
 Qed.
+
 Lemma signed_difference_division_bounds__machine_bounds :
   forall residue answer divisor,
     0 <= residue <= 2147483647 ->
@@ -57,6 +92,7 @@ Proof.
     lia.
   - apply Z.quot_le_upper_bound; nia.
 Qed.
+
 Lemma bounded_merge_arithmetic__machine_bounds :
   forall answer lcm multiplier reduced_modulus,
     0 <= answer < lcm ->
@@ -72,15 +108,18 @@ Proof.
     Hanswer Hmultiplier Hlcm Hproduct.
   nia.
 Qed.
+
 Lemma crt_prefix_meaning_one__prefix_boundaries :
   forall residues moduli n,
-    ExtendedCRTInputs residues moduli n ->
+    (1 <= n /\ Zlength residues = n /\ Zlength moduli = n /\
+     forall index, 0 <= index < n ->
+       0 < Znth index moduli 0 <= 2147483647 /\
+       0 <= Znth index residues 0 < Znth index moduli 0) ->
     1 <= n ->
     CRTPrefixMeaning residues moduli 1
       (Znth 0 residues 0) (Znth 0 moduli 0).
 Proof.
   intros residues moduli n Hinputs Hn.
-  unfold ExtendedCRTInputs in Hinputs.
   destruct Hinputs as [Hn' [Hresidues [Hmoduli Hall]]].
   destruct residues as [| residue residues].
   - cbn in Hresidues. lia.
@@ -89,33 +128,14 @@ Proof.
     + specialize (Hall 0 ltac:(lia)) as Hzero.
       destruct Hzero as [[Hmodulus_pos Hmodulus_max]
                          [Hresidue_nonneg Hresidue_lt]].
-      unfold CRTPrefixMeaning, CRTLCMPrefix,
-        CRTAllCongruences, CRTCongruent.
-      rewrite Z2Nat.inj_pos, Pos2Nat.inj_1.
-      cbn [firstn fold_left].
+      unfold CRTPrefixMeaning, CRTLCMPrefix, CRTAllCongruences, sublist.
+      cbn [Z.to_nat skipn firstn fold_left].
       repeat rewrite Znth0_cons in *.
       split.
       * symmetry. apply Z.lcm_1_l_nonneg. lia.
-      * intros index Hindex.
-        assert (index = 0) by lia.
-        subst index.
-        exists 0.
-        repeat rewrite Znth0_cons.
-        ring.
+      * constructor; [exists 0; ring | constructor].
 Qed.
-Lemma crt_prefix_meaning_to_result__prefix_boundaries :
-  forall residues moduli n i answer combined_modulus,
-    i = n ->
-    0 <= answer < combined_modulus ->
-    CRTPrefixMeaning residues moduli i answer combined_modulus ->
-    ExtendedCRTSystemResult residues moduli n answer combined_modulus.
-Proof.
-  intros residues moduli n i answer combined_modulus Hi Hanswer Hprefix.
-  subst i.
-  unfold CRTPrefixMeaning in Hprefix.
-  unfold ExtendedCRTSystemResult.
-  tauto.
-Qed.
+
 Lemma quot_div_of_divide_pos__merge_transition :
   forall numerator denominator : Z,
     0 < denominator ->
@@ -127,6 +147,7 @@ Proof.
   rewrite Hnumerator, Z.quot_mul, Z.div_mul by lia.
   reflexivity.
 Qed.
+
 Lemma firstn_succ_nth__merge_transition {A : Type} :
   forall (l : list A) (n : nat) (default : A),
     (n < length l)%nat ->
@@ -138,6 +159,7 @@ Proof.
     + reflexivity.
     + simpl in *. f_equal. apply IH. lia.
 Qed.
+
 Lemma fold_left_lcm_all_divide__merge_transition :
   forall (values : list Z) (accumulator difference : Z),
     (accumulator | difference) ->
@@ -152,6 +174,7 @@ Proof.
       * apply Hall. now left.
     + intros other Hother. apply Hall. now right.
 Qed.
+
 Lemma fold_left_lcm_preserves_divide__merge_transition :
   forall (values : list Z) (accumulator divisor : Z),
     (divisor | accumulator) ->
@@ -164,6 +187,7 @@ Proof.
     destruct (Z.divide_lcm_l accumulator value) as [r Hlcm].
     exists (q * r). nia.
 Qed.
+
 Lemma fold_left_lcm_in_divides__merge_transition :
   forall (values : list Z) (accumulator value : Z),
     In value values ->
@@ -176,6 +200,7 @@ Proof.
   apply fold_left_lcm_preserves_divide__merge_transition.
   apply Z.divide_lcm_r.
 Qed.
+
 Lemma crt_lcm_prefix_multiple__merge_transition :
   forall (moduli : list Z) (count index : Z),
     0 <= index < count ->
@@ -190,7 +215,7 @@ Proof.
     rewrite <- Zlength_correct. lia. }
   assert (Hindex_nat : (Z.to_nat index < Z.to_nat count)%nat).
   { apply Z2Nat.inj_lt; lia. }
-  unfold CRTLCMPrefix.
+  unfold CRTLCMPrefix, sublist; cbn [Z.to_nat skipn].
   apply fold_left_lcm_in_divides__merge_transition.
   assert (Hnth :
       nth (Z.to_nat index) (firstn (Z.to_nat count) moduli) 0 =
@@ -201,6 +226,7 @@ Proof.
   rewrite length_firstn, Nat.min_l by exact Hcount_nat.
   exact Hindex_nat.
 Qed.
+
 Lemma crt_prefix_solution_congruent_lcm__merge_transition :
   forall (residues moduli : list Z) (count answer combined solution : Z),
     0 <= count ->
@@ -211,47 +237,47 @@ Proof.
   intros residues moduli count answer combined solution Hcount Hprefix Hsolution.
   destruct Hprefix as [Hcombined Hanswer].
   subst combined.
-  unfold CRTLCMPrefix.
+  unfold CRTLCMPrefix, sublist; cbn [Z.to_nat skipn].
   apply fold_left_lcm_all_divide__merge_transition.
   - exists (solution - answer). nia.
   - intros modulus Hin.
+    unfold CRTAllCongruences in Hanswer, Hsolution.
+    apply (Forall2_nth_iff _ _ _ _ _ 0 0) in Hanswer.
+    apply (Forall2_nth_iff _ _ _ _ _ 0 0) in Hsolution.
+    destruct Hanswer as [Hlen Hanswer], Hsolution as [_ Hsolution].
     destruct (In_nth _ _ 0 Hin) as [k [Hk Hnth]].
-    assert (Hkcount_nat : (k < Z.to_nat count)%nat).
-    { eapply Nat.lt_le_trans; [exact Hk |].
-      rewrite length_firstn. lia. }
-    assert (Hkcount : 0 <= Z.of_nat k < count).
-    { split; [lia |].
-      rewrite <- (Z2Nat.id count Hcount).
-      lia. }
-    assert (Hmodulus : Znth (Z.of_nat k) moduli 0 = modulus).
-    { unfold Znth. rewrite Nat2Z.id.
-      rewrite nth_firstn in Hnth by exact Hkcount_nat.
-      exact Hnth. }
-    specialize (Hanswer (Z.of_nat k) Hkcount).
-    specialize (Hsolution (Z.of_nat k) Hkcount).
-    rewrite Hmodulus in Hanswer, Hsolution.
+    assert (Hkr : (k < length (sublist 0 count residues))%nat).
+    { rewrite Hlen. exact Hk. }
+    specialize (Hanswer k Hkr). specialize (Hsolution k Hkr).
+    change (nth k (sublist 0 count moduli) 0 = modulus) in Hnth.
+    rewrite Hnth in Hanswer, Hsolution.
     unfold CRTCongruent in Hanswer, Hsolution.
     destruct Hanswer as [answer_q Hanswer].
     destruct Hsolution as [solution_q Hsolution].
     exists (solution_q - answer_q). nia.
 Qed.
+
 Lemma crt_merge_difference_divisible__merge_transition :
   forall (residues moduli : list Z) (n index answer combined : Z),
+    n <= Zlength residues -> n <= Zlength moduli ->
     ExtendedCRTSystemCompatible residues moduli n ->
     CRTPrefixMeaning residues moduli index answer combined ->
     0 <= index < n ->
     (Z.gcd combined (Znth index moduli 0) |
       Znth index residues 0 - answer).
 Proof.
-  intros residues moduli n index answer combined Hcompatible Hprefix Hindex.
+  intros residues moduli n index answer combined Hr Hm Hcompatible Hprefix Hindex.
   destruct Hcompatible as [solution Hsolution].
   assert (Hsolution_prefix :
       CRTAllCongruences residues moduli index solution).
-  { intros old_index Hold_index. apply Hsolution. lia. }
+  { apply crt_all_congruences_indexed; try lia.
+    rewrite crt_all_congruences_indexed in Hsolution by lia.
+    intros old_index Hold_index. apply Hsolution. lia. }
   pose proof
     (crt_prefix_solution_congruent_lcm__merge_transition
       residues moduli index answer combined solution
       (proj1 Hindex) Hprefix Hsolution_prefix) as Hprefix_div.
+  rewrite crt_all_congruences_indexed in Hsolution by lia.
   specialize (Hsolution index Hindex).
   unfold CRTCongruent in Hsolution.
   destruct Hsolution as [next_q Hsolution].
@@ -263,6 +289,7 @@ Proof.
   exists (combined_q * prefix_q - modulus_q * next_q).
   nia.
 Qed.
+
 Lemma reduced_merge_equation_from_bezout__merge_transition :
   forall (current_answer current_modulus next_residue next_modulus
           gcd x_coefficient y_coefficient normalized quotient : Z),
@@ -310,10 +337,14 @@ Proof.
     by ring.
   rewrite Hunit. ring.
 Qed.
+
 Lemma crt_lcm_prefix_step__merge_transition :
   forall (residues moduli : list Z)
          (n index answer combined gcd reduced : Z),
-    ExtendedCRTInputs residues moduli n ->
+    (1 <= n /\ Zlength residues = n /\ Zlength moduli = n /\
+     forall index, 0 <= index < n ->
+       0 < Znth index moduli 0 <= 2147483647 /\
+       0 <= Znth index residues 0 < Znth index moduli 0) ->
     0 <= index < n ->
     0 < combined ->
     CRTPrefixMeaning residues moduli index answer combined ->
@@ -332,12 +363,12 @@ Proof.
   assert (Hsuccessor : Z.to_nat (index + 1) = S (Z.to_nat index)).
   { rewrite Z2Nat.inj_add by lia. simpl. lia. }
   destruct Hprefix as [Hcombined Hcongruences].
-  unfold CRTLCMPrefix at 1.
+  unfold CRTLCMPrefix, sublist at 1; cbn [Z.to_nat skipn].
   rewrite Hsuccessor.
   rewrite (firstn_succ_nth__merge_transition
     moduli (Z.to_nat index) 0 Hindex_nat).
   rewrite fold_left_app. simpl.
-  unfold CRTLCMPrefix in Hcombined.
+  unfold CRTLCMPrefix, sublist in Hcombined; cbn [Z.to_nat skipn] in Hcombined.
   rewrite <- Hcombined.
   unfold Znth in Hgcd, Hreduced.
   subst gcd. subst reduced.
@@ -354,10 +385,14 @@ Proof.
     { apply Z.div_pos; lia. }
     nia.
 Qed.
+
 Lemma crt_prefix_meaning_merge__merge_transition :
   forall (residues moduli : list Z)
          (n index answer combined gcd reduced multiplier : Z),
-    ExtendedCRTInputs residues moduli n ->
+    (1 <= n /\ Zlength residues = n /\ Zlength moduli = n /\
+     forall index, 0 <= index < n ->
+       0 < Znth index moduli 0 <= 2147483647 /\
+       0 <= Znth index residues 0 < Znth index moduli 0) ->
     ExtendedCRTSystemCompatible residues moduli n ->
     0 <= index < n ->
     0 < combined ->
@@ -385,13 +420,17 @@ Proof.
         Hgcd Hgcd_pos Hreduced). }
   split.
   - symmetry. exact Hnext_combined.
-  - intros old_index Hold_index.
+  - pose proof Hinputs as (_ & Hr & Hm & _).
+    apply crt_all_congruences_indexed; try lia.
+    pose proof Hprefix_congruences as Hprefix_indexed.
+    rewrite crt_all_congruences_indexed in Hprefix_indexed by lia.
+    intros old_index Hold_index.
     destruct (Z_lt_ge_dec old_index index) as [Hold | Hnew].
-    + specialize (Hprefix_congruences old_index).
+    + specialize (Hprefix_indexed old_index).
       assert (Hold_bounds : 0 <= old_index < index) by lia.
-      specialize (Hprefix_congruences Hold_bounds).
-      unfold CRTCongruent in Hprefix_congruences.
-      destruct Hprefix_congruences as [old_q Hanswer].
+      specialize (Hprefix_indexed Hold_bounds).
+      unfold CRTCongruent in Hprefix_indexed.
+      destruct Hprefix_indexed as [old_q Hanswer].
       assert (Hmoduli_count : index <= Zlength moduli).
       { destruct Hinputs as (_ & _ & Hmoduli_length & _).
         rewrite Hmoduli_length. lia. }
@@ -405,7 +444,7 @@ Proof.
     + assert (old_index = index) by lia. subst old_index.
       pose proof
         (crt_merge_difference_divisible__merge_transition
-          residues moduli n index answer combined Hcompatible
+          residues moduli n index answer combined ltac:(lia) ltac:(lia) Hcompatible
           (conj Hcombined Hprefix_congruences) Hindex) as Hdifference.
       destruct (Z.gcd_divide_l combined (Znth index moduli 0))
         as [combined_q Hcombined_factor].
@@ -505,4 +544,22 @@ Proof.
       lia.
     }
     lia.
+Qed.
+
+Lemma crt_prefix_meaning_to_result__prefix_boundaries :
+  forall residues moduli n i answer combined_modulus,
+    0 <= n -> i = n ->
+    0 <= answer < combined_modulus ->
+    CRTPrefixMeaning residues moduli i answer combined_modulus ->
+    ExtendedCRTSystemResult residues moduli n answer combined_modulus.
+Proof.
+  intros residues moduli n i answer combined Hn Hi Ha Hp. subst i.
+  split; [exact (proj1 Hp) |].
+  exists answer. split; [split | reflexivity].
+  - split; [lia | exact (proj2 Hp)].
+  - intros solution [Hs Hcong].
+    pose proof (crt_prefix_solution_congruent_lcm__merge_transition
+      residues moduli n answer combined solution Hn Hp Hcong) as [q Hq].
+    change (answer <= solution).
+    assert (0 <= q) by nia. nia.
 Qed.

@@ -1,4 +1,7 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (HouseRobberAnswer : list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.house_robber.rocq.spec_lib */
@@ -8,11 +11,10 @@ int rob(int *nums, int n)
     Require
       0 <= n && n <= 100000 &&
       Zlength(l) == n &&
-      IntArray::full(nums, n, l) &&
-      (forall (k : Z), (0 <= k && k < n) => (0 <= l[k] && l[k] <= 10000))
+      Forall(Z::le(0), l) && Forall(Z::ge(10000), l) &&
+      IntArray::full(nums, n, l)
     Ensure
       HouseRobberAnswer(l, __return) &&
-      0 <= __return && __return <= 1000000000 &&
       IntArray::full(nums, n, l)
  */
 {
@@ -28,7 +30,6 @@ int rob(int *nums, int n)
     } else {
       cur = skip;
     }
-
     prev2 = prev1;
     prev1 = cur;
   }

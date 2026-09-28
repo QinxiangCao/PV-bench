@@ -1,6 +1,14 @@
 # P1220 Turning Off Streetlights
 
-## Description
+## Abstract model
+
+After the starting light is switched off, the set of extinguished lights in
+an optimal walk can be represented as an interval containing the start. A DP
+state stores the minimum consumed energy for an extinguished interval and for
+the walker being at its left or right endpoint. Extending the interval adds
+travel time multiplied by the total power of all lights still on.
+
+## Problem statement
 
 $n$ streetlights lie on a road in increasing position order. Each has a power
 rating. A worker begins at light $c$, immediately turns it off, and then walks
@@ -8,13 +16,10 @@ at one metre per second to turn off the others. Switching time is negligible.
 Minimize the energy consumed by all lights from the start until every light is
 off.
 
-## Input
+## Input and output
 
-The input gives the number of lights, the starting light, and every light's position and power consumption.
-
-## Output
-
-Print the minimum total energy consumed while all lights are turned off.
+The first line contains $n$ and $c$. Each of the next $n$ lines contains a
+position and power. Output the minimum energy in joules.
 
 ## Constraints
 

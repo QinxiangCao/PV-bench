@@ -1,4 +1,4 @@
-#include "pointf.h"
+struct PointF { float x; float y; };
 
 static int point_cmp_xy(float ax, float ay, float bx, float b_y)
 

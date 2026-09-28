@@ -1,0 +1,21 @@
+{
+  "id": "P067_1415D_xor_gun",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1415/D",
+    "title": "XOR-gun",
+    "url": "https://codeforces.com/problemset/problem/1415/D",
+    "rating": 2000,
+    "tags": [
+      "bitmasks",
+      "brute force",
+      "constructive algorithms"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": false
+  }
+}

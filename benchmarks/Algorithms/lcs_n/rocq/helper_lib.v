@@ -1,33 +1,49 @@
-Require Import PVbench.Algorithms.lcs_n.rocq.spec_lib.
-
+Require Export PVbench.Algorithms.lcs_n.rocq.spec_lib.
 From Coq Require Import ZArith List.
-From AUXLib Require Import ListLib.
+From AUXLib Require Import ListLib MonotonicList.
 Import ListNotations.
 Local Open Scope Z_scope.
+From Coq Require Import Lia Ring.
+From Coq Require Import Lia.
+From Coq Require Import micromega.Psatz.
+From MaxMinLib Require Import MaxMin Interface.
+From Coq Require Import Sorting.Sorted.
 
-Definition LCSNLogicalTableShape
-    (mixed : list (option Z)) (table : list Z) (n : Z) : Prop :=
-  Zlength mixed = (n + 1) * (n + 1) /\
-  Zlength table = (n + 1) * (n + 1).
+(** Row-major address using the caller-selected runtime dimension. *)
+Definition LCSNCellIndex (n row col : Z) : Z :=
+  row * (n + 1) + col.
+
+(** The mathematical prefix-table equation for one public cell. *)
+Definition LCSNCellRecurrence
+    (xs ys table : list Z) (n row col : Z) : Prop :=
+  ((row = 0 \/ col = 0) /\
+     Znth (LCSNCellIndex n row col) table 0 = 0) \/
+  (0 < row /\ 0 < col /\
+    ((Znth (row - 1) xs 0 = Znth (col - 1) ys 0 /\
+       Znth (LCSNCellIndex n row col) table 0 =
+         Znth (LCSNCellIndex n (row - 1) (col - 1)) table 0 + 1) \/
+     (Znth (row - 1) xs 0 <> Znth (col - 1) ys 0 /\
+       Znth (LCSNCellIndex n row col) table 0 =
+         Z.max
+           (Znth (LCSNCellIndex n (row - 1) col) table 0)
+           (Znth (LCSNCellIndex n row (col - 1)) table 0)))).
+
 Definition LCSNCellInitialized
     (mixed : list (option Z)) (table : list Z)
     (n row col : Z) : Prop :=
   Znth (LCSNCellIndex n row col) mixed None =
     Some (Znth (LCSNCellIndex n row col) table 0).
+
 Definition LCSNBoundaryCell
     (mixed : list (option Z)) (table : list Z)
     (n row col : Z) : Prop :=
   LCSNCellInitialized mixed table n row col /\
   Znth (LCSNCellIndex n row col) table 0 = 0.
-Definition LCSNInteriorCell
-    (xs ys : list Z) (mixed : list (option Z)) (table : list Z)
-    (n row col : Z) : Prop :=
-  LCSNCellInitialized mixed table n row col /\
-  LCSNCellRecurrence xs ys table n row col /\
-  0 <= Znth (LCSNCellIndex n row col) table 0 <= Z.min row col.
+
 Definition LCSNCellUndefined
     (mixed : list (option Z)) (n row col : Z) : Prop :=
   Znth (LCSNCellIndex n row col) mixed None = None.
+
 Definition LCSNBoundariesReady
     (mixed : list (option Z)) (table : list Z) (n : Z) : Prop :=
   (forall row,
@@ -36,80 +52,52 @@ Definition LCSNBoundariesReady
   (forall col,
     0 <= col <= n ->
     LCSNBoundaryCell mixed table n 0 col).
-Definition LCSNCompletedInteriorRows
-    (xs ys : list Z) (mixed : list (option Z)) (table : list Z)
-    (n rows_done : Z) : Prop :=
-  forall row col,
-    1 <= row < rows_done ->
-    1 <= col <= n ->
-    LCSNInteriorCell xs ys mixed table n row col.
+
 Definition LCSNInteriorRowsUndefinedFrom
     (mixed : list (option Z)) (n rows_from : Z) : Prop :=
-  forall row col,
-    rows_from <= row <= n ->
-    1 <= col <= n ->
-    LCSNCellUndefined mixed n row col.
+  forall row, rows_from <= row <= n ->
+    Forall (eq (@None Z))
+      (sublist (LCSNCellIndex n row 1) (LCSNCellIndex n row (n + 1)) mixed).
 
-(** Stable state of the first, strided initialization loop.  The predicate
-    classifies the entire square, not only the written column prefix. *)
-Definition LCSNColumnProgress
-    (mixed : list (option Z)) (table : list Z)
+(** Public progress separates mathematical table meaning from shape. *)
+Definition LCSNTableResult (xs ys : list Z) (n : Z) (table : list Z) : Prop :=
+  forall row col, 0 <= row <= n -> 0 <= col <= n ->
+    LCSNCellRecurrence xs ys table n row col.
+
+Definition LCSNInteriorCell (xs ys : list Z) (mixed : list (option Z))
+    (table : list Z) (n row col : Z) : Prop :=
+  LCSNCellInitialized mixed table n row col /\
+  LCSNCellRecurrence xs ys table n row col.
+
+Definition LCSNCompletedInteriorRows (xs ys : list Z) (mixed : list (option Z))
+    (table : list Z) (n rows_done : Z) : Prop :=
+  forall row col, 1 <= row < rows_done -> 1 <= col <= n ->
+    LCSNInteriorCell xs ys mixed table n row col.
+
+Definition LCSNColumnProgress (mixed : list (option Z)) (table : list Z)
     (n rows_done : Z) : Prop :=
-  LCSNLogicalTableShape mixed table n /\
-  (forall row,
-    0 <= row < rows_done ->
-    LCSNBoundaryCell mixed table n row 0) /\
-  (forall row,
-    rows_done <= row <= n ->
-    LCSNCellUndefined mixed n row 0) /\
-  (forall row col,
-    0 <= row <= n ->
-    1 <= col <= n ->
-    LCSNCellUndefined mixed n row col).
+  (forall row, 0 <= row < rows_done -> LCSNBoundaryCell mixed table n row 0) /\
+  (forall row, rows_done <= row <= n -> LCSNCellUndefined mixed n row 0) /\
+  LCSNInteriorRowsUndefinedFrom mixed n 0.
 
-(** Stable state of the row-zero initialization loop; the first column is
-    already complete, [cols_done] records the row-zero prefix, and every
-    complementary cell is explicitly undefined. *)
-Definition LCSNBoundaryProgress
-    (mixed : list (option Z)) (table : list Z)
+Definition LCSNBoundaryProgress (mixed : list (option Z)) (table : list Z)
     (n cols_done : Z) : Prop :=
-  LCSNLogicalTableShape mixed table n /\
-  (forall row,
-    0 <= row <= n ->
-    LCSNBoundaryCell mixed table n row 0) /\
-  (forall col,
-    1 <= col < cols_done ->
-    LCSNBoundaryCell mixed table n 0 col) /\
-  (forall col,
-    cols_done <= col <= n ->
-    LCSNCellUndefined mixed n 0 col) /\
-  (forall row col,
-    1 <= row <= n ->
-    1 <= col <= n ->
-    LCSNCellUndefined mixed n row col).
+  (forall row, 0 <= row <= n -> LCSNBoundaryCell mixed table n row 0) /\
+  (forall col, 1 <= col < cols_done -> LCSNBoundaryCell mixed table n 0 col) /\
+  Forall (eq (@None Z)) (sublist cols_done (n + 1) mixed) /\
+  LCSNInteriorRowsUndefinedFrom mixed n 1.
 
-(** Outer-loop state: completed rows have their final meanings, while the
-    entire future interior is still undefined. *)
-Definition LCSNRowsProgress
-    (xs ys : list Z) (mixed : list (option Z)) (table : list Z)
-    (n rows_done : Z) : Prop :=
-  LCSNLogicalTableShape mixed table n /\
+Definition LCSNRowsProgress (xs ys : list Z) (mixed : list (option Z))
+    (table : list Z) (n rows_done : Z) : Prop :=
   LCSNBoundariesReady mixed table n /\
   LCSNCompletedInteriorRows xs ys mixed table n rows_done /\
   LCSNInteriorRowsUndefinedFrom mixed n rows_done.
 
-(** Inner-loop state.  Unlike [LCSNRowsProgress], it treats the current row
-    separately so that a written prefix can coexist with an undefined suffix. *)
-Definition LCSNRowProgress
-    (xs ys : list Z) (mixed : list (option Z)) (table : list Z)
-    (n row next_col : Z) : Prop :=
-  LCSNLogicalTableShape mixed table n /\
+Definition LCSNRowProgress (xs ys : list Z) (mixed : list (option Z))
+    (table : list Z) (n row next_col : Z) : Prop :=
   LCSNBoundariesReady mixed table n /\
   LCSNCompletedInteriorRows xs ys mixed table n row /\
-  (forall col,
-    1 <= col < next_col ->
-    LCSNInteriorCell xs ys mixed table n row col) /\
-  (forall col,
-    next_col <= col <= n ->
-    LCSNCellUndefined mixed n row col) /\
+  (forall col, 1 <= col < next_col -> LCSNInteriorCell xs ys mixed table n row col) /\
+  Forall (eq (@None Z))
+    (sublist (LCSNCellIndex n row next_col) (LCSNCellIndex n row (n + 1)) mixed) /\
   LCSNInteriorRowsUndefinedFrom mixed n (row + 1).

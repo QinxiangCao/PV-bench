@@ -1,26 +1,13 @@
-/*
- * Matrix-chain multiplication (CLRS interval dynamic programming).
- *
- * Matrix i has dimensions dimensions[i] by dimensions[i + 1].  The caller
- * supplies matrix_count * matrix_count integers in cost as the DP workspace.
- * The verified interface bounds matrix_count and the dimensions so that every
- * scalar-multiplication count below fits in a signed 32-bit int.
- */
-
-int matrixChainMinCost(int *dimensions, int matrix_count, int *cost)
+int matrixChainMinCost(int *dimensions, int matrix_count)
 
 {
-  int width = matrix_count;
+  int cost[64];
 
-  /* A one-matrix product needs no scalar multiplications.  Clearing the whole
-   * table also gives defined values to the caller's complete workspace. */
+  int width = matrix_count;
 
   for (int i = 0; i < matrix_count * width; ++i) {
     cost[i] = 0;
   }
-
-  /* After finishing a chain length, every shorter interval already contains
-   * its minimum cost, so it is available to each candidate split below. */
 
   for (int chain_length = 2;
        chain_length <= matrix_count;
@@ -30,8 +17,6 @@ int matrixChainMinCost(int *dimensions, int matrix_count, int *cost)
          left + chain_length <= matrix_count;
          ++left) {
       int right = left + chain_length - 1;
-
-      /* Use the leftmost split as a real initial candidate. */
 
       int best = cost[left * width + left]
                + cost[(left + 1) * width + right]
@@ -54,5 +39,7 @@ int matrixChainMinCost(int *dimensions, int matrix_count, int *cost)
     }
   }
 
-  return cost[matrix_count - 1];
+  int result = cost[matrix_count - 1];
+
+  return result;
 }

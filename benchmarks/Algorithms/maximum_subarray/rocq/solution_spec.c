@@ -1,4 +1,7 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (MaxSubarraySumPrefix : list Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.maximum_subarray.rocq.spec_lib */
@@ -15,7 +18,7 @@ int max_sub_array(int *arr, int n)
       1 <= n && n <= 100000 &&
       Zlength(l) == n &&
       IntArray::full(arr, n, l) &&
-      (forall (k : Z), (0 <= k && k < n) => (-10000 <= l[k] && l[k] <= 10000))
+      Forall(Z::le(-10000), l) && Forall(Z::ge(10000), l)
     Ensure
       MaxSubarraySumPrefix(l, n, __return) &&
       IntArray::full(arr, n, l)

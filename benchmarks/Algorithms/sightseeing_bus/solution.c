@@ -1,7 +1,10 @@
-int solve(int n, int m, int k, int *d, int *t, int *a, int *b,
-          int *late, int *off, int *arr)
+int solve(int n, int m, int k, int *d, int *t, int *a, int *b)
 
 {
+    int late[1000];
+    int off[1000];
+    int arr[1000];
+
     int i;
     int j;
     int cur;
@@ -18,7 +21,7 @@ int solve(int n, int m, int k, int *d, int *t, int *a, int *b,
     for (i = 0; i < m; ++i) {
         int x = a[i] - 1;
         int y = b[i] - 1;
-
+        
         if (late[x] < t[i]) {
             late[x] = t[i];
         }
@@ -26,7 +29,7 @@ int solve(int n, int m, int k, int *d, int *t, int *a, int *b,
     }
 
     cur = 0;
-
+    
     for (i = 0; i < n; ++i) {
         arr[i] = cur;
         if (cur < late[i]) {
@@ -40,11 +43,11 @@ int solve(int n, int m, int k, int *d, int *t, int *a, int *b,
     while (k > 0) {
         best = 0;
         pos = -1;
-
+        
         for (i = 0; i + 1 < n; ++i) {
             if (d[i] > 0) {
                 cnt = 0;
-
+                
                 for (j = i + 1; j < n; ++j) {
                     cnt = cnt + off[j];
                     if (arr[j] <= late[j]) {
@@ -63,7 +66,7 @@ int solve(int n, int m, int k, int *d, int *t, int *a, int *b,
             break;
         }
         d[pos] = d[pos] - 1;
-
+        
         for (i = pos + 1; i < n; ++i) {
             arr[i] = arr[i] - 1;
             if (arr[i] < late[i]) {
@@ -75,10 +78,11 @@ int solve(int n, int m, int k, int *d, int *t, int *a, int *b,
     }
 
     ans = 0;
-
+    
     for (i = 0; i < m; ++i) {
-
+        
         ans = ans + arr[b[i] - 1] - t[i];
     }
+    
     return ans;
 }

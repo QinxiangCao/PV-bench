@@ -1,4 +1,3 @@
-/* Swap two complete flat minister records. */
 void swap_ministers(int *a, int n, int i, int j)
 
 {
@@ -10,29 +9,14 @@ void swap_ministers(int *a, int n, int i, int j)
   a[2 * j + 1] = tmp_right;
 }
 
-/*
- * This verification-oriented implementation deliberately uses the bounded
- * domain 1 <= n <= 8 and hand values in [1,10].  Thus every comparison key is
- * at most 100 and king_left times all minister left hands is at most 10^9;
- * ordinary signed int arithmetic is sufficient and no high-precision code is
- * used.
- *
- * The strict comparison makes the adjacent-swap bubble sort stable for equal
- * left*right keys.  The formal result is stronger than sortedness: it says the
- * produced permutation realises the MaxMinLib minimax reward specification.
- */
 void kings_game(int *ministers, int n, int king_left, int king_right, int *ans)
 
 {
   (void)king_right;
 
-  /* First copy the complete flat input, preserving the disjoint source. */
-
   for (int k = 0; k < 2 * n; k++) {
     ans[k] = ministers[k];
   }
-
-  /* Bubble the largest remaining key into the next suffix position. */
 
   for (int pass = 0; pass < n - 1; pass++) {
 
@@ -43,7 +27,7 @@ void kings_game(int *ministers, int n, int king_left, int king_right, int *ans)
       int right2 = ans[2 * (j + 1) + 1];
 
       if (left1 * right1 > left2 * right2) {
-        swap_ministers(ans, n, j, j + 1) ;
+        swap_ministers(ans, n, j, j + 1)  ;
       }
     }
   }

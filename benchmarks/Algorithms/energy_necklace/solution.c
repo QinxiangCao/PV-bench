@@ -1,6 +1,9 @@
-int energyNecklace(int *beads, int n, int *vals, int *dp)
+int energyNecklace(int *beads, int n)
 
 {
+  int vals[200];
+  int dp[40000];
+
   int total = 2 * n;
   int width = total;
 
@@ -53,5 +56,7 @@ int energyNecklace(int *beads, int n, int *vals, int *dp)
 
   }
 
-  return answer;
+  int result = answer;
+
+  return result;
 }

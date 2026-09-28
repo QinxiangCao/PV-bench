@@ -1,3 +1,12 @@
+/*@ Extern Coq
+      (Permutation : list Z -> list Z -> Prop)
+ */
+/*@ Extern Coq
+      (increasing : list Z -> Prop)
+ */
+
+/*@ Import Coq Require Import PVbench.Algorithms.quicksort_hoare_fill_index.rocq.spec_lib */
+
 int partition(int *arr, int low, int high)
 
 {

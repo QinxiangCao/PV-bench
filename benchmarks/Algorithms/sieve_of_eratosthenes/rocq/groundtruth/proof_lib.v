@@ -1,11 +1,11 @@
+Require Export PVbench.Algorithms.sieve_of_eratosthenes.rocq.helper_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import AUXLib.ListLib.
+Require Import AUXLib.MonotonicList.
 Import ListNotations.
 Local Open Scope Z_scope.
-Require Export PVbench.Algorithms.sieve_of_eratosthenes.rocq.spec_lib.
-Require Export PVbench.Algorithms.sieve_of_eratosthenes.rocq.helper_lib.
 
 Lemma StrictPrime_iff_no_proper_divisor :
   forall p : Z,
@@ -94,9 +94,10 @@ Lemma SieveInitPrefix_start__sieve_invariants :
 Proof.
   intros n values Hlen.
   split; [exact Hlen |].
-  intros k Hrange.
-  lia.
+  change (Forall (fun value : Z => value = 1) nil).
+  constructor.
 Qed.
+
 Lemma SieveInitPrefix_step__sieve_invariants :
   forall (n next : Z) (values : list Z),
     1 <= next ->
@@ -108,14 +109,23 @@ Proof.
   split.
   - rewrite Zlength_replace_Znth.
     exact Hlen.
-  - intros k Hrange.
-    destruct (Z.eq_dec k next) as [-> | Hneq].
+  - apply (proj2 (Forall_Znth _ 0 _)).
+    intros k Hrange.
+    rewrite Zlength_sublist in Hrange
+      by (rewrite ?Zlength_replace_Znth, ?Hlen; lia).
+    rewrite Znth_sublist by lia.
+    replace (k + 0) with k by lia.
+    destruct (Z.eq_dec k (next - 1)) as [-> | Hneq].
     + rewrite Znth_replace_Znth_Same by (rewrite Hlen; lia).
       reflexivity.
     + rewrite Znth_replace_Znth_Diff by (rewrite ?Hlen; lia).
-      apply Hprefix.
-      lia.
+      pose proof (proj1 (Forall_Znth _ 0 _) Hprefix k
+        ltac:(rewrite Zlength_sublist by (rewrite ?Hlen; lia); lia)) as Hone.
+      rewrite Znth_sublist in Hone by lia.
+      replace (k + 0) with k in Hone by lia.
+      exact Hone.
 Qed.
+
 Lemma SieveInitPrefix_finish__sieve_invariants :
   forall (n next : Z) (values : list Z),
     2 <= n ->
@@ -153,9 +163,13 @@ Proof.
         -- rewrite Znth_replace_Znth_Diff
              by (rewrite ?Zlength_replace_Znth, ?Hlen; lia).
            rewrite Znth_replace_Znth_Diff by (rewrite ?Hlen; lia).
-           apply Hprefix.
-           lia.
+           pose proof (proj1 (Forall_Znth _ 0 _) Hprefix (k - 1)
+             ltac:(rewrite Zlength_sublist by (rewrite ?Hlen; lia); lia)) as Hone.
+           rewrite Znth_sublist in Hone by lia.
+           replace (k - 1 + 0) with (k - 1) in Hone by lia.
+           exact Hone.
 Qed.
+
 Lemma SieveStage_mark_start__sieve_invariants :
   forall (n factor : Z) (values : list Z),
     2 <= factor ->
@@ -165,8 +179,6 @@ Lemma SieveStage_mark_start__sieve_invariants :
 Proof.
   intros n factor values Hfactor Hfactorn [Hlen Hstage].
   repeat split.
-  - exact Hfactor.
-  - nia.
   - exists 2.
     ring.
   - exact Hlen.
@@ -189,6 +201,7 @@ Proof.
               nia.
         -- exact Hone.
 Qed.
+
 Lemma ProcessedMultiple_step_except_current__sieve_invariants :
   forall (factor next k : Z),
     0 < factor ->
@@ -222,18 +235,19 @@ Proof.
     repeat split; try assumption.
     lia.
 Qed.
+
 Lemma SieveMarkState_step__sieve_invariants :
   forall (n factor next : Z) (values : list Z),
+    2 <= factor ->
+    2 * factor <= next ->
     next <= n ->
     SieveMarkState n factor next values ->
     SieveMarkState n factor (next + factor)
       (replace_Znth (next - 1) 0 values).
 Proof.
-  intros n factor next values Hnextn
-    [Hfactor [Hstart [Hnextdiv [Hlen Hmark]]]].
+  intros n factor next values Hfactor Hstart Hnextn
+    [Hnextdiv [Hlen Hmark]].
   repeat split.
-  - exact Hfactor.
-  - lia.
   - destruct Hnextdiv as [q Hq].
     exists (q + 1).
     nia.
@@ -277,6 +291,7 @@ Proof.
               ** apply Hnot_old; right; exact (proj1 Hprocessed Hnew).
            ++ exact Hone.
 Qed.
+
 Lemma HasProperDivisorBelow_succ_at_mark_exit__sieve_invariants :
   forall (factor next k : Z),
     2 <= factor ->
@@ -316,14 +331,16 @@ Proof.
       exists factor.
       repeat split; try assumption; lia.
 Qed.
+
 Lemma SieveMarkState_finish__sieve_invariants :
   forall (n factor next : Z) (values : list Z),
+    2 <= factor ->
     n < next ->
     SieveMarkState n factor next values ->
     SieveStage n (factor + 1) values.
 Proof.
-  intros n factor next values Hnnext
-    [Hfactor [Hstart [Hnextdiv [Hlen Hmark]]]].
+  intros n factor next values Hfactor Hnnext
+    [Hnextdiv [Hlen Hmark]].
   split; [exact Hlen |].
   intros k Hrange.
   specialize (Hmark k Hrange).
@@ -345,6 +362,7 @@ Proof.
         exact (Hnot_old (proj1 Htransition Hnew)).
       * exact Hone.
 Qed.
+
 Lemma HasProperDivisorBelow_succ_absorbed__sieve_invariants :
   forall (factor k : Z),
     HasProperDivisorBelow factor factor ->
@@ -369,6 +387,7 @@ Proof.
     exists d.
     repeat split; try assumption; lia.
 Qed.
+
 Lemma SieveStage_skip_composite__sieve_invariants :
   forall (n factor : Z) (values : list Z),
     2 <= factor ->

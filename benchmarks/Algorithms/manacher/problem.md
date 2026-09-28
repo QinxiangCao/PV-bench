@@ -1,17 +1,16 @@
 # LeetCode 5: Longest Palindromic Substring
 
-## Description
+## Abstract model
+
+Among all contiguous substrings that read identically from left to right and
+right to left, maximize the substring length. The verification case transforms
+the input with separators, applies Manacher's linear-time radius algorithm,
+and copies one maximum palindrome to a caller-provided output buffer.
+
+## Problem statement
 
 Given a string `s`, return a longest palindromic substring. If several longest
 answers exist, any one may be returned.
-
-## Input
-
-The function receives a string `s` and a writable output buffer.
-
-## Output
-
-Write and return a longest palindromic substring; any longest answer is accepted.
 
 ## Constraints
 

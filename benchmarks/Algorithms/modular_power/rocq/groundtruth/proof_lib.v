@@ -1,10 +1,10 @@
+Require Export PVbench.Algorithms.modular_power.rocq.helper_lib.
 From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
 Require Import Coq.micromega.Lia.
 Require Import Coq.setoid_ring.Ring.
-Require Export PVbench.Algorithms.modular_power.rocq.spec_lib.
-Require Export PVbench.Algorithms.modular_power.rocq.helper_lib.
+Require Import SimpleC.SL.IntLib.
 
 Lemma pow_mod_base__loop_transitions :
   forall x m n,
@@ -110,3 +110,15 @@ Proof.
   - exact Hprogress.
 Qed.
 
+Lemma modular_residue_int a modulus :
+  1 <= modulus <= 100000 ->
+  signed_last_nbits (Z.rem a modulus) 32 = Z.rem a modulus.
+Proof.
+  intros Hm. apply signed_last_nbits_eq; [lia |].
+  pose proof (Z.rem_bound_abs a modulus ltac:(lia)) as Hb.
+  rewrite (Z.abs_eq modulus) in Hb by lia.
+  change (-2147483648 <= Z.rem a modulus < 2147483648).
+  destruct (Z_le_gt_dec 0 (Z.rem a modulus)).
+  - rewrite Z.abs_eq in Hb by lia. lia.
+  - rewrite Z.abs_neq in Hb by lia. lia.
+Qed.

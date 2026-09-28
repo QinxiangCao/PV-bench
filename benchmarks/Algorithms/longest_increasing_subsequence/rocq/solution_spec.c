@@ -1,25 +1,25 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (LISLength : list Z -> Z -> Prop)
-      (LISDPTablePrefix : list Z -> list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.longest_increasing_subsequence.rocq.spec_lib */
 
-int lengthOfLIS(int *nums, int numsSize, int *dp)
+int lengthOfLIS(int *nums, int numsSize)
 /*@ With (l : list Z)
     Require
       1 <= numsSize && numsSize <= 100000 &&
       Zlength(l) == numsSize &&
-      IntArray::full(nums, numsSize, l) *
-      IntArray::undef_full(dp, numsSize)
+      Forall(Z::le(-10000), l) && Forall(Z::ge(10000), l) &&
+      IntArray::full(nums, numsSize, l)
     Ensure
-      exists d,
       LISLength(l, __return) &&
-      1 <= __return && __return <= numsSize &&
-      LISDPTablePrefix(l, d, numsSize) &&
-      IntArray::full(nums, numsSize, l) *
-      IntArray::full(dp, numsSize, d)
+      IntArray::full(nums, numsSize, l)
  */
 {
+  int dp[100000];
+
   int ans = 1;
 
   for (int i = 0; i < numsSize; ++i) {

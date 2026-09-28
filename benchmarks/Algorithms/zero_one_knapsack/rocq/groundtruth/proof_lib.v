@@ -1,3 +1,4 @@
+Require Export PVbench.Algorithms.zero_one_knapsack.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 From AUXLib Require Import ListLib.
@@ -5,6 +6,7 @@ From MaxMinLib Require Import MaxMin Interface.
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+(* Helper imports migrated from zero_one_knapsack__vc_proving_subagent_merged_proof_manual.v. *)
 Require Import Coq.Bool.Bool.
 Require Import Coq.Strings.String.
 Require Import Coq.Strings.Ascii.
@@ -15,8 +17,8 @@ Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
-Require Export PVbench.Algorithms.zero_one_knapsack.rocq.spec_lib.
-Require Export PVbench.Algorithms.zero_one_knapsack.rocq.helper_lib.
+
+(* Helper lemmas migrated from zero_one_knapsack__vc_proving_subagent_merged_proof_manual.v. *)
 
 Lemma KnapsackRowsDone_to_RowProgress0 :
   forall weights values capacity dp row,
@@ -46,13 +48,12 @@ Qed.
 
 Lemma KnapsackRowProgress_index_bound :
   forall weights values capacity dp row col idx,
-    KnapsackTablePrefixShape dp (row * (capacity + 1) + col) ->
+    Zlength dp = row * (capacity + 1) + col ->
     KnapsackRowProgress weights values capacity dp row col ->
     0 <= idx < row * (capacity + 1) + col ->
     0 <= idx < Zlength dp.
 Proof.
   intros weights values capacity dp row col idx Hshape Hprogress Hidx.
-  unfold KnapsackTablePrefixShape in Hshape.
   lia.
 Qed.
 
@@ -74,13 +75,12 @@ Qed.
 
 Lemma KnapsackRowsDone_index_bound :
   forall weights values capacity dp rows_done idx,
-    KnapsackTablePrefixShape dp (rows_done * (capacity + 1)) ->
+    Zlength dp = rows_done * (capacity + 1) ->
     KnapsackRowsDone weights values capacity dp rows_done ->
     0 <= idx < rows_done * (capacity + 1) ->
     0 <= idx < Zlength dp.
 Proof.
   intros weights values capacity dp rows_done idx Hshape Hdone Hidx.
-  unfold KnapsackTablePrefixShape in Hshape.
   lia.
 Qed.
 
@@ -132,9 +132,6 @@ Lemma KnapsackPlan_empty:
 Proof.
   intros weights values item_count cap Hcount Hlen Hcap.
   unfold KnapsackPlan.
-  split; [exact Hcount|].
-  split; [exact Hlen|].
-  split; [exact Hcap|].
   exists nil, 0.
   unfold KnapsackPlanWeight, KnapsackPlanValue.
   repeat split; simpl; auto; try lia; constructor.
@@ -147,7 +144,7 @@ Lemma KnapsackPlan_row0_value_zero:
 Proof.
   intros weights values cap value Hplan.
   unfold KnapsackPlan, KnapsackPlanValue in Hplan.
-  destruct Hplan as (_ & _ & _ & picks & weight & _ & Hpicks & _ & _ & Hvalue).
+  destruct Hplan as (picks & weight & _ & Hpicks & _ & _ & Hvalue).
   apply Forall_Z_lt_0_nil in Hpicks.
   subst picks.
   simpl in Hvalue.
@@ -162,8 +159,7 @@ Lemma KnapsackPlan_col0_value_zero:
 Proof.
   intros weights values item_count value Hweights Hplan.
   unfold KnapsackPlan, KnapsackPlanWeight, KnapsackPlanValue in Hplan.
-  destruct Hplan as (_ & _ & _ & picks & weight & _ & Hpicks & Hweight & Hcap & Hvalue).
-  destruct Hvalue as [_ Hvalue].
+  destruct Hplan as (picks & weight & _ & Hpicks & Hweight & Hcap & Hvalue).
   destruct picks as [| p picks].
   - simpl in Hvalue.
     lia.
@@ -339,11 +335,8 @@ Lemma KnapsackPlan_promote_item : forall weights values item cap value,
 Proof.
   intros weights values item cap value Hitem_lt Hplan.
   unfold KnapsackPlan in *.
-  destruct Hplan as [Hitem [Hlen [Hcap Hexists]]].
+  pose proof Hplan as Hexists.
   destruct Hexists as [picks [weight [Hnd [HFor [Hweight [Hweight_cap Hvalue]]]]]].
-  split; [lia |].
-  split; [assumption |].
-  split; [assumption |].
   exists picks, weight.
   split; [assumption |].
   split.
@@ -365,12 +358,9 @@ Lemma KnapsackPlan_add_item : forall weights values item cap value w v,
 Proof.
   intros weights values item cap value w v Hitem Hw_nonneg Hlen Hw Hv Hplan.
   unfold KnapsackPlan in *.
-  destruct Hplan as [Hold_item [Hold_len [Hold_cap Hexists]]].
+  pose proof Hplan as Hexists.
   destruct Hexists as [picks [weight [Hnd [HFor [Hweight [Hweight_cap Hvalue]]]]]].
-  destruct Hvalue as [Hvalue_len Hvalue_eq].
-  split; [lia |].
-  split; [assumption |].
-  split; [lia |].
+  pose proof Hvalue as Hvalue_eq.
   exists (item :: picks), (w + weight).
   split.
   - constructor.
@@ -387,7 +377,6 @@ Proof.
         simpl. subst w. lia.
       * split; [lia |].
         unfold KnapsackPlanValue in *.
-        split; [exact Hlen |].
         simpl. subst v. lia.
 Qed.
 
@@ -420,74 +409,29 @@ Lemma KnapsackPlan_split_last_item : forall weights values item cap value w v,
       value = old_value + v) \/
   KnapsackPlan weights values item cap value.
 Proof.
-  intros weights values item cap value w v Hitem Hlen Hw Hv Hweights_nonneg Hplan.
-  unfold KnapsackPlan in Hplan.
-  destruct Hplan as [Htarget_item [Htarget_len [Htarget_cap Hexists]]].
-  destruct Hexists as [picks [weight [Hnd [HFor [Hweight [Hweight_cap Hvalue]]]]]].
-  destruct Hvalue as [Hvalue_len Hvalue_eq].
-  destruct (in_dec Z.eq_dec item picks) as [Hin_item | Hnotin_item].
-  - left.
-    exists (value - v).
-    split; [|lia].
-    unfold KnapsackPlan.
-    split; [lia |].
-    split; [exact Htarget_len |].
-    assert (Hremove_weight_nonneg :
-      0 <= sum (map (fun i : Z => Znth i weights 0) (remove Z.eq_dec item picks))).
-    {
-      apply sum_map_nonneg.
-      intros x Hinx.
-      apply in_remove in Hinx.
-      destruct Hinx as [Hin_x Hx_ne].
-      apply Forall_forall with (x := x) in HFor; [|exact Hin_x].
-      apply Hweights_nonneg.
-      lia.
-    }
+  intros weights values item cap value w v Hitem Hlen Hw Hv Hweights Hplan.
+  destruct Hplan as (picks & weight & Hnd & HFor & Hweight & Hcap & Hvalue).
+  unfold KnapsackPlanWeight in Hweight.
+  unfold KnapsackPlanValue in Hvalue.
+  destruct (in_dec Z.eq_dec item picks) as [Hin | Hnotin].
+  - left. exists (value - v). split; [|lia].
+    exists (remove Z.eq_dec item picks), (weight - w).
+    split; [apply NoDup_remove_Z; assumption|].
     split.
-    + unfold KnapsackPlanWeight in Hweight.
-      pose proof (sum_map_remove_NoDup (fun i : Z => Znth i weights 0) item picks Hnd Hin_item) as Hsumw.
-      rewrite Hweight in Hweight_cap.
-      rewrite Hsumw in Hweight_cap.
-      subst w.
-      lia.
-    + exists (remove Z.eq_dec item picks), (weight - w).
-      split; [apply NoDup_remove_Z; exact Hnd |].
-      split.
-      * apply Forall_forall.
-        intros x Hinx.
-        apply in_remove in Hinx.
-        destruct Hinx as [Hin_x Hx_ne].
-        apply Forall_forall with (x := x) in HFor; [lia | exact Hin_x].
-      * split.
-        -- unfold KnapsackPlanWeight in *.
-           pose proof (sum_map_remove_NoDup (fun i : Z => Znth i weights 0) item picks Hnd Hin_item) as Hsumw.
-           rewrite Hsumw in Hweight.
-           subst w.
-           lia.
-        -- split; [lia |].
-           unfold KnapsackPlanValue in *.
-           split; [exact Htarget_len |].
-           pose proof (sum_map_remove_NoDup (fun i : Z => Znth i values 0) item picks Hnd Hin_item) as Hsumv.
-           rewrite Hsumv in Hvalue_eq.
-           subst v.
-           lia.
-  - right.
-    unfold KnapsackPlan.
-    split; [lia |].
-    split; [exact Htarget_len |].
-    split; [exact Htarget_cap |].
-    exists picks, weight.
-    split; [exact Hnd |].
-    split.
-    + apply Forall_forall.
-      intros x Hinx.
-      apply Forall_forall with (x := x) in HFor; [|exact Hinx].
-      assert (x <> item) by (intro Heq; subst x; contradiction).
-      lia.
-    + split; [exact Hweight |].
-      split; [exact Hweight_cap |].
-      unfold KnapsackPlanValue.
-      split; [exact Htarget_len | exact Hvalue_eq].
+    + apply Forall_forall. intros x Hx.
+      apply in_remove in Hx. destruct Hx as [Hx Hne].
+      apply Forall_forall with (x := x) in HFor; [lia|assumption].
+    + pose proof (sum_map_remove_NoDup (fun i => Znth i weights 0) item picks Hnd Hin) as Hsw.
+      pose proof (sum_map_remove_NoDup (fun i => Znth i values 0) item picks Hnd Hin) as Hsv.
+      rewrite Hsw in Hweight. rewrite Hsv in Hvalue.
+      cbn beta in Hweight, Hvalue.
+      unfold KnapsackPlanWeight, KnapsackPlanValue. repeat split; lia.
+  - right. exists picks, weight.
+    split; [assumption|]. split.
+    + apply Forall_forall. intros x Hx.
+      assert (x <> item) by (intro E; subst; contradiction).
+      apply Forall_forall with (x := x) in HFor; [lia|assumption].
+    + unfold KnapsackPlanWeight, KnapsackPlanValue. auto.
 Qed.
 
 Lemma KnapsackCellCorrect_take_better : forall weights values item j w v without prev,
@@ -584,8 +528,12 @@ Proof.
                   Hitem Hlen Hw Hv Hweights_nonneg Hplan_b) as Hsplit.
     destruct Hsplit as [[old_value [Hold_plan Hb]] | Hdrop_plan].
     + unfold KnapsackPlan in Hold_plan.
-      destruct Hold_plan as [_ [_ [Hold_cap _]]].
-      lia.
+      destruct Hold_plan as (picks & weight & Hnd & HFor & Hweight & Hcap & Hvalue).
+      assert (Hnonneg : 0 <= sum (map (fun k => Znth k weights 0) picks)).
+      { apply sum_map_nonneg. intros k Hk.
+        apply Forall_forall with (x := k) in HFor; [|assumption].
+        apply Hweights_nonneg; lia. }
+      unfold KnapsackPlanWeight in Hweight. lia.
     + specialize (Hmax_without b Hdrop_plan).
       lia.
 Qed.
@@ -640,21 +588,22 @@ Qed.
 
 Lemma KnapsackCellCorrect_value_bound : forall weights values item cap value n,
   Zlength values = n ->
+  item <= n ->
   0 <= n <= 300 ->
   (forall k : Z, 0 <= k < n -> 0 <= Znth k values 0 <= 10000) ->
   KnapsackCellCorrect weights values item cap value ->
   0 <= value <= 4000000.
 Proof.
-  intros weights values item cap value n Hvalues_len Hn Hvalues_bound Hcell.
+  intros weights values item cap value n Hvalues_len Hitem Hn Hvalues_bound Hcell.
   unfold KnapsackCellCorrect, KnapsackMaxValue in Hcell.
   unfold MaxMin.max_value_of_subset, MaxMin.max_object_of_subset in Hcell.
   destruct Hcell as [value_obj [[Hplan _] Hvalue_obj]].
   subst value_obj.
   unfold KnapsackPlan in Hplan.
-  destruct Hplan as [Hitem [Hlen [_ Hexists]]].
+  pose proof Hplan as Hexists.
   destruct Hexists as [picks [weight [Hnd [HFor [_ [_ Hvalue_plan]]]]]].
   unfold KnapsackPlanValue in Hvalue_plan.
-  destruct Hvalue_plan as [_ Hvalue_eq].
+  pose proof Hvalue_plan as Hvalue_eq.
   assert (HFor_n : Forall (fun i : Z => 0 <= i < n) picks).
   {
     apply Forall_forall.
@@ -696,104 +645,4 @@ Proof.
       replace (row * (capacity + 1) + col - Zlength dp) with 0 by lia.
       simpl.
       exact Hcell.
-Qed.
-
-Lemma KnapsackMaxValue_parameters_nonnegative__dp_refinement_and_exit :
-  forall weights values item_count capacity answer,
-    KnapsackMaxValue weights values item_count capacity answer ->
-    0 <= item_count /\ 0 <= capacity.
-Proof.
-  intros weights values item_count capacity answer Hmax.
-  unfold KnapsackMaxValue, MaxMin.max_value_of_subset,
-    MaxMin.max_object_of_subset in Hmax.
-  destruct Hmax as [obj [[Hplan _] _]].
-  unfold KnapsackPlan in Hplan.
-  destruct Hplan as [Hitem [_ [Hcapacity _]]].
-  lia.
-Qed.
-
-Lemma KnapsackRowAnnotationState_append_cell__row_state_result_refactor :
-  forall weights values item_count capacity width dp row col value,
-    KnapsackRowAnnotationState weights values item_count capacity width
-      dp row col ->
-    0 <= col <= capacity ->
-    KnapsackCellCorrect weights values row col value ->
-    0 <= value <= 4000000 ->
-    KnapsackRowAnnotationState weights values item_count capacity width
-      (dp ++ value :: nil) row (col + 1).
-Proof.
-  intros weights values item_count capacity width dp row col value
-    Hstate Hcol Hcell Hvalue.
-  unfold KnapsackRowAnnotationState in *.
-  destruct Hstate as
-    [Hsafety [Hrow [Hcol_state [Hwritten [Hshape [Hbounded Hprogress]]]]]].
-  destruct Hsafety as [Hitems [Hcapacity [Hwidth [Hwidth_bounds Hinputs]]]].
-  split.
-  - exact (conj Hitems
-      (conj Hcapacity (conj Hwidth (conj Hwidth_bounds Hinputs)))).
-  - split; [exact Hrow|].
-    split; [nia|].
-    split; [nia|].
-    split.
-    + unfold KnapsackTablePrefixShape in *.
-      destruct Hshape as [Hwritten_nonnegative Hlength].
-      split; [lia|].
-      rewrite Zlength_app_cons, Hlength.
-      lia.
-    + split.
-      * unfold KnapsackTableValuesBounded in *.
-        intros k Hk.
-        rewrite Zlength_app_cons in Hk.
-        destruct (Z_lt_ge_dec k (Zlength dp)) as [Hold | Hnew].
-        -- rewrite app_Znth1 by lia.
-           apply Hbounded; lia.
-        -- rewrite app_Znth2 by lia.
-           replace (k - Zlength dp) with 0 by lia.
-           rewrite Znth0_cons.
-           exact Hvalue.
-      * apply KnapsackRowProgress_append_cell_recurrence; try assumption.
-        unfold KnapsackTablePrefixShape in Hshape.
-        destruct Hshape as [_ Hlength].
-        rewrite Hlength, Hwidth.
-        reflexivity.
-Qed.
-Lemma KnapsackRowsAnnotationState_to_Result__row_state_result_refactor :
-  forall weights values item_count capacity width dp,
-    KnapsackRowsAnnotationState weights values item_count capacity width
-      dp (item_count + 1) ->
-    KnapsackResultState weights values item_count capacity dp
-      (Znth (item_count * width + capacity) dp 0).
-Proof.
-  intros weights values item_count capacity width dp Hstate.
-  unfold KnapsackRowsAnnotationState in Hstate.
-  destruct Hstate as
-    [Hsafety [_ [_ [Hshape [Hbounded Hdone]]]]].
-  destruct Hsafety as [Hitems [Hcapacity [Hwidth [Hwidth_bounds Hinputs]]]].
-  unfold KnapsackResultState.
-  split.
-  - pose proof Hdone as Hcell_source.
-    unfold KnapsackRowsDone, KnapsackTablePrefix in Hcell_source.
-    specialize (Hcell_source item_count capacity (proj1 Hitems) (ltac:(lia))).
-    assert (Hindex :
-      0 <= KnapsackCellIndex capacity item_count capacity <
-        (item_count + 1) * (capacity + 1)) by
-      (unfold KnapsackCellIndex; nia).
-    specialize (Hcell_source Hindex).
-    replace (item_count * width + capacity) with
-      (KnapsackCellIndex capacity item_count capacity) by
-      (unfold KnapsackCellIndex; nia).
-    exact Hcell_source.
-  - split.
-    + apply Hbounded.
-      unfold KnapsackTablePrefixShape in Hshape.
-      destruct Hshape as [_ Hlength].
-      rewrite Hlength, Hwidth.
-      nia.
-    + split.
-      * unfold KnapsackTablePrefixShape in *.
-        destruct Hshape as [Hnonnegative Hlength].
-        split; [nia|].
-        rewrite Hlength, Hwidth.
-        reflexivity.
-      * split; [exact Hbounded|exact Hdone].
 Qed.

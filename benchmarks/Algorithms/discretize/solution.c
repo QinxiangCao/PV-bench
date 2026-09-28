@@ -42,7 +42,7 @@ void int_array_quicksort(int *arr, int n)
     quicksort_range(arr, n, 0, n - 1);
 }
 
-int discretize(const int *src, int n, int *dest_map) 
+int discretize(const int *src, int n, int *dest_map)
 
 {
 
@@ -59,11 +59,10 @@ int discretize(const int *src, int n, int *dest_map)
             dest_map[slow] = dest_map[fast];
         }
     }
-
     return slow + 1;
 }
 
-int query_forward(const int *map, int map_size, int target) 
+int query_forward(const int *map, int map_size, int target)
 
 {
     int low = 0;
@@ -80,6 +79,5 @@ int query_forward(const int *map, int map_size, int target)
             high = mid - 1;
         }
     }
-
-    return -1; 
+    return -1;
 }

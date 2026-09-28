@@ -16,6 +16,7 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import PVbench.Algorithms.bubble_sort.rocq.spec_lib.
 Require Import PVbench.Algorithms.bubble_sort.rocq.helper_lib.
 Local Open Scope sac.
 
@@ -472,8 +473,7 @@ forall (returnSize_pre: Z) (numsSize_pre: Z) (nums_pre: Z) (l: (@list Z)) (i: Z)
 |--
   EX (l1: (@list Z)) ,
   “ (Permutation l l1 ) ” 
-  &&  “ (increasing l1 ) ” 
-  &&  “ ((Zlength (l1)) = numsSize_pre) ”
+  &&  “ (increasing l1 ) ”
   &&  (IntArray.full nums_pre numsSize_pre l1 )
   **  ((returnSize_pre) # Int  |-> numsSize_pre)
 ) \/
@@ -481,17 +481,11 @@ forall (returnSize_pre: Z) (numsSize_pre: Z) (nums_pre: Z) (l: (@list Z)) (i: Z)
 forall (numsSize_pre: Z) (l: (@list Z)) (i: Z) (l1_2: (@list Z)) (l2: (@list Z)) (l3: (@list Z)) (PreH1 : (i >= (numsSize_pre - 1 ))) (PreH2 : (1 <= numsSize_pre)) (PreH3 : (numsSize_pre <= 50000)) (PreH4 : (l3 = (app (l1_2) (l2)))) (PreH5 : (numsSize_pre = (Zlength (l)))) (PreH6 : (i = (Zlength (l2)))) (PreH7 : (0 <= i)) (PreH8 : (i < numsSize_pre)) (PreH9 : (1 <= (Zlength (l1_2)))) (PreH10 : (Permutation l l3 )) (PreH11 : (increasing l2 )) (PreH12 : (prefix_suffix_sorted l1_2 l2 )) ,
   TT && emp 
 |--
-  “ ((Zlength (l3)) = numsSize_pre) ” 
-  &&  “ (increasing l3 ) ”
+  “ (increasing l3 ) ”
   &&  emp
 ).
 
 Definition sortArray_return_wit_1_split_goal_1 := 
-forall (numsSize_pre: Z) (l: (@list Z)) (i: Z) (l1_2: (@list Z)) (l2: (@list Z)) (l3: (@list Z)) (PreH1 : (i >= (numsSize_pre - 1 ))) (PreH2 : (1 <= numsSize_pre)) (PreH3 : (numsSize_pre <= 50000)) (PreH4 : (l3 = (app (l1_2) (l2)))) (PreH5 : (numsSize_pre = (Zlength (l)))) (PreH6 : (i = (Zlength (l2)))) (PreH7 : (0 <= i)) (PreH8 : (i < numsSize_pre)) (PreH9 : (1 <= (Zlength (l1_2)))) (PreH10 : (Permutation l l3 )) (PreH11 : (increasing l2 )) (PreH12 : (prefix_suffix_sorted l1_2 l2 )) ,
-  ((Zlength (l3)) = numsSize_pre)
-.
-
-Definition sortArray_return_wit_1_split_goal_2 := 
 forall (numsSize_pre: Z) (l: (@list Z)) (i: Z) (l1_2: (@list Z)) (l2: (@list Z)) (l3: (@list Z)) (PreH1 : (i >= (numsSize_pre - 1 ))) (PreH2 : (1 <= numsSize_pre)) (PreH3 : (numsSize_pre <= 50000)) (PreH4 : (l3 = (app (l1_2) (l2)))) (PreH5 : (numsSize_pre = (Zlength (l)))) (PreH6 : (i = (Zlength (l2)))) (PreH7 : (0 <= i)) (PreH8 : (i < numsSize_pre)) (PreH9 : (1 <= (Zlength (l1_2)))) (PreH10 : (Permutation l l3 )) (PreH11 : (increasing l2 )) (PreH12 : (prefix_suffix_sorted l1_2 l2 )) ,
   (increasing l3 )
 .
@@ -504,8 +498,7 @@ forall (returnSize_pre: Z) (numsSize_pre: Z) (nums_pre: Z) (l: (@list Z)) (PreH1
 |--
   EX (l1: (@list Z)) ,
   “ (Permutation l l1 ) ” 
-  &&  “ (increasing l1 ) ” 
-  &&  “ ((Zlength (l1)) = numsSize_pre) ”
+  &&  “ (increasing l1 ) ”
   &&  (IntArray.full nums_pre numsSize_pre l1 )
   **  ((returnSize_pre) # Int  |-> numsSize_pre)
 ) \/

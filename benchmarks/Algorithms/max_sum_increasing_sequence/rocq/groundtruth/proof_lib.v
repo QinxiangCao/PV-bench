@@ -1,3 +1,4 @@
+Require Export PVbench.Algorithms.max_sum_increasing_sequence.rocq.helper_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
@@ -6,8 +7,34 @@ From MaxMinLib Require Import MaxMin Interface.
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
-Require Export PVbench.Algorithms.max_sum_increasing_sequence.rocq.spec_lib.
-Require Export PVbench.Algorithms.max_sum_increasing_sequence.rocq.helper_lib.
+
+Definition MSISDPTablePrefixFacts
+    (l dp : list Z) (hi : Z) : Prop :=
+  1 <= hi <= Zlength l /\
+  Zlength dp = hi /\
+  forall k,
+    0 <= k < hi ->
+    MSISEndingAt l k (Znth k dp 0) /\
+    1 <= Znth k dp 0 <= (k + 1) * 10000.
+
+Definition MSISInnerProgressFacts
+    (l dp : list Z) (i scanned : Z) : Prop :=
+  1 <= i < Zlength l /\
+  0 <= scanned <= i /\
+  Zlength dp = i + 1 /\
+  (forall k,
+    0 <= k < i ->
+    MSISEndingAt l k (Znth k dp 0) /\
+    1 <= Znth k dp 0 <= (k + 1) * 10000) /\
+  max_value_of_subset Z.le
+    (fun candidate => MSISInnerCandidate l dp i scanned candidate)
+    (fun candidate => candidate)
+    (Znth i dp 0) /\
+  1 <= Znth i dp 0 <= (i + 1) * 10000.
+
+Definition MSISBestSoFarFacts (l : list Z) (limit ans : Z) : Prop :=
+  1 <= limit <= Zlength l /\
+  MSISPrefix l limit ans.
 
 Lemma msis_valid_limit_one_singleton__initialization :
   forall l idxs,
@@ -109,13 +136,13 @@ Qed.
 
 Lemma msis_inner_progress_zero__initialization :
   forall l d i,
-    MSISDPTablePrefix l d i ->
+    MSISDPTablePrefixFacts l d i ->
     1 <= i < Zlength l ->
     1 <= Znth i l 0 <= 10000 ->
-    MSISInnerProgress l (d ++ Znth i l 0 :: nil) i 0.
+    MSISInnerProgressFacts l (d ++ Znth i l 0 :: nil) i 0.
 Proof.
   intros l d i Hprefix Hi Hvalue.
-  unfold MSISDPTablePrefix in Hprefix.
+  unfold MSISDPTablePrefixFacts in Hprefix.
   destruct Hprefix as [Hhi [Hlen Hentries]].
   assert (Hlast :
     Znth i (d ++ Znth i l 0 :: nil) 0 = Znth i l 0).
@@ -125,7 +152,7 @@ Proof.
     rewrite Znth0_cons.
     reflexivity.
   }
-  unfold MSISInnerProgress.
+  unfold MSISInnerProgressFacts.
   split; [exact Hi |].
   split; [lia |].
   split.
@@ -153,12 +180,12 @@ Qed.
 
 Lemma msis_inner_progress_entry_bound__inner_transitions :
   forall l dp i scanned k,
-    MSISInnerProgress l dp i scanned ->
+    MSISInnerProgressFacts l dp i scanned ->
     0 <= k < i ->
     1 <= Znth k dp 0 <= (k + 1) * 10000.
 Proof.
   intros l dp i scanned k Hprogress Hk.
-  unfold MSISInnerProgress in Hprogress.
+  unfold MSISInnerProgressFacts in Hprogress.
   destruct Hprogress as [_ [_ [_ [Hprefix _]]]].
   exact (proj2 (Hprefix k Hk)).
 Qed.
@@ -228,16 +255,16 @@ Qed.
 
 Lemma replace_Znth_inner_progress_step__inner_transitions :
   forall l dp i j,
-    MSISInnerProgress l dp i j ->
+    MSISInnerProgressFacts l dp i j ->
     0 <= j < i ->
     Znth j l 0 < Znth i l 0 ->
     Znth i dp 0 < Znth j dp 0 + Znth i l 0 ->
     1 <= Znth i l 0 <= 10000 ->
-    MSISInnerProgress l
+    MSISInnerProgressFacts l
       (replace_Znth i (Znth j dp 0 + Znth i l 0) dp) i (j + 1).
 Proof.
   intros l dp i j Hprogress Hj Hvalues Hlarger Hi_value.
-  unfold MSISInnerProgress in *.
+  unfold MSISInnerProgressFacts in *.
   destruct Hprogress as
     [Hi [Hscan [Hlen [Hprefix [Hmaximum Hcurrent_bounds]]]]].
   assert (Hi_dp : 0 <= i < Zlength dp) by (rewrite Hlen; lia).
@@ -303,14 +330,14 @@ Qed.
 
 Lemma msis_inner_progress_skip_dominated__inner_transitions :
   forall l dp i j,
-    MSISInnerProgress l dp i j ->
+    MSISInnerProgressFacts l dp i j ->
     0 <= j < i ->
     Znth j l 0 < Znth i l 0 ->
     Znth j dp 0 + Znth i l 0 <= Znth i dp 0 ->
-    MSISInnerProgress l dp i (j + 1).
+    MSISInnerProgressFacts l dp i (j + 1).
 Proof.
   intros l dp i j Hprogress Hj Hvalues Hdominated.
-  unfold MSISInnerProgress in *.
+  unfold MSISInnerProgressFacts in *.
   destruct Hprogress as
     [Hi [Hscan [Hlen [Hprefix [Hmaximum Hcurrent_bounds]]]]].
   split; [exact Hi |].
@@ -350,13 +377,13 @@ Qed.
 
 Lemma msis_inner_progress_skip_nonincreasing__inner_transitions :
   forall l dp i j,
-    MSISInnerProgress l dp i j ->
+    MSISInnerProgressFacts l dp i j ->
     0 <= j < i ->
     Znth i l 0 <= Znth j l 0 ->
-    MSISInnerProgress l dp i (j + 1).
+    MSISInnerProgressFacts l dp i (j + 1).
 Proof.
   intros l dp i j Hprogress Hj Hnonincreasing.
-  unfold MSISInnerProgress in *.
+  unfold MSISInnerProgressFacts in *.
   destruct Hprogress as
     [Hi [Hscan [Hlen [Hprefix [Hmaximum Hcurrent_bounds]]]]].
   split; [exact Hi |].
@@ -631,11 +658,11 @@ Qed.
 
 Lemma msis_inner_complete_dp_prefix__outer_transitions :
   forall l dp i,
-    MSISInnerProgress l dp i i ->
-    MSISDPTablePrefix l dp (i + 1).
+    MSISInnerProgressFacts l dp i i ->
+    MSISDPTablePrefixFacts l dp (i + 1).
 Proof.
   intros l dp i Hprogress.
-  unfold MSISInnerProgress in Hprogress.
+  unfold MSISInnerProgressFacts in Hprogress.
   destruct Hprogress as
     [Hi [Hscan [Hlen [Hprefix [Hcandidate_max Hcurrent_bounds]]]]].
   assert (Hcandidate_to_valid :
@@ -713,7 +740,7 @@ Proof.
       lia.
     - lia.
   }
-  unfold MSISDPTablePrefix.
+  unfold MSISDPTablePrefixFacts.
   split; [lia |].
   split; [exact Hlen |].
   intros k Hk.
@@ -802,12 +829,12 @@ Qed.
 
 Lemma msis_prefix_extend_by_ending__outer_transitions :
   forall l i old current,
-    MSISBestSoFar l i old ->
+    MSISBestSoFarFacts l i old ->
     MSISEndingAt l i current ->
-    MSISBestSoFar l (i + 1) (Z.max old current).
+    MSISBestSoFarFacts l (i + 1) (Z.max old current).
 Proof.
   intros l i old current Hbest Hcurrent.
-  unfold MSISBestSoFar in Hbest.
+  unfold MSISBestSoFarFacts in Hbest.
   destruct Hbest as [Hi Hold].
   pose proof Hcurrent as Hcurrent_bounds.
   unfold MSISEndingAt in Hcurrent_bounds.
@@ -816,7 +843,7 @@ Proof.
   destruct Hcurrent_bounds as
     [current_witness [[Hcurrent_valid_full Hcurrent_upper] Hcurrent_sum]].
   destruct Hcurrent_valid_full as [Hi_current [Hcurrent_valid Hcurrent_last]].
-  unfold MSISBestSoFar.
+  unfold MSISBestSoFarFacts.
   split; [lia |].
   unfold MSISPrefix, MSISEndingAt,
     MaxMin.max_value_of_subset, MaxMin.max_object_of_subset in *.
@@ -853,3 +880,47 @@ Proof.
     + rewrite Hold_sum, Z.max_l by lia. reflexivity.
 Qed.
 
+Lemma msis_table_facts : forall l dp hi,
+  1 <= hi <= Zlength l -> Zlength dp = hi ->
+  (forall k, 0 <= k < hi -> 1 <= Znth k dp 0 <= (k + 1) * 10000) ->
+  MSISDPTablePrefix l dp hi -> MSISDPTablePrefixFacts l dp hi.
+Proof.
+  unfold MSISDPTablePrefix, MSISDPTablePrefixFacts.
+  intros l dp hi Hi Hl Hb Hp. split; [exact Hi |].
+  split; [exact Hl |]. intros k Hk; split; auto.
+Qed.
+
+Lemma msis_table_pure : forall l dp hi,
+  MSISDPTablePrefixFacts l dp hi -> MSISDPTablePrefix l dp hi.
+Proof. unfold MSISDPTablePrefix, MSISDPTablePrefixFacts; firstorder. Qed.
+
+Lemma msis_inner_facts : forall l dp i j,
+  1 <= i < Zlength l -> 0 <= j <= i -> Zlength dp = i + 1 ->
+  (forall k, 0 <= k < i + 1 -> 1 <= Znth k dp 0 <= (k + 1) * 10000) ->
+  MSISInnerProgress l dp i j -> MSISInnerProgressFacts l dp i j.
+Proof.
+  unfold MSISInnerProgress, MSISInnerProgressFacts, MSISDPTablePrefix.
+  intros l dp i j Hi Hj Hlen Hbounds [Hp Hmax].
+  split; [exact Hi |]. split; [exact Hj |]. split; [exact Hlen |].
+  split.
+  - intros k Hk; split; [apply Hp | apply Hbounds]; lia.
+  - split; [exact Hmax | apply Hbounds; lia].
+Qed.
+
+Lemma msis_inner_pure : forall l dp i j,
+  MSISInnerProgressFacts l dp i j -> MSISInnerProgress l dp i j.
+Proof.
+  unfold MSISInnerProgressFacts, MSISInnerProgress, MSISDPTablePrefix.
+  intros l dp i j [_ [_ [_ [Hp [Hm _]]]]].
+  split; [intros k Hk; exact (proj1 (Hp k Hk)) | exact Hm].
+Qed.
+
+Lemma msis_inner_bounds : forall l dp i j,
+  MSISInnerProgressFacts l dp i j ->
+  forall k, 0 <= k < i + 1 -> 1 <= Znth k dp 0 <= (k + 1) * 10000.
+Proof.
+  unfold MSISInnerProgressFacts.
+  intros l dp i j [_ [_ [_ [Hp [_ Hbound]]]]] k Hk.
+  destruct (Z.eq_dec k i); subst; auto.
+  exact (proj2 (Hp k ltac:(lia))).
+Qed.

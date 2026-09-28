@@ -1,15 +1,109 @@
+Require Export PVbench.Algorithms.choosing_inns.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 Require Import Coq.Bool.Bool.
 From AUXLib Require Import ListLib.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
-Require Import PVbench.Algorithms.choosing_inns.rocq.spec_lib.
-Require Import PVbench.Algorithms.choosing_inns.rocq.helper_lib.
-
 Require Import Coq.micromega.Psatz.
+Require Import Coq.micromega.Lia.
+From SumLib Require Import ZRange.
+
+Definition zrange (n : Z) : list Z :=
+  map Z.of_nat (seq 0 (Z.to_nat n)).
+
+Definition zrange_between (lo hi : Z) : list Z :=
+  map (fun t => lo + Z.of_nat t) (seq 0 (Z.to_nat (hi - lo + 1))).
+
+Definition affordable_betweenb (costs : list Z) (p lo hi : Z) : bool :=
+  existsb (fun idx => Z.leb (Znth idx costs 0) p) (zrange_between lo hi).
+
+Definition choosing_pairb (colors costs : list Z) (p : Z) (pair : Z * Z) : bool :=
+  let (left, right) := pair in
+  same_colorb colors left right && affordable_betweenb costs p left right.
+
+Definition choosing_pairs_up_to (n : Z) : list (Z * Z) :=
+  flat_map (fun right => map (fun left => (left, right)) (zrange right))
+           (zrange n).
+
+Definition choosing_pair_count (colors costs : list Z) (p n : Z) : Z :=
+  Z.of_nat
+    (length
+       (filter (choosing_pairb colors costs p) (choosing_pairs_up_to n))).
+
+Definition color_count (colors : list Z) (limit color : Z) : Z :=
+  Z.of_nat
+    (length
+       (filter (fun idx => Z.eqb (Znth idx colors 0) color)
+               (zrange limit))).
+
+Definition good_color_count
+    (colors costs : list Z) (limit p color : Z) : Z :=
+  Z.of_nat
+    (length
+       (filter
+          (fun idx =>
+             Z.eqb (Znth idx colors 0) color &&
+             affordable_betweenb costs p idx (limit - 1))
+          (zrange limit))).
+
+(** Safety and representation facts for the immutable problem input.  This
+    predicate deliberately contains no statement about the required answer. *)
+Definition ChoosingInputSafe
+    (colors costs : list Z) (n k p : Z) : Prop :=
+  0 <= n <= 200000 /\
+  1 <= k <= 50 /\
+  0 <= p <= 100 /\
+  Zlength colors = n /\
+  Zlength costs = n /\
+  (forall idx, 0 <= idx < n -> 0 <= Znth idx colors 0 < k) /\
+  (forall idx, 0 <= idx < n -> 0 <= Znth idx costs 0 <= 100).
+
+(** Shape and arithmetic bounds for a concrete per-colour count array. *)
+Definition CountArraySafe (xs : list Z) (k limit : Z) : Prop :=
+  Zlength xs = k /\
+  forall idx, 0 <= idx < k -> 0 <= Znth idx xs 0 <= limit.
+
+Definition CountsZeroPrefix (xs : list Z) (written : Z) : Prop :=
+  Zlength xs = written /\
+  forall idx, 0 <= idx < written -> Znth idx xs 0 = 0.
+
+Definition CountsZeroFull (k : Z) (xs : list Z) : Prop :=
+  Zlength xs = k /\
+  forall idx, 0 <= idx < k -> Znth idx xs 0 = 0.
+
+Definition CopyCountsPrefix
+    (src old dst : list Z) (written k : Z) : Prop :=
+  (forall idx, 0 <= idx < written -> Znth idx dst 0 = Znth idx src 0) /\
+  (forall idx, written <= idx < k -> Znth idx dst 0 = Znth idx old 0).
+
+(** Safety facts for the mutable prefix state.  The mathematical meanings of
+    [answer], [seen], and [good] are intentionally absent. *)
+Definition ChoosingPrefixDataSafe
+    (colors costs : list Z) (limit k : Z) (seen good : list Z) : Prop :=
+  0 <= limit <= Zlength colors /\
+  Zlength costs = Zlength colors /\
+  CountArraySafe seen k limit /\
+  CountArraySafe good k limit.
+
+(** Functional meaning of a processed prefix, independent of C array shape
+    and machine-integer bounds. *)
+Definition ChoosingPrefixState
+    (colors costs : list Z) (limit k p answer : Z)
+    (seen good : list Z) : Prop :=
+  answer = choosing_pair_count colors costs p limit /\
+  (forall color,
+      0 <= color < k ->
+      Znth color seen 0 = color_count colors limit color) /\
+  (forall color,
+      0 <= color < k ->
+      Znth color good 0 = good_color_count colors costs limit p color).
+
+Definition ChoosingInnsAnswer
+    (colors costs : list Z) (n k p answer : Z) : Prop :=
+  answer = choosing_pair_count colors costs p n.
+
 Lemma CountsZeroPrefix_nil : CountsZeroPrefix nil 0.
 Proof.
   unfold CountsZeroPrefix.
@@ -17,6 +111,7 @@ Proof.
   - rewrite Zlength_nil. reflexivity.
   - intros idx Hidx. lia.
 Qed.
+
 Lemma CountsZeroPrefix_snoc_zero :
   forall xs i,
     CountsZeroPrefix xs i ->
@@ -41,6 +136,7 @@ Proof.
         reflexivity.
       * rewrite Hlen. lia.
 Qed.
+
 Lemma CountsZeroPrefix_to_full :
   forall xs k,
     CountsZeroPrefix xs k ->
@@ -49,6 +145,7 @@ Proof.
   intros xs k H.
   exact H.
 Qed.
+
 Lemma CopyCountsPrefix_zero :
   forall src old k,
     Zlength src = k ->
@@ -61,6 +158,7 @@ Proof.
   - intros idx Hidx. lia.
   - intros idx Hidx. reflexivity.
 Qed.
+
 Lemma CopyCountsPrefix_step_replace :
   forall src old dst i k,
     CopyCountsPrefix src old dst i k ->
@@ -82,6 +180,7 @@ Proof.
     rewrite Znth_replace_Znth_Diff by (try rewrite Hdst; lia).
     apply Hrest. lia.
 Qed.
+
 Lemma CopyCountsPrefix_full_eq :
   forall src old dst i k,
     CopyCountsPrefix src old dst i k ->
@@ -98,6 +197,7 @@ Proof.
   intros idx Hidx.
   apply Hdone. lia.
 Qed.
+
 Lemma replace_Znth_preserves_bounds :
   forall xs i v k lo hi,
     Zlength xs = k ->
@@ -116,6 +216,7 @@ Proof.
   - rewrite Znth_replace_Znth_Diff by (try rewrite Hlen; lia).
     apply Hxs. lia.
 Qed.
+
 Lemma CountArraySafe_weaken_limit :
   forall xs k old_limit new_limit,
     CountArraySafe xs k old_limit ->
@@ -129,6 +230,7 @@ Proof.
   specialize (Hbounds idx Hidx).
   lia.
 Qed.
+
 Lemma CountArraySafe_increment_at :
   forall xs k limit c,
     CountArraySafe xs k limit ->
@@ -146,6 +248,7 @@ Proof.
     + specialize (Hbounds c Hc). lia.
     + intros idx Hidx. specialize (Hbounds idx Hidx). lia.
 Qed.
+
 Lemma ChoosingPrefixDataSafe_step_affordable_after_copy :
   forall colors costs i k seen good c,
     ChoosingPrefixDataSafe colors costs i k seen good ->
@@ -164,6 +267,7 @@ Proof.
   - now apply CountArraySafe_increment_at.
   - now apply CountArraySafe_increment_at.
 Qed.
+
 Lemma ChoosingPrefixDataSafe_step_expensive :
   forall colors costs i k seen good c,
     ChoosingPrefixDataSafe colors costs i k seen good ->
@@ -181,7 +285,7 @@ Proof.
   - now apply CountArraySafe_increment_at.
   - eapply CountArraySafe_weaken_limit; eauto; lia.
 Qed.
-Require Import Coq.micromega.Lia.
+
 Lemma choosing_pair_count_zero :
   forall colors costs p,
     choosing_pair_count colors costs p 0 = 0.
@@ -191,6 +295,7 @@ Proof.
   simpl.
   reflexivity.
 Qed.
+
 Lemma color_count_zero :
   forall colors color,
     color_count colors 0 color = 0.
@@ -200,6 +305,7 @@ Proof.
   simpl.
   reflexivity.
 Qed.
+
 Lemma good_color_count_zero :
   forall colors costs p color,
     good_color_count colors costs 0 p color = 0.
@@ -209,6 +315,7 @@ Proof.
   simpl.
   reflexivity.
 Qed.
+
 Lemma CountsZeroFull_to_ChoosingPrefixState_zero :
   forall colors costs k p seen good,
     CountsZeroFull k seen ->
@@ -231,6 +338,7 @@ Proof.
       rewrite good_color_count_zero.
       reflexivity.
 Qed.
+
 Lemma CountsZeroFull_to_CountArraySafe_zero :
   forall k xs,
     CountsZeroFull k xs ->
@@ -242,6 +350,7 @@ Proof.
   rewrite Hzero by lia.
   lia.
 Qed.
+
 Lemma CountsZeroFull_to_ChoosingPrefixDataSafe_zero :
   forall colors costs k seen good,
     CountsZeroFull k seen ->
@@ -258,6 +367,7 @@ Proof.
     + now apply CountsZeroFull_to_CountArraySafe_zero.
     + now apply CountsZeroFull_to_CountArraySafe_zero.
 Qed.
+
 Lemma CountsZeroFull_bounds_zero :
   forall k xs idx,
     CountsZeroFull k xs ->
@@ -269,6 +379,7 @@ Proof.
   rewrite Hzero by lia.
   lia.
 Qed.
+
 Lemma ChoosingPrefixState_to_ChoosingInnsAnswer_full :
   forall colors costs n k p answer seen good,
     Zlength colors = n ->
@@ -281,6 +392,7 @@ Proof.
   unfold ChoosingInnsAnswer.
   exact (proj1 Hstate).
 Qed.
+
 Lemma zrange_length_nonneg :
   forall n,
     0 <= n ->
@@ -292,6 +404,7 @@ Proof.
   rewrite Z2Nat.id by lia.
   reflexivity.
 Qed.
+
 Lemma zrange_snoc :
   forall n,
     0 <= n ->
@@ -307,6 +420,7 @@ Proof.
   rewrite Z2Nat.id by lia.
   reflexivity.
 Qed.
+
 Lemma zrange_In :
   forall x n,
     In x (zrange n) ->
@@ -325,6 +439,7 @@ Proof.
     rewrite Z2Nat.id in Hm by lia.
     lia.
 Qed.
+
 Lemma zrange_between_snoc :
   forall lo hi,
     lo <= hi ->
@@ -343,6 +458,7 @@ Proof.
   replace (lo + (hi - lo)) with hi by lia.
   reflexivity.
 Qed.
+
 Lemma affordable_betweenb_hi_true :
   forall costs p lo hi,
     lo <= hi ->
@@ -359,6 +475,7 @@ Proof.
   rewrite orb_true_r.
   reflexivity.
 Qed.
+
 Lemma affordable_betweenb_extend_expensive :
   forall costs p lo hi,
     lo <= hi ->
@@ -376,6 +493,7 @@ Proof.
   rewrite orb_false_r.
   reflexivity.
 Qed.
+
 Lemma affordable_betweenb_single_expensive :
   forall costs p i,
     p < Znth i costs 0 ->
@@ -390,6 +508,7 @@ Proof.
   rewrite Hleb.
   reflexivity.
 Qed.
+
 Lemma filter_length_le :
   forall {A : Type} (f : A -> bool) (xs : list A),
     (length (filter f xs) <= length xs)%nat.
@@ -399,6 +518,7 @@ Proof.
   - lia.
   - destruct (f x); simpl; lia.
 Qed.
+
 Lemma filter_map_ext_in :
   forall {A B : Type} (f : A -> B) (p : B -> bool) (q : A -> bool) xs,
     (forall x, In x xs -> p (f x) = q x) ->
@@ -414,6 +534,7 @@ Proof.
       apply Hext.
       right; exact Hy.
 Qed.
+
 Lemma choosing_pairs_up_to_snoc :
   forall n,
     0 <= n ->
@@ -429,6 +550,7 @@ Proof.
   rewrite app_nil_r.
   reflexivity.
 Qed.
+
 Lemma choosing_pairs_up_to_Zlength_twice :
   forall n,
     0 <= n ->
@@ -453,6 +575,7 @@ Proof.
     rewrite zrange_length_nonneg by lia.
     nia.
 Qed.
+
 Lemma choosing_pair_count_prefix_bound :
   forall colors costs p limit n,
     0 <= limit <= n ->
@@ -486,6 +609,7 @@ Proof.
     assert (limit * (limit - 1) <= 2 * 19999900000) by nia.
     lia.
 Qed.
+
 Lemma color_count_snoc :
   forall colors i color,
     0 <= i ->
@@ -501,6 +625,7 @@ Proof.
   simpl.
   destruct (Z.eqb (Znth i colors 0) color); simpl; lia.
 Qed.
+
 Lemma good_color_count_affordable_as_color_count :
   forall colors costs i p color,
     0 <= i ->
@@ -514,7 +639,7 @@ Proof.
     filter
       (fun idx : Z =>
          Z.eqb (Znth idx colors 0) color &&
-         affordable_betweenb costs p idx (i + 1 - 1)) 
+         affordable_betweenb costs p idx (i + 1 - 1))
       (zrange (i + 1)) =
     filter (fun idx : Z => Z.eqb (Znth idx colors 0) color)
       (zrange (i + 1))).
@@ -530,6 +655,7 @@ Proof.
   rewrite Hf.
   reflexivity.
 Qed.
+
 Lemma good_color_count_snoc_expensive :
   forall colors costs i p color,
     0 <= i ->
@@ -545,12 +671,12 @@ Proof.
     filter
       (fun idx : Z =>
          Z.eqb (Znth idx colors 0) color &&
-         affordable_betweenb costs p idx (i + 1 - 1)) 
+         affordable_betweenb costs p idx (i + 1 - 1))
       (zrange i) =
     filter
       (fun idx : Z =>
          Z.eqb (Znth idx colors 0) color &&
-         affordable_betweenb costs p idx (i - 1)) 
+         affordable_betweenb costs p idx (i - 1))
       (zrange i)).
   {
     apply filter_ext_in.
@@ -567,6 +693,7 @@ Proof.
   rewrite affordable_betweenb_single_expensive by lia.
   destruct (Z.eqb (Znth i colors 0) color); simpl; lia.
 Qed.
+
 Lemma choosing_pair_count_snoc_affordable :
   forall colors costs p i c,
     0 <= i ->
@@ -599,6 +726,7 @@ Proof.
   rewrite Hmap, length_map.
   reflexivity.
 Qed.
+
 Lemma choosing_pair_count_snoc_expensive :
   forall colors costs p i c,
     0 <= i ->
@@ -634,6 +762,7 @@ Proof.
   rewrite Hmap, length_map.
   reflexivity.
 Qed.
+
 Lemma ChoosingPrefixState_answer_bound :
   forall colors costs limit k p answer seen good n,
     ChoosingPrefixDataSafe colors costs limit k seen good ->
@@ -652,6 +781,7 @@ Proof.
   - lia.
   - exact Hn.
 Qed.
+
 Lemma ChoosingPrefixState_step_affordable_after_copy :
   forall colors costs i k p old_answer answer seen good seen_next c,
     ChoosingPrefixDataSafe colors costs i k seen good ->
@@ -706,6 +836,7 @@ Proof.
       apply Hseen_next_count.
       exact Hcolor.
 Qed.
+
 Lemma ChoosingPrefixState_step_expensive :
   forall colors costs i k p old_answer answer seen good seen_next c,
     ChoosingPrefixDataSafe colors costs i k seen good ->

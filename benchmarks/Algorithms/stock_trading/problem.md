@@ -1,6 +1,13 @@
 # P2569 Stock Trading
 
-## Description
+## Abstract model
+
+Use a DP state indexed by day and shares held. Transitions either keep the
+previous holding or buy/sell within the daily limits from a state at least
+$W+1$ days earlier. Holdings always stay in $[0,\mathrm{MaxP}]$. The objective
+is maximum profit after day $T$.
+
+## Problem statement
 
 For each of the next $T$ days, the buy price, sell price, maximum purchasable
 shares, and maximum sellable shares are known. Any two transaction days must
@@ -8,13 +15,10 @@ have at least $W$ complete days between them, and holdings may never exceed
 `MaxP`. Starting with no shares and unlimited cash, maximize the profit earned
 over the $T$ days.
 
-## Input
+## Input and output
 
-The input gives the number of days, stock limit, waiting period, and each day's prices and transaction limits.
-
-## Output
-
-Print the maximum achievable profit.
+The first line contains $T$, `MaxP`, and $W$. Each following line contains
+$AP_i$, $BP_i$, $AS_i$, and $BS_i$. Output the maximum profit.
 
 ## Constraints
 

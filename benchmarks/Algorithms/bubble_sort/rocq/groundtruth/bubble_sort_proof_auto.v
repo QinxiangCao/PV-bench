@@ -17,6 +17,7 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import PVbench.Algorithms.bubble_sort.rocq.spec_lib.
 Require Import PVbench.Algorithms.bubble_sort.rocq.helper_lib.
 Local Open Scope sac.
 

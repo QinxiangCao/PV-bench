@@ -20,10 +20,11 @@ void copyCounts(int *seen, int *good, int k)
 }
 
 long long countChoosingInns(
-    int *colors, int *costs, int n, int k, int p,
-    int *seen, int *good)
+    int *colors, int *costs, int n, int k, int p)
 
 {
+  int seen[50];
+  int good[50];
   long long answer = 0;
 
   initCounts(seen, good, k);

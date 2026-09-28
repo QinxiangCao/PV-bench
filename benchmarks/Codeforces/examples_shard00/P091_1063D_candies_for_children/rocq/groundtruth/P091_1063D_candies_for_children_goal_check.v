@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P091_1063D_candies_for_children.rocq.groundtruth Require Import P091_1063D_candies_for_children_goal P091_1063D_candies_for_children_proof_auto P091_1063D_candies_for_children_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P091_1063D_candies_for_children_proof_auto.
+  Include P091_1063D_candies_for_children_proof_manual.
+End VC_Correctness.

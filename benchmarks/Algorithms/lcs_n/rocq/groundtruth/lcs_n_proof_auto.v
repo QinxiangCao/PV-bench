@@ -21,192 +21,186 @@ Require Import PVbench.Algorithms.lcs_n.rocq.spec_lib.
 Require Import PVbench.Algorithms.lcs_n.rocq.helper_lib.
 Local Open Scope sac.
 
-Lemma proof_of_lcs_n_safety_wit_1 : lcs_n_safety_wit_1.
+Lemma proof_of_longest_common_sequence_safety_wit_1 : longest_common_sequence_safety_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_2 : lcs_n_safety_wit_2.
+Lemma proof_of_longest_common_sequence_safety_wit_2 : longest_common_sequence_safety_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_3 : lcs_n_safety_wit_3.
+Lemma proof_of_longest_common_sequence_safety_wit_3 : longest_common_sequence_safety_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_4 : lcs_n_safety_wit_4.
+Lemma proof_of_longest_common_sequence_safety_wit_4 : longest_common_sequence_safety_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_5 : lcs_n_safety_wit_5.
+Lemma proof_of_longest_common_sequence_safety_wit_5 : longest_common_sequence_safety_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_6 : lcs_n_safety_wit_6.
+Lemma proof_of_longest_common_sequence_safety_wit_6 : longest_common_sequence_safety_wit_6.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_7 : lcs_n_safety_wit_7.
+Lemma proof_of_longest_common_sequence_safety_wit_7 : longest_common_sequence_safety_wit_7.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_8 : lcs_n_safety_wit_8.
+Lemma proof_of_longest_common_sequence_safety_wit_8 : longest_common_sequence_safety_wit_8.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_9 : lcs_n_safety_wit_9.
+Lemma proof_of_longest_common_sequence_safety_wit_9 : longest_common_sequence_safety_wit_9.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_10 : lcs_n_safety_wit_10.
+Lemma proof_of_longest_common_sequence_safety_wit_10 : longest_common_sequence_safety_wit_10.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_11 : lcs_n_safety_wit_11.
+Lemma proof_of_longest_common_sequence_safety_wit_11 : longest_common_sequence_safety_wit_11.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_12 : lcs_n_safety_wit_12.
+Lemma proof_of_longest_common_sequence_safety_wit_12 : longest_common_sequence_safety_wit_12.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_13 : lcs_n_safety_wit_13.
+Lemma proof_of_longest_common_sequence_safety_wit_13 : longest_common_sequence_safety_wit_13.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_14 : lcs_n_safety_wit_14.
+Lemma proof_of_longest_common_sequence_safety_wit_14 : longest_common_sequence_safety_wit_14.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_15 : lcs_n_safety_wit_15.
+Lemma proof_of_longest_common_sequence_safety_wit_15 : longest_common_sequence_safety_wit_15.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_16 : lcs_n_safety_wit_16.
+Lemma proof_of_longest_common_sequence_safety_wit_16 : longest_common_sequence_safety_wit_16.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_17 : lcs_n_safety_wit_17.
+Lemma proof_of_longest_common_sequence_safety_wit_17 : longest_common_sequence_safety_wit_17.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_18 : lcs_n_safety_wit_18.
+Lemma proof_of_longest_common_sequence_safety_wit_18 : longest_common_sequence_safety_wit_18.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_19 : lcs_n_safety_wit_19.
+Lemma proof_of_longest_common_sequence_safety_wit_19 : longest_common_sequence_safety_wit_19.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_20 : lcs_n_safety_wit_20.
+Lemma proof_of_longest_common_sequence_safety_wit_20 : longest_common_sequence_safety_wit_20.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_21 : lcs_n_safety_wit_21.
+Lemma proof_of_longest_common_sequence_safety_wit_21 : longest_common_sequence_safety_wit_21.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_22 : lcs_n_safety_wit_22.
+Lemma proof_of_longest_common_sequence_safety_wit_22 : longest_common_sequence_safety_wit_22.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_23 : lcs_n_safety_wit_23.
+Lemma proof_of_longest_common_sequence_safety_wit_23 : longest_common_sequence_safety_wit_23.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_24 : lcs_n_safety_wit_24.
+Lemma proof_of_longest_common_sequence_safety_wit_24 : longest_common_sequence_safety_wit_24.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_25 : lcs_n_safety_wit_25.
+Lemma proof_of_longest_common_sequence_safety_wit_25 : longest_common_sequence_safety_wit_25.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_26 : lcs_n_safety_wit_26.
+Lemma proof_of_longest_common_sequence_safety_wit_26 : longest_common_sequence_safety_wit_26.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_27 : lcs_n_safety_wit_27.
+Lemma proof_of_longest_common_sequence_safety_wit_27 : longest_common_sequence_safety_wit_27.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_28 : lcs_n_safety_wit_28.
+Lemma proof_of_longest_common_sequence_safety_wit_28 : longest_common_sequence_safety_wit_28.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_29 : lcs_n_safety_wit_29.
+Lemma proof_of_longest_common_sequence_safety_wit_29 : longest_common_sequence_safety_wit_29.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_30 : lcs_n_safety_wit_30.
+Lemma proof_of_longest_common_sequence_safety_wit_30 : longest_common_sequence_safety_wit_30.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_31 : lcs_n_safety_wit_31.
+Lemma proof_of_longest_common_sequence_safety_wit_31 : longest_common_sequence_safety_wit_31.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_32 : lcs_n_safety_wit_32.
+Lemma proof_of_longest_common_sequence_safety_wit_32 : longest_common_sequence_safety_wit_32.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_33 : lcs_n_safety_wit_33.
+Lemma proof_of_longest_common_sequence_safety_wit_33 : longest_common_sequence_safety_wit_33.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_34 : lcs_n_safety_wit_34.
+Lemma proof_of_longest_common_sequence_safety_wit_34 : longest_common_sequence_safety_wit_34.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_35 : lcs_n_safety_wit_35.
+Lemma proof_of_longest_common_sequence_safety_wit_35 : longest_common_sequence_safety_wit_35.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_36 : lcs_n_safety_wit_36.
+Lemma proof_of_longest_common_sequence_safety_wit_36 : longest_common_sequence_safety_wit_36.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_37 : lcs_n_safety_wit_37.
+Lemma proof_of_longest_common_sequence_safety_wit_37 : longest_common_sequence_safety_wit_37.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_38 : lcs_n_safety_wit_38.
+Lemma proof_of_longest_common_sequence_safety_wit_38 : longest_common_sequence_safety_wit_38.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_39 : lcs_n_safety_wit_39.
+Lemma proof_of_longest_common_sequence_safety_wit_39 : longest_common_sequence_safety_wit_39.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_40 : lcs_n_safety_wit_40.
+Lemma proof_of_longest_common_sequence_safety_wit_40 : longest_common_sequence_safety_wit_40.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_41 : lcs_n_safety_wit_41.
+Lemma proof_of_longest_common_sequence_safety_wit_41 : longest_common_sequence_safety_wit_41.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_42 : lcs_n_safety_wit_42.
+Lemma proof_of_longest_common_sequence_safety_wit_42 : longest_common_sequence_safety_wit_42.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_43 : lcs_n_safety_wit_43.
+Lemma proof_of_longest_common_sequence_safety_wit_43 : longest_common_sequence_safety_wit_43.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_44 : lcs_n_safety_wit_44.
+Lemma proof_of_longest_common_sequence_safety_wit_44 : longest_common_sequence_safety_wit_44.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_safety_wit_45 : lcs_n_safety_wit_45.
+Lemma proof_of_longest_common_sequence_safety_wit_45 : longest_common_sequence_safety_wit_45.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_entail_wit_5 : lcs_n_entail_wit_5.
+Lemma proof_of_longest_common_sequence_return_wit_1 : longest_common_sequence_return_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_entail_wit_11 : lcs_n_entail_wit_11.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_1 : longest_common_sequence_partial_solve_wit_1.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_return_wit_1 : lcs_n_return_wit_1.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_2 : longest_common_sequence_partial_solve_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_1 : lcs_n_partial_solve_wit_1.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_3 : longest_common_sequence_partial_solve_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_2 : lcs_n_partial_solve_wit_2.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_4 : longest_common_sequence_partial_solve_wit_4.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_3 : lcs_n_partial_solve_wit_3.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_5_pure : longest_common_sequence_partial_solve_wit_5_pure.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_4 : lcs_n_partial_solve_wit_4.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_5 : longest_common_sequence_partial_solve_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_5_pure : lcs_n_partial_solve_wit_5_pure.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_6 : longest_common_sequence_partial_solve_wit_6.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_5 : lcs_n_partial_solve_wit_5.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_7 : longest_common_sequence_partial_solve_wit_7.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_6 : lcs_n_partial_solve_wit_6.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_8_pure : longest_common_sequence_partial_solve_wit_8_pure.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_7 : lcs_n_partial_solve_wit_7.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_8 : longest_common_sequence_partial_solve_wit_8.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_8_pure : lcs_n_partial_solve_wit_8_pure.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_9 : longest_common_sequence_partial_solve_wit_9.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_8 : lcs_n_partial_solve_wit_8.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_10 : longest_common_sequence_partial_solve_wit_10.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_9 : lcs_n_partial_solve_wit_9.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_11 : longest_common_sequence_partial_solve_wit_11.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_10 : lcs_n_partial_solve_wit_10.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_12 : longest_common_sequence_partial_solve_wit_12.
 Proof. Admitted. 
 
-Lemma proof_of_lcs_n_partial_solve_wit_11 : lcs_n_partial_solve_wit_11.
-Proof. Admitted. 
-
-Lemma proof_of_lcs_n_partial_solve_wit_12 : lcs_n_partial_solve_wit_12.
-Proof. Admitted. 
-
-Lemma proof_of_lcs_n_partial_solve_wit_13 : lcs_n_partial_solve_wit_13.
+Lemma proof_of_longest_common_sequence_partial_solve_wit_13 : longest_common_sequence_partial_solve_wit_13.
 Proof. Admitted. 
 

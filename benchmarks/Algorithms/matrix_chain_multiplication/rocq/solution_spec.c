@@ -1,47 +1,30 @@
-/*
- * Matrix-chain multiplication (CLRS interval dynamic programming).
- *
- * Matrix i has dimensions dimensions[i] by dimensions[i + 1].  The caller
- * supplies matrix_count * matrix_count integers in cost as the DP workspace.
- * The verified interface bounds matrix_count and the dimensions so that every
- * scalar-multiplication count below fits in a signed 32-bit int.
- */
 /*@ Extern Coq
-      (MatrixChainDimensionsBounded : list Z -> Z -> Prop)
-      (MatrixChainMinimumCost : list Z -> Z -> Z -> Prop)
-      (MatrixChainTableResult : list Z -> list Z -> Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
+      (MatrixChainOptimalCost : list Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.matrix_chain_multiplication.rocq.spec_lib */
 
-int matrixChainMinCost(int *dimensions, int matrix_count, int *cost)
+int matrixChainMinCost(int *dimensions, int matrix_count)
 /*@ With (dimensions_l : list Z)
     Require
       1 <= matrix_count && matrix_count <= 8 &&
       Zlength(dimensions_l) == matrix_count + 1 &&
-      MatrixChainDimensionsBounded(dimensions_l, matrix_count) &&
-      IntArray::full(dimensions, matrix_count + 1, dimensions_l) *
-      IntArray::undef_full(cost, matrix_count * matrix_count)
+      Zlength(dimensions_l) == matrix_count + 1 && Forall(Z::le(1), dimensions_l) && Forall(Z::ge(100), dimensions_l) &&
+      IntArray::full(dimensions, matrix_count + 1, dimensions_l)
     Ensure
-      exists cost_l,
-      MatrixChainTableResult(dimensions_l, cost_l, matrix_count) &&
-      MatrixChainMinimumCost(dimensions_l, matrix_count, __return) &&
-      __return == cost_l[matrix_count - 1] &&
-      0 <= __return && __return <= 7000000 &&
-      IntArray::full(dimensions, matrix_count + 1, dimensions_l) *
-      IntArray::full(cost, matrix_count * matrix_count, cost_l)
+      MatrixChainOptimalCost(dimensions_l, matrix_count, __return) &&
+      IntArray::full(dimensions, matrix_count + 1, dimensions_l)
  */
 {
-  int width = matrix_count;
+  int cost[64];
 
-  /* A one-matrix product needs no scalar multiplications.  Clearing the whole
-   * table also gives defined values to the caller's complete workspace. */
+  int width = matrix_count;
 
   for (int i = 0; i < matrix_count * width; ++i) {
     cost[i] = 0;
   }
-
-  /* After finishing a chain length, every shorter interval already contains
-   * its minimum cost, so it is available to each candidate split below. */
 
   for (int chain_length = 2;
        chain_length <= matrix_count;
@@ -51,8 +34,6 @@ int matrixChainMinCost(int *dimensions, int matrix_count, int *cost)
          left + chain_length <= matrix_count;
          ++left) {
       int right = left + chain_length - 1;
-
-      /* Use the leftmost split as a real initial candidate. */
 
       int best = cost[left * width + left]
                + cost[(left + 1) * width + right]
@@ -75,5 +56,7 @@ int matrixChainMinCost(int *dimensions, int matrix_count, int *cost)
     }
   }
 
-  return cost[matrix_count - 1];
+  int result = cost[matrix_count - 1];
+
+  return result;
 }

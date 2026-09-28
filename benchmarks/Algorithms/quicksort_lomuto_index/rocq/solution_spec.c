@@ -1,3 +1,12 @@
+/*@ Extern Coq
+      (Permutation : list Z -> list Z -> Prop)
+ */
+/*@ Extern Coq
+      (increasing : list Z -> Prop)
+ */
+
+/*@ Import Coq Require Import PVbench.Algorithms.quicksort_lomuto_index.rocq.spec_lib */
+
 void swap(int *arr, int i, int j)
 
 {

@@ -65,11 +65,13 @@ void sortHeightIndexRangeNLogN(
 }
 
 int maxAreaNLogN(
-    const int *height, int heightSize,
-    int *workHeight, int *workIndex,
-    int *bufferHeight, int *bufferIndex)
+    const int *height, int heightSize)
 
 {
+    int workHeight[100000];
+    int workIndex[100000];
+    int bufferHeight[100000];
+    int bufferIndex[100000];
 
     for (int k = 0; k < heightSize; ++k) {
         int h = height[k];
@@ -113,11 +115,11 @@ int maxAreaNLogN(
         }
 
         if (index < minimumIndex) {
-
+            
             minimumIndex = index;
         }
         if (index > maximumIndex) {
-
+            
             maximumIndex = index;
         }
     }

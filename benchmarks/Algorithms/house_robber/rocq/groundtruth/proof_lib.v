@@ -1,16 +1,14 @@
+Require Export PVbench.Algorithms.house_robber.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 Require Import Coq.micromega.Lia.
 From AUXLib Require Import ListLib.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
 
-
-Require Import PVbench.Algorithms.house_robber.rocq.spec_lib.
-Require Import PVbench.Algorithms.house_robber.rocq.helper_lib.
+(* Helper lemmas migrated from house_robber__vc_proving_subagent_tmp_proof_manual__merged_proof_manual.v. *)
 
 Lemma RobPrefixOpt_zero : forall l, RobPrefixOpt l 0 0.
 Proof.
@@ -345,7 +343,7 @@ Lemma rob_prefix_step_take :
 Proof.
   intros l i prev2 prev1 Hi_range Hstate Htake_gt.
   unfold HouseRobberDPState in Hstate.
-  destruct Hstate as [Hi_state [Hopt_i Hprev2_case]].
+  destruct Hstate as [Hopt_i Hprev2_case].
   apply rob_prefix_opt_intro.
   - destruct Hprev2_case as [[Hi_zero Hprev2_zero] | [Hi_pos Hopt_prev2]].
     + subst i prev2.
@@ -428,8 +426,7 @@ Proof.
   intros l n i prev2 prev1 Hlen Hi_nonneg Hi_lt Hstate Htake.
   pose proof Hstate as Hstate_orig.
   unfold HouseRobberDPState in *.
-  destruct Hstate as [Hi_state [Hopt_i Hprev2_case]].
-  split; [lia |].
+  destruct Hstate as [Hopt_i Hprev2_case].
   split.
   - apply (rob_prefix_step_take l i prev2 prev1); auto; lia.
   - right.
@@ -450,7 +447,7 @@ Lemma house_robber_take_value_bound :
 Proof.
   intros l n i prev2 prev1 Hlen Hn_bound Hrange Hi_nonneg Hi_lt Hstate.
   unfold HouseRobberDPState in Hstate.
-  destruct Hstate as [_ [_ Hprev2_case]].
+  destruct Hstate as [_ Hprev2_case].
   pose proof (Hrange i ltac:(lia)) as [_ Hcurrent_bound].
   destruct Hprev2_case as [[Hi_zero Hprev2_zero] | [Hi_pos Hopt_prev2]].
   - subst; lia.
@@ -655,8 +652,8 @@ Lemma HouseRobberDPState_skip_step :
 Proof.
   intros l i prev2 prev1 Hstate Hskip Hlen.
   unfold HouseRobberDPState in *.
-  destruct Hstate as [Hrange [Hcur Hprev]].
-  split; [lia | split].
+  destruct Hstate as [Hcur Hprev].
+  split.
   - eapply RobPrefixOpt_step_skip; eauto.
   - right.
     split; [lia |].

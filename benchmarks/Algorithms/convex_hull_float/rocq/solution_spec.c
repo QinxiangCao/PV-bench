@@ -1,16 +1,32 @@
-#include "../pointf.h"
-#include "pointf_model.h"
-
 /*@ Import Coq Require Import PVbench.Algorithms.convex_hull_float.rocq.spec_lib */
-
-
-/*@ Extern Coq
-      (pointsf_finite : list PointF -> Prop)
-      (all_pointf_cross_finite : list PointF -> Prop)
-      (pointf_permutation : list PointF -> list PointF -> Prop)
-      (pointf_xy_sorted : list PointF -> Prop)
-      (is_andrew_hull_float : list PointF -> list PointF -> list PointF -> Prop)
- */
+/*@ Extern Coq Record PointF {
+      pointf_x : fp32;
+      pointf_y : fp32;
+    } */
+/*@ Extern Coq (In : {A} -> A -> list A -> Prop) */
+/*@ Extern Coq (Forall : {A} -> (A -> Prop) -> list A -> Prop) */
+/*@ Extern Coq (map : {A B} -> (A -> B) -> list A -> list B) */
+/*@ Extern Coq (fp32_isFinite : fp32 -> Prop) */
+/*@ Extern Coq (fp32_sub : fp32 -> fp32 -> fp32) */
+/*@ Extern Coq (fp32_mul : fp32 -> fp32 -> fp32) */
+/*@ Extern Coq (pointf_permutation : list PointF -> list PointF -> Prop) */
+/*@ Extern Coq (pointf_xy_sorted : list PointF -> Prop) */
+/*@ Extern Coq (pointf_xy_sorted_range : list PointF -> Z -> Z -> Prop) */
+/*@ Extern Coq (is_andrew_hull_float : list PointF -> list PointF -> list PointF -> Prop) */
+/*@ Extern Coq (pointf_get_x : PointF -> fp32) */
+/*@ Extern Coq (pointf_get_y : PointF -> fp32) */
+/*@ Extern Coq (default_pointf : PointF) */
+/*@ Extern Coq (store_pointf : Z -> PointF -> Assertion) */
+/*@ Extern Coq (undef_pointf : Z -> Assertion) */
+/*@ Extern Coq (pointf_cmp_xy : PointF -> PointF -> Z) */
+/*@ Extern Coq (pointf_cross : PointF -> PointF -> PointF -> fp32) */
+/*@ Extern Coq (PointFArray::full : Z -> Z -> list PointF -> Assertion) */
+/*@ Extern Coq (PointFArray::missing_i : Z -> Z -> Z -> Z -> list PointF -> Assertion) */
+/*@ Extern Coq (PointFArray::seg : Z -> Z -> Z -> list PointF -> Assertion) */
+/*@ Extern Coq (PointFArray::undef_full : Z -> Z -> Assertion) */
+/*@ Extern Coq (PointFArray::undef_seg : Z -> Z -> Z -> Assertion) */
+/*@ Extern Coq (Znth : {A} -> Z -> list A -> A -> A) */
+struct PointF { float x; float y; };
 
 static int point_cmp_xy(float ax, float ay, float bx, float b_y)
 
@@ -120,19 +136,24 @@ int convex_hull_float(struct PointF *pts, int n, struct PointF *hull)
 /*@ With (input hull_init : list PointF)
     Require
       2 <= n && n <= 50000 && Zlength(input) == n &&
-      pointsf_finite(input) && all_pointf_cross_finite(input) &&
-      Zlength(hull_init) == 2 * n && pointsf_finite(hull_init) &&
+      Forall(fp32_isFinite, map(pointf_get_x, input)) &&
+          Forall(fp32_isFinite, map(pointf_get_y, input)) && (forall (pa : PointF) (pb : PointF) (pc : PointF),
+          (In(pa, input) && In(pb, input) && In(pc, input)) =>
+          (fp32_isFinite(fp32_sub(pointf_get_x(pb), pointf_get_x(pa))) &&
+          fp32_isFinite(fp32_sub(pointf_get_y(pc), pointf_get_y(pa))) &&
+          fp32_isFinite(fp32_sub(pointf_get_y(pb), pointf_get_y(pa))) &&
+          fp32_isFinite(fp32_sub(pointf_get_x(pc), pointf_get_x(pa))) &&
+          fp32_isFinite(fp32_mul(fp32_sub(pointf_get_x(pb), pointf_get_x(pa)), fp32_sub(pointf_get_y(pc), pointf_get_y(pa)))) &&
+          fp32_isFinite(fp32_mul(fp32_sub(pointf_get_y(pb), pointf_get_y(pa)), fp32_sub(pointf_get_x(pc), pointf_get_x(pa)))) &&
+          fp32_isFinite(pointf_cross(pa, pb, pc)))) &&
+      Zlength(hull_init) == 2 * n && Forall(fp32_isFinite, map(pointf_get_x, hull_init)) &&
+          Forall(fp32_isFinite, map(pointf_get_y, hull_init)) &&
       PointFArray::full(pts, n, input) *
       PointFArray::full(hull, 2 * n, hull_init)
     Ensure
       exists sorted hull_all out,
-        pts == pts@pre && hull == hull@pre && n == n@pre &&
-        Zlength(sorted) == n && Zlength(hull_all) == 2 * n &&
+
         out == sublist(0, __return, hull_all) && Zlength(out) == __return &&
-        2 <= __return && __return <= 2 * n &&
-        pointsf_finite(sorted) && all_pointf_cross_finite(sorted) &&
-        pointsf_finite(hull_all) && pointf_permutation(input, sorted) &&
-        pointf_xy_sorted(sorted) &&
         is_andrew_hull_float(input, sorted, out) &&
         PointFArray::full(pts, n, sorted) *
         PointFArray::full(hull, 2 * n, hull_all)

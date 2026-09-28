@@ -1,33 +1,33 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (EnergyValsDuplicated : list Z -> list Z -> Z -> Prop)
-      (EnergyLabelsBounded : list Z -> Z -> Prop)
-      (EnergyComputationBounded : list Z -> Z -> Z -> Prop)
+      (EnergyIntervalPlan : list Z -> Z -> Z -> Z -> Prop)
       (EnergyNecklaceAnswer : list Z -> Z -> Z -> Prop)
-      (EnergyLenDone : list Z -> list Z -> Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.energy_necklace.rocq.spec_lib */
 
-int energyNecklace(int *beads, int n, int *vals, int *dp)
+int energyNecklace(int *beads, int n)
 /*@ With (beads_l : list Z)
     Require
       4 <= n && n <= 100 &&
       Zlength(beads_l) == n &&
-      EnergyLabelsBounded(beads_l, n) &&
-      EnergyComputationBounded(beads_l, n, 2100000000) &&
-      IntArray::full(beads, n, beads_l) *
-      IntArray::undef_full(vals, 2 * n) *
-      IntArray::undef_full(dp, (2 * n) * (2 * n))
+      Zlength(beads_l) == n && Forall(Z::le(1), beads_l) && Forall(Z::ge(1000), beads_l) &&
+      (forall (ev : list Z) (start : Z) (energy : Z),
+        (EnergyValsDuplicated(beads_l, ev, n) &&
+         0 <= start && start < n &&
+         EnergyIntervalPlan(ev, start, start + n - 1, energy)) =>
+        energy <= 2100000000) &&
+      IntArray::full(beads, n, beads_l)
     Ensure
-      exists vals_l dp_l,
-      EnergyValsDuplicated(beads_l, vals_l, n) &&
-      EnergyLenDone(vals_l, dp_l, 2 * n, 2 * n, n + 1) &&
       EnergyNecklaceAnswer(beads_l, n, __return) &&
-      0 <= __return && __return <= 2100000000 &&
-      IntArray::full(beads, n, beads_l) *
-      IntArray::full(vals, 2 * n, vals_l) *
-      IntArray::full(dp, (2 * n) * (2 * n), dp_l)
+      IntArray::full(beads, n, beads_l)
  */
 {
+  int vals[200];
+  int dp[40000];
+
   int total = 2 * n;
   int width = total;
 
@@ -80,5 +80,7 @@ int energyNecklace(int *beads, int n, int *vals, int *dp)
 
   }
 
-  return answer;
+  int result = answer;
+
+  return result;
 }

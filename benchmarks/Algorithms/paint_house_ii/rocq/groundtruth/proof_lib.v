@@ -1,3 +1,4 @@
+Require Export PVbench.Algorithms.paint_house_ii.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 From AUXLib Require Import ListLib.
@@ -8,8 +9,22 @@ Local Open Scope Z_scope.
 Local Open Scope list_scope.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.micromega.Lia.
-Require Export PVbench.Algorithms.paint_house_ii.rocq.spec_lib.
-Require Export PVbench.Algorithms.paint_house_ii.rocq.helper_lib.
+(** Keep the element type implicit when Zlength is passed to map. *)
+Arguments Zlength {A}.
+
+Definition PaintHouseIICompletedMinima
+  (costs : list (list Z)) (n k row old_min1 old_min2 old_color
+    new_min1 new_min2 new_color : Z) : Prop :=
+  PaintHouseIIColorMinima costs n k row k old_min1 old_min2 old_color
+    new_min1 new_min2 new_color /\
+  PaintHouseIIRowMinima costs n k (row + 1) new_min1 new_min2 new_color.
+
+
+Definition PaintHouseIIValidColoring (k n : Z) (colors : list Z) : Prop :=
+  Zlength colors = n /\
+  (forall i, 0 <= i < n -> 0 <= Znth i colors (-1) < k) /\
+  (forall i, 0 <= i < n - 1 ->
+     Znth i colors (-1) <> Znth (i + 1) colors (-1)).
 
 Definition PaintHouseIIPrefixLastColor
     (row : Z) (colors : list Z) (color : Z) : Prop :=
@@ -24,10 +39,64 @@ Definition PaintHouseIIValidPrefixColoring
   (forall i, 0 <= i < row - 1 ->
      Znth i colors (-1) <> Znth (i + 1) colors (-1)).
 
+Definition PaintHouseIISecondBestForColor
+    (costs : list (list Z)) (n k row color value : Z) : Prop :=
+  (row = 0 /\ color = -1 /\ value = 0) \/
+  (1 <= row <= n /\
+   min_value_of_subset Z.le
+     (fun p : Z * Z =>
+        fst p <> color /\
+        PaintHouseIIPrefixCost costs n k row (fst p) (snd p))
+     (fun p : Z * Z => snd p)
+     value).
+
+Definition PaintHouseIIDPState
+    (costs : list (list Z)) (n k row min1 min2 min1_color : Z) : Prop :=
+  (row = 0 /\ min1 = 0 /\ min2 = 0 /\ min1_color = -1) \/
+  (1 <= row <= n /\
+   0 <= min1_color < k /\
+   PaintHouseIIBestColor costs n k row min1_color min1 /\
+   PaintHouseIISecondBestForColor costs n k row min1_color min2).
+
 Definition PaintHouseIIPrevCost
     (costs : list (list Z)) (k row old_min1 old_min2 old_color color : Z) : Z :=
   PaintCostAt costs row color +
   if Z.eq_dec color old_color then old_min2 else old_min1.
+
+Definition PaintHouseIIInnerState
+    (costs : list (list Z)) (n k row processed old_min1 old_min2 old_color
+       new_min1 new_min2 new_color : Z) : Prop :=
+  0 <= row < n /\
+  0 <= processed <= k /\
+  PaintHouseIIDPState costs n k row old_min1 old_min2 old_color /\
+  ((processed = 0 /\
+    new_min1 = PaintHouseIIInf /\
+    new_min2 = PaintHouseIIInf /\
+    new_color = -1) \/
+   (1 <= processed <= k /\
+    0 <= new_color < processed /\
+    PaintHouseIIProcessedBestColor
+      costs n k row old_min1 old_min2 old_color processed new_color new_min1 /\
+    ((processed = 1 /\ new_min2 = PaintHouseIIInf) \/
+     (2 <= processed /\
+      PaintHouseIIProcessedSecondBest
+        costs n k row old_min1 old_min2 old_color processed new_color new_min2)))).
+
+Definition PaintHouseIICompletedRowState
+    (costs : list (list Z)) (n k row old_min1 old_min2 old_color
+       new_min1 new_min2 new_color : Z) : Prop :=
+  PaintHouseIIInnerState
+    costs n k row k old_min1 old_min2 old_color new_min1 new_min2 new_color /\
+  PaintHouseIIDPState costs n k (row + 1) new_min1 new_min2 new_color.
+
+Definition PaintHouseIIAnswer
+    (costs : list (list Z)) (n k answer : Z) : Prop :=
+  min_value_of_subset Z.le
+    (fun colors : list Z =>
+       PaintHouseIIValidColoring k n colors)
+    (fun colors : list Z =>
+       PaintHouseIIColoringCost costs n colors)
+    answer.
 
 Lemma PaintHouseIIPrefixCost_value_bound__loop_core :
   forall costs n k row color value,
@@ -871,4 +940,3 @@ Proof.
       apply PaintHouseIIValidColoring_to_PrefixCost__answer; [lia | exact Hvalid].
   - symmetry; exact Hbest_cost.
 Qed.
-

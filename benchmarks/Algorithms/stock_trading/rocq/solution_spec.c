@@ -1,42 +1,62 @@
+#include "int_array_def.h"
 #include "array2_def.h"
 
 /*@ Extern Coq
-      (IntArray2::undef_full : Z -> Z -> Z -> Assertion)
-      (StockTableShape : list (list Z) -> Z -> Z -> Prop)
-      (StockInputsBounded : list Z -> list Z -> list Z -> list Z -> Z -> Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Forall2 : {A B} -> (A -> B -> Prop) -> list A -> list B -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (StockMaximumProfit : list Z -> list Z -> list Z -> list Z -> Z -> Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.stock_trading.rocq.spec_lib */
 
+void stock_init_storage(int *storage, int length)
+
+{
+
+    for (int index = 0; index < length; ++index) {
+        storage[index] = 0;
+    }
+
+}
+
 int maximum_profit(int days, int max_stock, int wait_days,
-                         int *ap, int *bp, int *buy_limit, int *sell_limit,
-                         int *queue_index, int *dp)
-/*@ With (ap_l bp_l buy_l sell_l queue0 : list Z)
-         (dp_init : list (list Z))
+                         int *ap, int *bp, int *buy_limit, int *sell_limit)
+/*@ With (ap_l bp_l buy_l sell_l : list Z)
     Require
         1 <= days && days <= 990 &&
         1 <= max_stock && max_stock <= 990 &&
         0 <= wait_days && wait_days < days &&
-        StockInputsBounded(ap_l, bp_l, buy_l, sell_l, days, max_stock) &&
+        Zlength(ap_l) == days &&
+        Zlength(bp_l) == days &&
+        Zlength(buy_l) == days &&
+        Zlength(sell_l) == days &&
+        Forall(Z::le(1), bp_l) &&
+        Forall(Z::ge(1000), ap_l) &&
+        Forall2(Z::le, bp_l, ap_l) &&
+        Forall(Z::le(1), buy_l) &&
+        Forall(Z::ge(max_stock), buy_l) &&
+        Forall(Z::le(1), sell_l) &&
+        Forall(Z::ge(max_stock), sell_l) &&
         IntArray::full(ap, days, ap_l) *
         IntArray::full(bp, days, bp_l) *
         IntArray::full(buy_limit, days, buy_l) *
-        IntArray::full(sell_limit, days, sell_l) *
-        IntArray::full(queue_index, max_stock + 1, queue0) *
-        StockTableShape(dp_init, days, max_stock) &&
-        IntArray2::full(dp, days + 1, max_stock + 1, dp_init)
+        IntArray::full(sell_limit, days, sell_l)
     Ensure
         StockMaximumProfit(ap_l, bp_l, buy_l, sell_l,
                            days, max_stock, wait_days, __return) &&
-        0 <= __return && __return <= 1000000000 &&
         IntArray::full(ap, days, ap_l) *
         IntArray::full(bp, days, bp_l) *
         IntArray::full(buy_limit, days, buy_l) *
-        IntArray::full(sell_limit, days, sell_l) *
-        IntArray::undef_full(queue_index, max_stock + 1) *
-        IntArray2::undef_full(dp, days + 1, max_stock + 1)
+        IntArray::full(sell_limit, days, sell_l)
  */
 {
+    int queue_index[991];
+    int dp[982081];
+
+    stock_init_storage(queue_index, max_stock + 1);
+    stock_init_storage(dp, (days + 1) * (max_stock + 1));
+
     int neg_inf = -1000000000;
     int width = max_stock + 1;
 

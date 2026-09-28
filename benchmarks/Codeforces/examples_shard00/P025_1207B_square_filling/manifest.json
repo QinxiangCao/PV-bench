@@ -1,0 +1,21 @@
+{
+  "id": "P025_1207B_square_filling",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1207/B",
+    "title": "Square Filling",
+    "url": "https://codeforces.com/problemset/problem/1207/B",
+    "rating": 1200,
+    "tags": [
+      "constructive algorithms",
+      "greedy",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "M1",
+    "output_mode": "OPSEQ",
+    "interactive": false,
+    "multi_test": false
+  }
+}

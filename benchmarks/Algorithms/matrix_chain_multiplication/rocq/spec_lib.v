@@ -1,16 +1,11 @@
 From Coq Require Import ZArith List.
 Require Import AUXLib.ListLib.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+From Coq Require Import Lia.
 
-Definition MatrixChainDimensionsBounded
-    (dimensions : list Z) (matrix_count : Z) : Prop :=
-  Zlength dimensions = matrix_count + 1 /\
-  forall i, 0 <= i <= matrix_count ->
-    1 <= Znth i dimensions 0 <= 100.
 Inductive MatrixChainPlan
     (dimensions : list Z) : Z -> Z -> Z -> Prop :=
   | MatrixChainPlan_single :
@@ -30,6 +25,7 @@ Inductive MatrixChainPlan
            Znth left dimensions 0 *
            Znth (split + 1) dimensions 0 *
            Znth (right + 1) dimensions 0).
+
 Definition MatrixChainIntervalMinimum
     (dimensions : list Z) (left right answer : Z) : Prop :=
   min_value_of_subset Z.le
@@ -37,14 +33,8 @@ Definition MatrixChainIntervalMinimum
        MatrixChainPlan dimensions left right scalar_cost)
     (fun scalar_cost => scalar_cost)
     answer.
-Definition MatrixChainMinimumCost
-    (dimensions : list Z) (matrix_count answer : Z) : Prop :=
-  Zlength dimensions = matrix_count + 1 /\
-  MatrixChainIntervalMinimum dimensions 0 (matrix_count - 1) answer.
-Definition MatrixChainTableResult
-    (dimensions table : list Z) (matrix_count : Z) : Prop :=
-  Zlength table = matrix_count * matrix_count /\
-  forall left right,
-    0 <= left /\ left <= right /\ right < matrix_count ->
-    MatrixChainIntervalMinimum dimensions left right
-      (Znth (left * matrix_count + right) table 0).
+
+(** Mathematical predicates exposed by the refactored annotation.  Existing
+    helper lemmas retain their original internal premises for proof reuse. *)
+Definition MatrixChainOptimalCost (dimensions : list Z) (count answer : Z) : Prop :=
+  MatrixChainIntervalMinimum dimensions 0 (count - 1) answer.

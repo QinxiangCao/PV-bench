@@ -1,8 +1,26 @@
-int maximum_profit(int days, int max_stock, int wait_days,
-                         int *ap, int *bp, int *buy_limit, int *sell_limit,
-                         int *queue_index, int *dp)
+#include "int_array_def.h"
+#include "array2_def.h"
+
+void stock_init_storage(int *storage, int length)
 
 {
+
+    for (int index = 0; index < length; ++index) {
+        storage[index] = 0;
+    }
+
+}
+
+int maximum_profit(int days, int max_stock, int wait_days,
+                         int *ap, int *bp, int *buy_limit, int *sell_limit)
+
+{
+    int queue_index[991];
+    int dp[982081];
+
+    stock_init_storage(queue_index, max_stock + 1);
+    stock_init_storage(dp, (days + 1) * (max_stock + 1));
+
     int neg_inf = -1000000000;
     int width = max_stock + 1;
 

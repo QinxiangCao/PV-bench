@@ -20,7 +20,7 @@ int partition(int *arr, int n, int low, int high)
   }
 
   swap(arr, i + 1, high);
-  return i + 1 ;
+  return i + 1  ;
 }
 
 void quicksort_range(int *arr, int n, int left, int right)
@@ -35,12 +35,12 @@ void quicksort_range(int *arr, int n, int left, int right)
       quicksort_range(arr, n, p + 1, right);
     }
   }
-  return ;
+  return  ;
 }
 
 void quicksort(int *arr, int n)
 
 {
   quicksort_range(arr, n, 0, n - 1);
-  return ;
+  return  ;
 }

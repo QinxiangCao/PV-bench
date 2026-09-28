@@ -4,26 +4,22 @@
 /*@ Extern Coq
       (increasing : list Z -> Prop)
  */
-
-/*
- * Stable decimal-bucket radix sort for non-negative integers.
- * Each pass distributes the input by one decimal digit and writes the
- * buckets back in order.  Processing from right to left keeps a pass stable.
+/*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
  */
+/*@ Import Coq Require Import PVbench.Algorithms.bucket_sort.rocq.spec_lib */
+
 void sort(int *a, int n)
 /*@ With (input : list Z)
     Require
       0 <= n && n <= 1000 &&
-      Zlength(input) == n &&
-      (forall (i : Z),
-         (0 <= i && i < n) =>
-         (0 <= Znth(i, input, 0) && Znth(i, input, 0) <= 999999999)) &&
+      Forall(Z::le(0), input) && Forall(Z::ge(999999999), input) &&
       IntArray::full(a, n, input)
     Ensure
       exists output,
-        Zlength(output) == n &&
-        Permutation(input, output) &&
-        increasing(output) &&
+        Permutation(input, output) && increasing(output) &&
         IntArray::full(a, n, output)
  */
 {
@@ -59,18 +55,14 @@ void sort(int *a, int n)
         }
 
         for (int i = n - 1; i >= 0; --i) {
-
             int digit = (a[i] / exponent) % 10;
 
             --count[digit];
-
             output[count[digit]] = a[i];
         }
 
         for (int i = 0; i < n; ++i) {
             a[i] = output[i];
         }
-
     }
-
 }

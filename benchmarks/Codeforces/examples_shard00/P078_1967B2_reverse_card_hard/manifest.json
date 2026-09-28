@@ -1,0 +1,21 @@
+{
+  "id": "P078_1967B2_reverse_card_hard",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1967/B2",
+    "title": "Reverse Card (Hard Version)",
+    "url": "https://codeforces.com/problemset/problem/1967/B2",
+    "rating": 2200,
+    "tags": [
+      "brute force",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

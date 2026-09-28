@@ -1,4 +1,11 @@
+#include "verification_stdlib.h"
+#include "verification_list.h"
+#include "int_array_def.h"
+
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (LinearContainerHeight : list Z -> Z -> Z -> Z)
       (LinearContainerArea : list Z -> Z -> Z -> Z)
       (MaximumContainerArea : list Z -> Z -> Prop)
@@ -18,12 +25,9 @@ int maxAreaLinear(const int *height, int heightSize)
       height != 0 &&
       Zlength(l) == heightSize &&
       IntArray::full(height, heightSize, l) &&
-      (forall (k : Z),
-        (0 <= k && k < heightSize) =>
-        (0 <= l[k] && l[k] <= 10000))
+      Forall(Z::le(0), l) && Forall(Z::ge(10000), l)
     Ensure
       MaximumContainerArea(l, __return) &&
-      0 <= __return && __return <= 999990000 &&
       IntArray::full(height, heightSize, l)
  */
 {
@@ -47,9 +51,7 @@ int maxAreaLinear(const int *height, int heightSize)
       0 <= maximumArea && maximumArea <= 999990000 &&
       LinearContainerTwoPointerInvariant(l, left, right, maximumArea) &&
       IntArray::full(height, heightSize@pre, l) &&
-      (forall (k : Z),
-        (0 <= k && k < heightSize@pre) =>
-        (0 <= l[k] && l[k] <= 10000))
+      Forall(Z::le(0), l) && Forall(Z::ge(10000), l)
      */
     while (left < right) {
         int width = right - left;
@@ -81,9 +83,7 @@ int maxAreaLinear(const int *height, int heightSize)
           0 <= maximumArea && maximumArea <= 999990000 &&
           LinearContainerTwoPointerInvariant(l, left, right, maximumArea) &&
           IntArray::full(height, heightSize@pre, l) &&
-          (forall (k : Z),
-            (0 <= k && k < heightSize@pre) =>
-            (0 <= l[k] && l[k] <= 10000))
+          Forall(Z::le(0), l) && Forall(Z::ge(10000), l)
          */
 
         /*
@@ -98,15 +98,6 @@ int maxAreaLinear(const int *height, int heightSize)
         }
     }
 
-    /*@ Assert
-      height == height@pre && heightSize == heightSize@pre &&
-      2 <= heightSize@pre && heightSize@pre <= 100000 &&
-      Zlength(l) == heightSize@pre &&
-      0 <= left && left == right && right < heightSize@pre &&
-      LinearContainerTwoPointerInvariant(l, left, right, maximumArea) &&
-      MaximumContainerArea(l, maximumArea) &&
-      0 <= maximumArea && maximumArea <= 999990000 &&
-      IntArray::full(height, heightSize@pre, l)
-     */
+
     return maximumArea;
 }

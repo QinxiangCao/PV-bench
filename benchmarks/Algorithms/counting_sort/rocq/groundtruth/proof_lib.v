@@ -1,12 +1,97 @@
+Require Export PVbench.Algorithms.counting_sort.rocq.helper_lib.
 From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
 From Coq Require Import Sorting.Permutation.
-From AUXLib Require Import ListLib.
-
-(** Mixed local storage has [Some 0] in every initialized histogram cell. *)
-Require Import PVbench.Algorithms.counting_sort.rocq.helper_lib.
+Require Import SumLib.Sum SumLib.ZRange.
+From AUXLib Require Import ListLib MonotonicList.
 From Coq Require Import Lia.
+
+Lemma CountingZeroedPrefix_index : forall counts upto,
+  0 <= upto <= Zlength counts ->
+  (CountingZeroedPrefix counts upto <->
+   forall value, 0 <= value < upto -> Znth value counts None = Some 0).
+Proof.
+  intros counts upto Hupto. unfold CountingZeroedPrefix.
+  rewrite (Forall_Znth (eq (Some 0)) None).
+  rewrite Zlength_sublist by lia.
+  split; intros Hvalue value Hrange.
+  - specialize (Hvalue value ltac:(lia)).
+    rewrite Znth_sublist in Hvalue by lia.
+    replace (value + 0) with value in Hvalue by lia. symmetry. exact Hvalue.
+  - rewrite Znth_sublist by lia.
+    replace (value + 0) with value by lia. symmetry. apply Hvalue. lia.
+Qed.
+
+(** Compatibility equation for the existing histogram proofs.  The public
+    definition above uses the finite-set sum and the library range instance. *)
+Lemma CountingCumulativeEnd_unfold : forall input value,
+  CountingCumulativeEnd input value =
+  fold_right Z.add 0
+    (map (fun index => CountingFrequency input (Z.of_nat index))
+         (seq 0 (Z.to_nat (value + 1)))).
+Proof.
+  intros input value.
+  unfold CountingCumulativeEnd.
+  rewrite sum_range_unfold.
+  unfold Zrange. replace (value + 1 - 0) with (value + 1) by lia.
+  generalize (Z.to_nat (value + 1)) as count.
+  intro count.
+  assert (Hrange : forall count start,
+    Zrange_aux (Z.of_nat start) count = map Z.of_nat (seq start count)).
+  { intros count'; induction count' as [| count' IH]; intros start; simpl; auto.
+    replace (Z.of_nat start + 1) with (Z.of_nat (S start)) by lia.
+    f_equal. apply IH. }
+  specialize (Hrange count 0%nat). simpl in Hrange. rewrite Hrange.
+  clear Hrange. remember (seq 0 count) as indices. clear Heqindices count.
+  induction indices; simpl; congruence.
+Qed.
+
+(** Reverse traversal fills a suffix of every value bucket.  [positions]
+    marks each still-unfilled bucket prefix; [mixed_output] records the cells
+    already known to agree with the mathematical sorted result. *)
+Lemma counting_Forall2_range : forall (A B : Type) (P : A -> B -> Prop)
+    (f : Z -> A) (g : Z -> B) lo hi,
+  Forall2 P (map f (Zrange lo hi)) (map g (Zrange lo hi)) <->
+  forall index, lo <= index < hi -> P (f index) (g index).
+Proof.
+  intros A B P f g lo hi.
+  assert (Hsame : forall indices,
+    Forall2 P (map f indices) (map g indices) <->
+    forall index, In index indices -> P (f index) (g index)).
+  { intros indices. induction indices as [|x xs IH]; cbn [map].
+    - split; intros; [contradiction | constructor].
+    - rewrite Forall2_cons_iff, IH. split.
+      + intros [Hx Htail] index Hin. destruct Hin as [Heq | Hin].
+        * subst index. exact Hx.
+        * apply Htail; exact Hin.
+      + intros H. split.
+        * apply H. left; reflexivity.
+        * intros index Hin. apply H. right; exact Hin. }
+  rewrite Hsame. setoid_rewrite <- In_Zrange. reflexivity.
+Qed.
+
+Lemma CountingPlacementProgress_indexed : forall input positions bucket_ends mixed_output sorted next_index,
+  CountingPlacementProgress input positions bucket_ends mixed_output sorted next_index <->
+CountingSorted input sorted /\
+  (forall value,
+    0 <= value < 100 ->
+    Znth value bucket_ends 0 =
+      CountingCumulativeEnd input value) /\
+  (forall value,
+    0 <= value < 100 ->
+    Znth value positions 0 =
+      CountingBucketStart input value +
+      CountingFrequency (sublist 0 (next_index + 1) input) value) /\
+  (forall value index,
+    0 <= value < 100 ->
+    Znth value positions 0 <= index < Znth value bucket_ends 0 ->
+    Znth index mixed_output None = Some (Znth index sorted 0)).
+Proof.
+  intros. unfold CountingPlacementProgress.
+  setoid_rewrite counting_Forall2_range.
+  firstorder.
+Qed.
 
 Lemma counting_zeroed_prefix_replace__initial_zeroing :
   forall mixed_counts upto,
@@ -17,7 +102,9 @@ Lemma counting_zeroed_prefix_replace__initial_zeroing :
       (replace_Znth upto (Some 0) mixed_counts) (upto + 1).
 Proof.
   intros mixed_counts upto Hlength Hupto Hzeroed.
-  unfold CountingZeroedPrefix in *.
+  apply CountingZeroedPrefix_index; [rewrite Zlength_replace_Znth; lia |].
+  pose proof (proj1 (CountingZeroedPrefix_index mixed_counts upto ltac:(lia)) Hzeroed) as Hzeroed_index.
+  clear Hzeroed. rename Hzeroed_index into Hzeroed.
   intros value Hvalue.
   destruct (Z.eq_dec value upto) as [Heq | Hneq].
   - subst value.
@@ -28,6 +115,7 @@ Proof.
     apply Hzeroed.
     lia.
 Qed.
+
 Lemma counting_histogram_empty__initial_zeroing :
   forall input zeros,
     (forall value,
@@ -42,6 +130,7 @@ Proof.
   rewrite Zsublist_nil by lia.
   reflexivity.
 Qed.
+
 Lemma counting_all_zero_materialization__initial_zeroing :
   forall mixed_counts,
     Zlength mixed_counts = 100 ->
@@ -68,6 +157,7 @@ Proof.
     + rewrite !Zlength_correct, length_map, repeat_length.
       lia.
 Qed.
+
 Lemma counting_frequency_prefix_snoc__histogram_cumulative :
   forall (input : list Z) i value,
     0 <= i < Zlength input ->
@@ -94,6 +184,7 @@ Proof.
   - simpl.
     destruct (Z.eq_dec (Znth i input 0) value); [contradiction | lia].
 Qed.
+
 Lemma counting_cumulative_end_step__histogram_cumulative :
   forall (input : list Z) value,
     0 <= value ->
@@ -102,7 +193,7 @@ Lemma counting_cumulative_end_step__histogram_cumulative :
       CountingFrequency input value.
 Proof.
   intros input value Hvalue.
-  unfold CountingCumulativeEnd.
+  rewrite !CountingCumulativeEnd_unfold.
   fold sum.
   replace (value - 1 + 1) with value by lia.
   replace (Z.to_nat (value + 1)) with (S (Z.to_nat value)) by lia.
@@ -113,6 +204,7 @@ Proof.
   rewrite Z2Nat.id by lia.
   lia.
 Qed.
+
 Lemma counting_frequency_cons__histogram_cumulative :
   forall (input : list Z) x value,
     CountingFrequency (x :: input) value =
@@ -124,6 +216,7 @@ Proof.
   simpl.
   destruct (Z.eq_dec x value); simpl; rewrite ?Nat2Z.inj_succ; lia.
 Qed.
+
 Lemma counting_frequency_sum_cons_notin__histogram_cumulative :
   forall (buckets input : list Z) x,
     ~ In x buckets ->
@@ -143,6 +236,7 @@ Proof.
     rewrite IH by exact Hx_buckets.
     lia.
 Qed.
+
 Lemma counting_frequency_sum_cons_bound__histogram_cumulative :
   forall (buckets input : list Z) x,
     NoDup buckets ->
@@ -163,6 +257,7 @@ Proof.
     + specialize (IH input x Htail).
       destruct (Z.eq_dec x bucket); [contradiction | lia].
 Qed.
+
 Lemma counting_frequency_range_sum_bound__histogram_cumulative :
   forall (buckets input : list Z),
     NoDup buckets ->
@@ -183,6 +278,7 @@ Proof.
     rewrite Zlength_cons.
     lia.
 Qed.
+
 Lemma counting_nat_to_Z_map_nodup__histogram_cumulative :
   forall (indices : list nat),
     NoDup indices ->
@@ -202,6 +298,7 @@ Proof.
       exact Hin.
     + exact IH.
 Qed.
+
 Lemma counting_cumulative_end_bound__histogram_cumulative :
   forall (input : list Z) value,
     CountingCumulativeEnd input value <= Zlength input.
@@ -213,8 +310,9 @@ Proof.
   pose proof (counting_frequency_range_sum_bound__histogram_cumulative
     (map Z.of_nat (seq 0 (Z.to_nat (value + 1)))) input Hnodup) as Hbound.
   rewrite map_map in Hbound.
-  exact Hbound.
+  rewrite CountingCumulativeEnd_unfold. exact Hbound.
 Qed.
+
 Lemma counting_frequency_nonnegative__placement_boundaries :
   forall values value,
     0 <= CountingFrequency values value.
@@ -223,6 +321,7 @@ Proof.
   unfold CountingFrequency.
   lia.
 Qed.
+
 Lemma counting_frequency_positive_In__placement_boundaries :
   forall values value,
     In value values ->
@@ -233,12 +332,13 @@ Proof.
   apply (proj1 (count_occ_In Z.eq_dec values value)) in Hin.
   lia.
 Qed.
+
 Lemma counting_cumulative_nonnegative__placement_boundaries :
   forall values value,
     0 <= CountingCumulativeEnd values value.
 Proof.
   intros values value.
-  unfold CountingCumulativeEnd.
+  rewrite !CountingCumulativeEnd_unfold.
   induction (seq 0 (Z.to_nat (value + 1))) as [| index rest IH]; simpl.
   - lia.
   - pose proof
@@ -246,6 +346,7 @@ Proof.
          values (Z.of_nat index)).
     lia.
 Qed.
+
 Lemma fold_right_Zadd_acc__placement_boundaries :
   forall values base,
     fold_right Z.add base values =
@@ -256,6 +357,7 @@ Proof.
   - rewrite IH.
     lia.
 Qed.
+
 Lemma counting_cumulative_bucket_identity__placement_boundaries :
   forall input value,
     0 <= value ->
@@ -268,11 +370,11 @@ Proof.
   - apply Z.leb_le in Hvalue0.
     assert (value = 0) by lia.
     subst value.
-    unfold CountingCumulativeEnd.
+    rewrite !CountingCumulativeEnd_unfold.
     simpl.
     lia.
   - apply Z.leb_gt in Hvalue0.
-    unfold CountingCumulativeEnd.
+    rewrite !CountingCumulativeEnd_unfold.
     replace (Z.to_nat (value + 1)) with (S (Z.to_nat value)) by lia.
     rewrite seq_S, map_app, fold_right_app.
     simpl.
@@ -283,6 +385,7 @@ Proof.
     rewrite Z.add_0_r.
     reflexivity.
 Qed.
+
 Lemma counting_bucket_start_nonnegative__placement_boundaries :
   forall input value,
     0 <= CountingBucketStart input value.
@@ -292,6 +395,7 @@ Proof.
   destruct (value <=? 0); [lia|].
   apply counting_cumulative_nonnegative__placement_boundaries.
 Qed.
+
 Lemma counting_index_bounds_to_In_bounds__placement_boundaries :
   forall input,
     (forall index,
@@ -312,6 +416,7 @@ Proof.
   rewrite Hnth in Hbounds.
   exact Hbounds.
 Qed.
+
 Lemma counting_canonical_sorted_exists__placement_boundaries :
   forall input,
     (forall value, In value input -> 0 <= value < 100) ->
@@ -345,6 +450,7 @@ Proof.
     + unfold CountingSorted.
       split; [exact Hperm | apply sort_list_increasing].
 Qed.
+
 Lemma counting_frequency_cons_fold__placement_boundaries :
   forall indices input head,
     fold_right Z.add 0
@@ -367,6 +473,7 @@ Proof.
       unfold CountingFrequency;
       lia.
 Qed.
+
 Lemma counting_cumulative_cons_bounded__placement_boundaries :
   forall input head value,
     0 <= head <= value ->
@@ -374,7 +481,7 @@ Lemma counting_cumulative_cons_bounded__placement_boundaries :
       CountingCumulativeEnd input value + 1.
 Proof.
   intros input head value Hhead.
-  unfold CountingCumulativeEnd.
+  rewrite !CountingCumulativeEnd_unfold.
   rewrite counting_frequency_cons_fold__placement_boundaries.
   assert
     (Hmap :
@@ -405,6 +512,7 @@ Proof.
   rewrite Hmap.
   lia.
 Qed.
+
 Lemma counting_cumulative_99_length__placement_boundaries :
   forall input,
     (forall value, In value input -> 0 <= value < 100) ->
@@ -421,6 +529,7 @@ Proof.
     simpl.
     lia.
 Qed.
+
 Lemma counting_cumulative_positive_at_In__placement_boundaries :
   forall input value,
     0 <= value ->
@@ -435,6 +544,7 @@ Proof.
     (counting_frequency_positive_In__placement_boundaries input value Hin).
   lia.
 Qed.
+
 Lemma counting_placement_initial__placement_boundaries :
   forall input positions output sorted,
     CountingSorted input sorted ->
@@ -443,7 +553,7 @@ Lemma counting_placement_initial__placement_boundaries :
       input positions positions output sorted (Zlength input - 1).
 Proof.
   intros input positions output sorted Hsorted Hstate.
-  unfold CountingPlacementProgress.
+  rewrite CountingPlacementProgress_indexed.
   split.
   - exact Hsorted.
   - split.
@@ -464,6 +574,7 @@ Proof.
       * intros value index Hvalue Hindex.
         lia.
 Qed.
+
 Lemma counting_bucket_start_nat__placement_boundaries :
   forall input n,
     CountingBucketStart input (Z.of_nat n) =
@@ -478,6 +589,7 @@ Proof.
     rewrite Hleb.
     reflexivity.
 Qed.
+
 Lemma counting_bucket_cover_upto__placement_boundaries :
   forall input limit index,
     0 <= index <
@@ -489,7 +601,7 @@ Lemma counting_bucket_cover_upto__placement_boundaries :
 Proof.
   intros input limit.
   induction limit as [| limit IH]; intros index Hindex.
-  - unfold CountingCumulativeEnd in Hindex.
+  - rewrite !CountingCumulativeEnd_unfold in Hindex.
     simpl in Hindex.
     lia.
   - destruct
@@ -507,6 +619,7 @@ Proof.
           by lia.
         lia.
 Qed.
+
 Lemma counting_placement_complete__placement_boundaries :
   forall input positions bucket_ends output sorted,
     (forall value, In value input -> 0 <= value < 100) ->
@@ -517,6 +630,7 @@ Lemma counting_placement_complete__placement_boundaries :
       Znth index output None = Some (Znth index sorted 0).
 Proof.
   intros input positions bucket_ends output sorted Hbounds Hprogress.
+  apply CountingPlacementProgress_indexed in Hprogress.
   destruct Hprogress as
     [Hsorted [Hbucket_ends [Hpositions Hfilled]]].
   intros index Hindex.
@@ -542,6 +656,7 @@ Proof.
   apply (Hfilled value index Hvalue).
   lia.
 Qed.
+
 Lemma counting_output_prefix__placement_boundaries :
   forall output sorted n,
     0 <= n <= Zlength output ->
@@ -572,6 +687,7 @@ Proof.
     apply Hpointwise.
     lia.
 Qed.
+
 Lemma counting_frequency_cons__placement_transition :
   forall x xs value,
     CountingFrequency (x :: xs) value =
@@ -583,6 +699,7 @@ Proof.
   simpl.
   destruct (Z.eq_dec x value); lia.
 Qed.
+
 Lemma counting_frequency_sum_cons__placement_transition :
   forall indices x xs,
     0 <= x ->
@@ -606,18 +723,20 @@ Proof.
       destruct (Nat.eq_dec index (Z.to_nat x)) as [Heq' | Hneq'];
       try lia.
 Qed.
+
 Lemma counting_cumulative_end_nil__placement_transition :
   forall value,
     CountingCumulativeEnd [] value = 0.
 Proof.
   intros value.
-  unfold CountingCumulativeEnd, CountingFrequency.
+  rewrite !CountingCumulativeEnd_unfold; unfold CountingFrequency.
   set (indices := seq 0 (Z.to_nat (value + 1))).
   clearbody indices.
   induction indices as [| index indices IH]; simpl.
   - reflexivity.
   - exact IH.
 Qed.
+
 Lemma counting_cumulative_end_cons__placement_transition :
   forall x xs value,
     0 <= x ->
@@ -627,7 +746,7 @@ Lemma counting_cumulative_end_cons__placement_transition :
       if x <=? value then 1 else 0.
 Proof.
   intros x xs value Hx Hvalue.
-  unfold CountingCumulativeEnd.
+  rewrite !CountingCumulativeEnd_unfold.
   rewrite counting_frequency_sum_cons__placement_transition by exact Hx.
   destruct (x <=? value) eqn:Hle.
   - apply Z.leb_le in Hle.
@@ -648,6 +767,7 @@ Proof.
         Hnotin) as Hcount.
     rewrite Hcount. simpl. lia.
 Qed.
+
 Lemma counting_cumulative_end_as_filter__placement_transition :
   forall values value,
     Forall (fun x => 0 <= x) values ->
@@ -665,6 +785,7 @@ Proof.
     + rewrite Zlength_cons, IH by assumption. lia.
     + rewrite IH by assumption. lia.
 Qed.
+
 Lemma counting_forall_nonnegative_from_Znth__placement_transition :
   forall values,
     (forall index,
@@ -687,6 +808,7 @@ Proof.
       replace (index + 1 - 1) with index in Hpoint by lia.
       apply Hpoint. lia.
 Qed.
+
 Lemma counting_increasing_filter_lower__placement_transition :
   forall values value index,
     increasing values ->
@@ -729,6 +851,7 @@ Proof.
         (IH value (index - 1) Htail_inc ltac:(rewrite Zlength_cons in Hindex; lia) Hle).
       lia.
 Qed.
+
 Lemma counting_filter_below_lower_empty__placement_transition :
   forall values lower value,
     Forall (fun x => lower <= x) values ->
@@ -743,6 +866,7 @@ Proof.
     + apply Z.leb_le in Hxvalue. lia.
     + apply IH with (lower := lower); assumption.
 Qed.
+
 Lemma counting_increasing_filter_upper__placement_transition :
   forall values value index,
     increasing values ->
@@ -777,6 +901,7 @@ Proof.
       * rewrite Zlength_cons. lia.
       * lia.
 Qed.
+
 Lemma counting_cumulative_end_perm__placement_transition :
   forall values1 values2 value,
     Permutation values1 values2 ->
@@ -790,13 +915,14 @@ Proof.
     f_equal.
     exact
       (proj1 (Permutation_count_occ Z.eq_dec values1 values2) Hperm x). }
-  unfold CountingCumulativeEnd.
+  rewrite !CountingCumulativeEnd_unfold.
   set (indices := seq 0 (Z.to_nat (value + 1))).
   clearbody indices.
   induction indices as [| index indices IH]; simpl.
   - reflexivity.
   - rewrite Hfrequency, IH. reflexivity.
 Qed.
+
 Lemma counting_sorted_bucket_value__placement_transition :
   forall input sorted value index,
     CountingSorted input sorted ->
@@ -858,6 +984,7 @@ Proof.
       lia. }
     lia.
 Qed.
+
 Lemma counting_frequency_prefix_drop_last__placement_transition :
   forall input processed value,
     0 <= processed < Zlength input ->
@@ -873,6 +1000,7 @@ Proof.
   simpl.
   destruct (Z.eq_dec (Znth processed input 0) value); lia.
 Qed.
+
 Lemma counting_cumulative_end_step__placement_transition :
   forall input value,
     0 <= value ->
@@ -885,11 +1013,11 @@ Proof.
   - apply Z.leb_le in Hvalue0.
     assert (Hvalue_eq : value = 0) by lia.
     subst value.
-    unfold CountingCumulativeEnd.
+    rewrite !CountingCumulativeEnd_unfold.
     simpl. lia.
   - assert (Hvaluepos : 0 < value).
     { apply Z.leb_gt in Hvalue0. lia. }
-    unfold CountingCumulativeEnd.
+    rewrite !CountingCumulativeEnd_unfold.
     replace (Z.to_nat (value + 1)) with (S (Z.to_nat value)) by lia.
     replace (Z.to_nat (value - 1 + 1)) with (Z.to_nat value) by lia.
     rewrite seq_S, map_app, fold_right_app.
@@ -901,16 +1029,18 @@ Proof.
     clearbody frequencies.
     induction frequencies as [| frequency frequencies IH]; simpl; lia.
 Qed.
+
 Lemma counting_cumulative_end_nonnegative__placement_transition :
   forall input value,
     0 <= CountingCumulativeEnd input value.
 Proof.
   intros input value.
-  unfold CountingCumulativeEnd, CountingFrequency.
+  rewrite !CountingCumulativeEnd_unfold; unfold CountingFrequency.
   set (indices := seq 0 (Z.to_nat (value + 1))).
   clearbody indices.
   induction indices as [| index indices IH]; simpl; lia.
 Qed.
+
 Lemma counting_bucket_start_nonnegative__placement_transition :
   forall input value,
     0 <= CountingBucketStart input value.
@@ -921,6 +1051,7 @@ Proof.
   - lia.
   - apply counting_cumulative_end_nonnegative__placement_transition.
 Qed.
+
 Lemma counting_frequency_prefix_le__placement_transition :
   forall input processed value,
     0 <= processed <= Zlength input ->
@@ -938,6 +1069,7 @@ Proof.
   rewrite count_occ_app.
   lia.
 Qed.
+
 Lemma counting_cumulative_end_bound__placement_transition :
   forall input sorted value,
     CountingSorted input sorted ->
@@ -956,6 +1088,7 @@ Proof.
   rewrite <- H.
   apply Nat.le_add_r.
 Qed.
+
 Lemma counting_placement_step__placement_transition :
   forall n input i output bucket_ends sorted positions output_default,
     0 <= n <= 100 ->
@@ -1018,6 +1151,7 @@ Proof.
     - rewrite Hpositions_len. exact Hvalue. }
   assert (Hwrite_output_bounds : 0 <= write_index < Zlength output).
   { rewrite Hwrite_eq, Houtput_len. lia. }
+  apply CountingPlacementProgress_indexed in Hprogress.
   destruct Hprogress as
     [Hcounting_sorted [Hbucket_ends [Hposition_equation Hfilled]]].
   assert (Hsorted_nonnegative : Forall (fun x => 0 <= x) sorted).
@@ -1129,7 +1263,7 @@ Proof.
         exact (proj1 Hindex). }
   assert (Hnew_progress : CountingPlacementProgress
     input positions' bucket_ends output' sorted (i - 1)).
-  { unfold CountingPlacementProgress.
+  { rewrite CountingPlacementProgress_indexed.
     split.
     - exact Hcounting_sorted.
     - split.
@@ -1182,6 +1316,7 @@ Proof.
       * exact Hnew_output_suffix.
       * exact Hnew_progress.
 Qed.
+
 Lemma counting_copy_initial__copyback :
   forall before target,
     CountingCopyProgress before target before 0.
@@ -1192,6 +1327,7 @@ Proof.
   rewrite sublist_self by reflexivity.
   reflexivity.
 Qed.
+
 Lemma counting_copy_step__copyback :
   forall before target live i,
     0 <= i < Zlength before ->
@@ -1220,6 +1356,7 @@ Proof.
   simpl.
   reflexivity.
 Qed.
+
 Lemma counting_copy_complete__copyback :
   forall before target live,
     Zlength target = Zlength before ->
@@ -1239,4 +1376,20 @@ Proof.
   }
   rewrite Hsuffix, app_nil_r in Hcopy.
   exact Hcopy.
+Qed.
+
+Lemma counting_Forall_sublist {A : Type} (P : A -> Prop) (default : A) :
+  forall values lo hi,
+    0 <= lo <= hi -> hi <= Zlength values ->
+    (Forall P (sublist lo hi values) <->
+      forall index, lo <= index < hi -> P (Znth index values default)).
+Proof.
+  intros values lo hi Hrange Hlength.
+  rewrite (Forall_Znth P default).
+  rewrite Zlength_sublist by lia.
+  split; intros Hall index Hindex.
+  - specialize (Hall (index - lo) ltac:(lia)).
+    rewrite Znth_sublist in Hall by lia.
+    replace (index - lo + lo) with index in Hall by lia. exact Hall.
+  - rewrite Znth_sublist by lia. apply Hall. lia.
 Qed.

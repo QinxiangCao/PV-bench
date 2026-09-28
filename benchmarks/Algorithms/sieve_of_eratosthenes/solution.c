@@ -14,9 +14,6 @@ void solve(int n, int *f)
             for (int j = i * 2; j <= n; j = j + i) {
                 f[j] = 0;
             }
-
         }
-
     }
-
 }

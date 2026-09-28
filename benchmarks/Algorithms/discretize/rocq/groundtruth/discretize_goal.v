@@ -913,7 +913,7 @@ Definition int_array_quicksort_partial_solve_wit_1 := int_array_quicksort_partia
 (*----- Function discretize -----*)
 
 Definition discretize_safety_wit_1 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 50000)) ,
   ((( &( "i" ) )) # Int  |->_)
   **  ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -926,7 +926,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Z
 .
 
 Definition discretize_safety_wit_2 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full dest_map_pre (i + 1 ) (app ((sublist (0) (i) (src_l))) ((cons ((Znth i src_l 0)) ((@nil Z))))) )
   **  (IntArray.undef_seg dest_map_pre (i + 1 ) n_pre )
   **  (IntArray.full src_pre n_pre src_l )
@@ -940,7 +940,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH
 .
 
 Definition discretize_safety_wit_3 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) ,
   ((( &( "slow" ) )) # Int  |->_)
   **  (IntArray.full dest_map_pre n_pre l1 )
   **  ((( &( "src" ) )) # Ptr  |-> src_pre)
@@ -953,7 +953,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list 
 .
 
 Definition discretize_safety_wit_4 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) ,
   ((( &( "fast" ) )) # Int  |->_)
   **  ((( &( "slow" ) )) # Int  |-> 0)
   **  (IntArray.full dest_map_pre n_pre l1 )
@@ -967,7 +967,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list 
 .
 
 Definition discretize_safety_wit_5 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full dest_map_pre n_pre cur_l )
   **  ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
@@ -981,7 +981,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 .
 
 Definition discretize_safety_wit_6 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full dest_map_pre n_pre (replace_Znth ((slow + 1 )) ((Znth fast cur_l 0)) (cur_l)) )
   **  ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
@@ -995,7 +995,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 .
 
 Definition discretize_safety_wit_7 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) = (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) = (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full dest_map_pre n_pre cur_l )
   **  ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
@@ -1009,63 +1009,26 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 .
 
 Definition discretize_safety_wit_8 := 
-(
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l: (@list Z)) (slow: Z) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (discretize_result src_l n_pre out_l (slow + 1 ) )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
   **  ((( &( "slow" ) )) # Int  |-> slow)
   **  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l )
+  **  (IntArray.full dest_map_pre n_pre cur_l )
 |--
   “ ((slow + 1 ) <= INT_MAX) ” 
   &&  “ ((INT_MIN) <= (slow + 1 )) ”
-) \/
-(
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l: (@list Z)) (slow: Z) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (discretize_result src_l n_pre out_l (slow + 1 ) )) ,
-  ((( &( "src" ) )) # Ptr  |-> src_pre)
-  **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
-  **  ((( &( "n" ) )) # Int  |-> n_pre)
-  **  ((( &( "slow" ) )) # Int  |-> slow)
-  **  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l )
-|--
-  “ ((slow + 1 ) <= INT_MAX) ” 
-  &&  “ ((INT_MIN) <= (slow + 1 )) ”
-).
-
-Definition discretize_safety_wit_8_split_goal_1 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l: (@list Z)) (slow: Z) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (discretize_result src_l n_pre out_l (slow + 1 ) )) ,
-  ((( &( "src" ) )) # Ptr  |-> src_pre)
-  **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
-  **  ((( &( "n" ) )) # Int  |-> n_pre)
-  **  ((( &( "slow" ) )) # Int  |-> slow)
-  **  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l )
-|--
-  “ ((slow + 1 ) <= INT_MAX) ”
-.
-
-Definition discretize_safety_wit_8_split_goal_2 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l: (@list Z)) (slow: Z) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (discretize_result src_l n_pre out_l (slow + 1 ) )) ,
-  ((( &( "src" ) )) # Ptr  |-> src_pre)
-  **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
-  **  ((( &( "n" ) )) # Int  |-> n_pre)
-  **  ((( &( "slow" ) )) # Int  |-> slow)
-  **  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l )
-|--
-  “ ((INT_MIN) <= (slow + 1 )) ”
 .
 
 Definition discretize_safety_wit_9 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l: (@list Z)) (slow: Z) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (discretize_result src_l n_pre out_l (slow + 1 ) )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
   **  ((( &( "slow" ) )) # Int  |-> slow)
   **  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l )
+  **  (IntArray.full dest_map_pre n_pre cur_l )
 |--
   “ (1 <= INT_MAX) ” 
   &&  “ ((INT_MIN) <= 1) ”
@@ -1073,12 +1036,11 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l: (@li
 
 Definition discretize_entail_wit_1 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 50000)) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.undef_full dest_map_pre n_pre )
 |--
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
+  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= 0) ” 
   &&  “ (0 <= n_pre) ”
@@ -1087,7 +1049,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Z
   **  (IntArray.undef_seg dest_map_pre 0 n_pre )
 ) \/
 (
-forall (n_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) ,
+forall (n_pre: Z) (src_l: (@list Z)) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 50000)) ,
   TT && emp 
 |--
   “ ((sublist (0) (0) (src_l)) = (@nil Z)) ”
@@ -1095,19 +1057,18 @@ forall (n_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH
 ).
 
 Definition discretize_entail_wit_1_split_goal_1 := 
-forall (n_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) ,
+forall (n_pre: Z) (src_l: (@list Z)) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 50000)) ,
   ((sublist (0) (0) (src_l)) = (@nil Z))
 .
 
 Definition discretize_entail_wit_2 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full dest_map_pre (i + 1 ) (app ((sublist (0) (i) (src_l))) ((cons ((Znth i src_l 0)) ((@nil Z))))) )
   **  (IntArray.undef_seg dest_map_pre (i + 1 ) n_pre )
   **  (IntArray.full src_pre n_pre src_l )
 |--
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
+  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= (i + 1 )) ” 
   &&  “ ((i + 1 ) <= n_pre) ”
@@ -1116,7 +1077,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH
   **  (IntArray.undef_seg dest_map_pre (i + 1 ) n_pre )
 ) \/
 (
-forall (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   TT && emp 
 |--
   “ ((app ((sublist (0) (i) (src_l))) ((cons ((Znth i src_l 0)) ((@nil Z))))) = (sublist (0) ((i + 1 )) (src_l))) ”
@@ -1124,32 +1085,31 @@ forall (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zle
 ).
 
 Definition discretize_entail_wit_2_split_goal_1 := 
-forall (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   ((app ((sublist (0) (i) (src_l))) ((cons ((Znth i src_l 0)) ((@nil Z))))) = (sublist (0) ((i + 1 )) (src_l)))
 .
 
 Definition discretize_entail_wit_3 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre i (sublist (0) (i) (src_l)) )
   **  (IntArray.undef_seg dest_map_pre i n_pre )
 |--
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
+  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ”
   &&  (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre n_pre src_l )
 ) \/
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full dest_map_pre i (sublist (0) (i) (src_l)) )
 |--
   (IntArray.full dest_map_pre n_pre src_l )
 ).
 
 Definition discretize_entail_wit_3_split_goal_spatial := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full dest_map_pre i (sublist (0) (i) (src_l)) )
 |--
   (IntArray.full dest_map_pre n_pre src_l )
@@ -1157,14 +1117,12 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i >= n_p
 
 Definition discretize_entail_wit_4 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) ,
   (IntArray.full dest_map_pre n_pre l1 )
   **  (IntArray.full src_pre n_pre src_l )
 |--
   EX (sorted_l: (@list Z))  (cur_l: (@list Z)) ,
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
-  &&  “ (n_pre <= 50000) ” 
+  “ (n_pre <= 50000) ” 
   &&  “ (0 <= 0) ” 
   &&  “ (0 < 1) ” 
   &&  “ (1 <= 1) ” 
@@ -1174,7 +1132,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (l1: (@list 
   **  (IntArray.full dest_map_pre n_pre cur_l )
 ) \/
 (
-forall (n_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) ,
+forall (n_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l l1 )) (PreH2 : (increasing l1 )) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) ,
   TT && emp 
 |--
   EX (sorted_l: (@list Z)) ,
@@ -1187,14 +1145,12 @@ forall (n_pre: Z) (src_l: (@list Z)) (l1: (@list Z)) (PreH1 : (permutation src_l
 
 Definition discretize_entail_wit_5_1 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) <> (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) <> (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
   (IntArray.full dest_map_pre n_pre (replace_Znth ((slow + 1 )) ((Znth fast cur_l_2 0)) (cur_l_2)) )
   **  (IntArray.full src_pre n_pre src_l )
 |--
   EX (sorted_l: (@list Z))  (cur_l: (@list Z)) ,
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
-  &&  “ (n_pre <= 50000) ” 
+  “ (n_pre <= 50000) ” 
   &&  “ (0 <= (slow + 1 )) ” 
   &&  “ ((slow + 1 ) < (fast + 1 )) ” 
   &&  “ (1 <= (fast + 1 )) ” 
@@ -1204,28 +1160,26 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l_2:
   **  (IntArray.full dest_map_pre n_pre cur_l )
 ) \/
 (
-forall (n_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) <> (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
+forall (n_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) <> (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
   TT && emp 
 |--
   EX (sorted_l: (@list Z)) ,
   “ (0 <= (slow + 1 )) ” 
   &&  “ ((slow + 1 ) < (fast + 1 )) ” 
   &&  “ (1 <= (fast + 1 )) ” 
-  &&  “ ((fast + 1 ) <= (Zlength (src_l))) ” 
+  &&  “ ((fast + 1 ) <= n_pre) ” 
   &&  “ (dedup_scan_inv src_l sorted_l (replace_Znth ((slow + 1 )) ((Znth fast cur_l_2 0)) (cur_l_2)) (slow + 1 ) (fast + 1 ) ) ”
   &&  emp
 ).
 
 Definition discretize_entail_wit_5_2 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) = (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) = (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
   (IntArray.full dest_map_pre n_pre cur_l_2 )
   **  (IntArray.full src_pre n_pre src_l )
 |--
   EX (sorted_l: (@list Z))  (cur_l: (@list Z)) ,
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
-  &&  “ (n_pre <= 50000) ” 
+  “ (n_pre <= 50000) ” 
   &&  “ (0 <= slow) ” 
   &&  “ (slow < (fast + 1 )) ” 
   &&  “ (1 <= (fast + 1 )) ” 
@@ -1235,63 +1189,48 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l_2:
   **  (IntArray.full dest_map_pre n_pre cur_l )
 ) \/
 (
-forall (n_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) = (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
+forall (n_pre: Z) (src_l: (@list Z)) (sorted_l_2: (@list Z)) (cur_l_2: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l_2 0) = (Znth slow cur_l_2 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l_2 cur_l_2 slow fast )) ,
   TT && emp 
 |--
   EX (sorted_l: (@list Z)) ,
   “ (slow < (fast + 1 )) ” 
   &&  “ (1 <= (fast + 1 )) ” 
-  &&  “ ((fast + 1 ) <= (Zlength (src_l))) ” 
+  &&  “ ((fast + 1 ) <= n_pre) ” 
   &&  “ (dedup_scan_inv src_l sorted_l cur_l_2 slow (fast + 1 ) ) ”
   &&  emp
 ).
 
-Definition discretize_entail_wit_6 := 
+Definition discretize_return_wit_1 := 
 (
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= slow)) (PreH6 : (slow < fast)) (PreH7 : (1 <= fast)) (PreH8 : (fast <= n_pre)) (PreH9 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre n_pre cur_l )
 |--
   EX (out_l: (@list Z)) ,
-  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
-  &&  “ (n_pre <= 50000) ” 
-  &&  “ (discretize_result src_l n_pre out_l (slow + 1 ) ) ”
+  “ (discretize_result src_l out_l (slow + 1 ) ) ”
   &&  (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre n_pre out_l )
 ) \/
 (
-forall (n_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= slow)) (PreH6 : (slow < fast)) (PreH7 : (1 <= fast)) (PreH8 : (fast <= n_pre)) (PreH9 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (n_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   TT && emp 
 |--
-  “ (discretize_result src_l n_pre cur_l (slow + 1 ) ) ”
+  “ (discretize_result src_l cur_l (slow + 1 ) ) ”
   &&  emp
 ).
 
-Definition discretize_entail_wit_6_split_goal_1 := 
-forall (n_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= slow)) (PreH6 : (slow < fast)) (PreH7 : (1 <= fast)) (PreH8 : (fast <= n_pre)) (PreH9 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
-  (discretize_result src_l n_pre cur_l (slow + 1 ) )
-.
-
-Definition discretize_return_wit_1 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (out_l_2: (@list Z)) (slow: Z) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (discretize_result src_l n_pre out_l_2 (slow + 1 ) )) ,
-  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l_2 )
-|--
-  EX (out_l: (@list Z)) ,
-  “ (discretize_result src_l n_pre out_l (slow + 1 ) ) ”
-  &&  (IntArray.full src_pre n_pre src_l )
-  **  (IntArray.full dest_map_pre n_pre out_l )
+Definition discretize_return_wit_1_split_goal_1 := 
+forall (n_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast >= n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+  (discretize_result src_l cur_l (slow + 1 ) )
 .
 
 Definition discretize_partial_solve_wit_1 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre i (sublist (0) (i) (src_l)) )
   **  (IntArray.undef_seg dest_map_pre i n_pre )
 |--
   “ (i < n_pre) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
   &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= i) ” 
@@ -1303,13 +1242,12 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH
 .
 
 Definition discretize_partial_solve_wit_2 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= i)) (PreH6 : (i <= n_pre)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH1 : (i < n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= i)) (PreH5 : (i <= n_pre)) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre i (sublist (0) (i) (src_l)) )
   **  (IntArray.undef_seg dest_map_pre i n_pre )
 |--
   “ (i < n_pre) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
   &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= i) ” 
@@ -1321,7 +1259,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (i: Z) (PreH
 .
 
 Definition discretize_partial_solve_wit_3_pure := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 50000)) ,
   ((( &( "src" ) )) # Ptr  |-> src_pre)
   **  ((( &( "dest_map" ) )) # Ptr  |-> dest_map_pre)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
@@ -1333,13 +1271,12 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Z
 .
 
 Definition discretize_partial_solve_wit_3_aux := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Zlength (src_l)) = n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 50000)) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 50000)) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre n_pre src_l )
 |--
   “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
   &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ”
   &&  (IntArray.full dest_map_pre n_pre src_l )
@@ -1349,13 +1286,11 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (PreH1 : ((Z
 Definition discretize_partial_solve_wit_3 := discretize_partial_solve_wit_3_pure -> discretize_partial_solve_wit_3_aux.
 
 Definition discretize_partial_solve_wit_4 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= slow)) (PreH6 : (slow < fast)) (PreH7 : (1 <= fast)) (PreH8 : (fast <= n_pre)) (PreH9 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast < n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full src_pre n_pre src_l )
   **  (IntArray.full dest_map_pre n_pre cur_l )
 |--
   “ (fast < n_pre) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= slow) ” 
   &&  “ (slow < fast) ” 
@@ -1368,13 +1303,11 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 .
 
 Definition discretize_partial_solve_wit_5 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast < n_pre)) (PreH2 : ((Zlength (src_l)) = n_pre)) (PreH3 : (1 <= n_pre)) (PreH4 : (n_pre <= 50000)) (PreH5 : (0 <= slow)) (PreH6 : (slow < fast)) (PreH7 : (1 <= fast)) (PreH8 : (fast <= n_pre)) (PreH9 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : (fast < n_pre)) (PreH2 : (n_pre <= 50000)) (PreH3 : (0 <= slow)) (PreH4 : (slow < fast)) (PreH5 : (1 <= fast)) (PreH6 : (fast <= n_pre)) (PreH7 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full dest_map_pre n_pre cur_l )
   **  (IntArray.full src_pre n_pre src_l )
 |--
   “ (fast < n_pre) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= slow) ” 
   &&  “ (slow < fast) ” 
@@ -1387,14 +1320,12 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 .
 
 Definition discretize_partial_solve_wit_6 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full dest_map_pre n_pre cur_l )
   **  (IntArray.full src_pre n_pre src_l )
 |--
   “ ((Znth fast cur_l 0) <> (Znth slow cur_l 0)) ” 
   &&  “ (fast < n_pre) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= slow) ” 
   &&  “ (slow < fast) ” 
@@ -1407,14 +1338,12 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 .
 
 Definition discretize_partial_solve_wit_7 := 
-forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : ((Zlength (src_l)) = n_pre)) (PreH4 : (1 <= n_pre)) (PreH5 : (n_pre <= 50000)) (PreH6 : (0 <= slow)) (PreH7 : (slow < fast)) (PreH8 : (1 <= fast)) (PreH9 : (fast <= n_pre)) (PreH10 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
+forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (@list Z)) (cur_l: (@list Z)) (fast: Z) (slow: Z) (PreH1 : ((Znth fast cur_l 0) <> (Znth slow cur_l 0))) (PreH2 : (fast < n_pre)) (PreH3 : (n_pre <= 50000)) (PreH4 : (0 <= slow)) (PreH5 : (slow < fast)) (PreH6 : (1 <= fast)) (PreH7 : (fast <= n_pre)) (PreH8 : (dedup_scan_inv src_l sorted_l cur_l slow fast )) ,
   (IntArray.full dest_map_pre n_pre cur_l )
   **  (IntArray.full src_pre n_pre src_l )
 |--
   “ ((Znth fast cur_l 0) <> (Znth slow cur_l 0)) ” 
   &&  “ (fast < n_pre) ” 
-  &&  “ ((Zlength (src_l)) = n_pre) ” 
-  &&  “ (1 <= n_pre) ” 
   &&  “ (n_pre <= 50000) ” 
   &&  “ (0 <= slow) ” 
   &&  “ (slow < fast) ” 
@@ -1429,7 +1358,7 @@ forall (dest_map_pre: Z) (n_pre: Z) (src_pre: Z) (src_l: (@list Z)) (sorted_l: (
 (*----- Function query_forward -----*)
 
 Definition query_forward_safety_wit_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
   ((( &( "low" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1441,7 +1370,8 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 
 .
 
 Definition query_forward_safety_wit_2 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) ,
+(
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
   ((( &( "high" ) )) # Int  |->_)
   **  ((( &( "low" ) )) # Int  |-> 0)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
@@ -1451,10 +1381,46 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 
 |--
   “ ((map_size_pre - 1 ) <= INT_MAX) ” 
   &&  “ ((INT_MIN) <= (map_size_pre - 1 )) ”
+) \/
+(
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
+  ((( &( "high" ) )) # Int  |->_)
+  **  ((( &( "low" ) )) # Int  |-> 0)
+  **  ((( &( "map" ) )) # Ptr  |-> map_pre)
+  **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
+  **  ((( &( "target" ) )) # Int  |-> target_pre)
+  **  (IntArray.full map_pre map_size_pre map_l )
+|--
+  “ ((map_size_pre - 1 ) <= INT_MAX) ” 
+  &&  “ ((INT_MIN) <= (map_size_pre - 1 )) ”
+).
+
+Definition query_forward_safety_wit_2_split_goal_1 := 
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
+  ((( &( "high" ) )) # Int  |->_)
+  **  ((( &( "low" ) )) # Int  |-> 0)
+  **  ((( &( "map" ) )) # Ptr  |-> map_pre)
+  **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
+  **  ((( &( "target" ) )) # Int  |-> target_pre)
+  **  (IntArray.full map_pre map_size_pre map_l )
+|--
+  “ ((map_size_pre - 1 ) <= INT_MAX) ”
+.
+
+Definition query_forward_safety_wit_2_split_goal_2 := 
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
+  ((( &( "high" ) )) # Int  |->_)
+  **  ((( &( "low" ) )) # Int  |-> 0)
+  **  ((( &( "map" ) )) # Ptr  |-> map_pre)
+  **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
+  **  ((( &( "target" ) )) # Int  |-> target_pre)
+  **  (IntArray.full map_pre map_size_pre map_l )
+|--
+  “ ((INT_MIN) <= (map_size_pre - 1 )) ”
 .
 
 Definition query_forward_safety_wit_3 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
   ((( &( "high" ) )) # Int  |->_)
   **  ((( &( "low" ) )) # Int  |-> 0)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
@@ -1468,7 +1434,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 
 
 Definition query_forward_safety_wit_4 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1481,7 +1447,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
   &&  “ ((INT_MIN) <= (low + ((high - low ) ÷ 2 ) )) ”
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1495,7 +1461,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
 ).
 
 Definition query_forward_safety_wit_4_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1508,7 +1474,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
 .
 
 Definition query_forward_safety_wit_4_split_goal_2 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1521,7 +1487,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
 .
 
 Definition query_forward_safety_wit_5 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1535,7 +1501,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
 .
 
 Definition query_forward_safety_wit_6 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1549,7 +1515,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
 .
 
 Definition query_forward_safety_wit_7 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "mid" ) )) # Int  |->_)
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1563,7 +1529,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
 .
 
 Definition query_forward_safety_wit_8 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1577,7 +1543,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 .
 
 Definition query_forward_safety_wit_9 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1591,7 +1557,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 .
 
 Definition query_forward_safety_wit_10 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1605,7 +1571,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 .
 
 Definition query_forward_safety_wit_11 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
   **  ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
@@ -1619,7 +1585,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 .
 
 Definition query_forward_safety_wit_12 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (high: Z) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= (high + 1 ))) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) (PreH9 : (query_forward_result map_l map_size_pre target_pre (-1) )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
   **  ((( &( "target" ) )) # Int  |-> target_pre)
@@ -1631,7 +1597,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 .
 
 Definition query_forward_safety_wit_13 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (high: Z) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= (high + 1 ))) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) (PreH9 : (query_forward_result map_l map_size_pre target_pre (-1) )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((( &( "map" ) )) # Ptr  |-> map_pre)
   **  ((( &( "map_size" ) )) # Int  |-> map_size_pre)
   **  ((( &( "target" ) )) # Int  |-> target_pre)
@@ -1645,12 +1611,10 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 
 Definition query_forward_entail_wit_1 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
-  &&  “ (map_size_pre <= 50000) ” 
+  “ (map_size_pre <= 50000) ” 
   &&  “ (strict_increasing map_l ) ” 
   &&  “ (0 <= 0) ” 
   &&  “ (0 <= ((map_size_pre - 1 ) + 1 )) ” 
@@ -1659,26 +1623,30 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (PreH1 
   &&  (IntArray.full map_pre map_size_pre map_l )
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
   TT && emp 
 |--
-  “ (query_forward_search_inv map_l map_size_pre target_pre 0 (map_size_pre - 1 ) ) ”
+  “ (query_forward_search_inv map_l map_size_pre target_pre 0 (map_size_pre - 1 ) ) ” 
+  &&  “ (0 <= ((map_size_pre - 1 ) + 1 )) ”
   &&  emp
 ).
 
 Definition query_forward_entail_wit_1_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
   (query_forward_search_inv map_l map_size_pre target_pre 0 (map_size_pre - 1 ) )
+.
+
+Definition query_forward_entail_wit_1_split_goal_2 := 
+forall (map_size_pre: Z) (map_l: (@list Z)) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) ,
+  (0 <= ((map_size_pre - 1 ) + 1 ))
 .
 
 Definition query_forward_entail_wit_2 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
-  &&  “ (map_size_pre <= 50000) ” 
+  “ (map_size_pre <= 50000) ” 
   &&  “ (strict_increasing map_l ) ” 
   &&  “ (0 <= low) ” 
   &&  “ (low <= (low + ((high - low ) ÷ 2 ) )) ” 
@@ -1688,7 +1656,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: 
   &&  (IntArray.full map_pre map_size_pre map_l )
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   TT && emp 
 |--
   “ ((low + ((high - low ) ÷ 2 ) ) <= high) ” 
@@ -1697,23 +1665,21 @@ forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (
 ).
 
 Definition query_forward_entail_wit_2_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   ((low + ((high - low ) ÷ 2 ) ) <= high)
 .
 
 Definition query_forward_entail_wit_2_split_goal_2 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low <= high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (low <= (low + ((high - low ) ÷ 2 ) ))
 .
 
 Definition query_forward_entail_wit_3_1 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
-  &&  “ (map_size_pre <= 50000) ” 
+  “ (map_size_pre <= 50000) ” 
   &&  “ (strict_increasing map_l ) ” 
   &&  “ (0 <= (mid + 1 )) ” 
   &&  “ ((mid + 1 ) <= (high + 1 )) ” 
@@ -1722,7 +1688,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
   &&  (IntArray.full map_pre map_size_pre map_l )
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   TT && emp 
 |--
   “ (query_forward_search_inv map_l map_size_pre target_pre (mid + 1 ) high ) ”
@@ -1730,18 +1696,16 @@ forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (h
 ).
 
 Definition query_forward_entail_wit_3_1_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) < target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (query_forward_search_inv map_l map_size_pre target_pre (mid + 1 ) high )
 .
 
 Definition query_forward_entail_wit_3_2 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
-  &&  “ (map_size_pre <= 50000) ” 
+  “ (map_size_pre <= 50000) ” 
   &&  “ (strict_increasing map_l ) ” 
   &&  “ (0 <= low) ” 
   &&  “ (low <= ((mid - 1 ) + 1 )) ” 
@@ -1750,7 +1714,7 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
   &&  (IntArray.full map_pre map_size_pre map_l )
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   TT && emp 
 |--
   “ (query_forward_search_inv map_l map_size_pre target_pre low (mid - 1 ) ) ”
@@ -1758,75 +1722,57 @@ forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (h
 ).
 
 Definition query_forward_entail_wit_3_2_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : ((Zlength (map_l)) = map_size_pre)) (PreH4 : (0 <= map_size_pre)) (PreH5 : (map_size_pre <= 50000)) (PreH6 : (strict_increasing map_l )) (PreH7 : (0 <= low)) (PreH8 : (low <= mid)) (PreH9 : (mid <= high)) (PreH10 : (high < map_size_pre)) (PreH11 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) >= target_pre)) (PreH2 : ((Znth mid map_l 0) <> target_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (query_forward_search_inv map_l map_size_pre target_pre low (mid - 1 ) )
 .
 
-Definition query_forward_entail_wit_4 := 
+Definition query_forward_return_wit_1 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
-  &&  “ (map_size_pre <= 50000) ” 
-  &&  “ (strict_increasing map_l ) ” 
-  &&  “ (0 <= low) ” 
-  &&  “ (low <= (high + 1 )) ” 
-  &&  “ (high < map_size_pre) ” 
-  &&  “ (query_forward_search_inv map_l map_size_pre target_pre low high ) ” 
-  &&  “ (query_forward_result map_l map_size_pre target_pre (-1) ) ”
+  “ (query_forward_result map_l target_pre (-1) ) ”
   &&  (IntArray.full map_pre map_size_pre map_l )
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   TT && emp 
 |--
-  “ (query_forward_result map_l map_size_pre target_pre (-1) ) ”
+  “ (query_forward_result map_l target_pre (-1) ) ”
   &&  emp
 ).
 
-Definition query_forward_entail_wit_4_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= (high + 1 ))) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
-  (query_forward_result map_l map_size_pre target_pre (-1) )
-.
-
-Definition query_forward_return_wit_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (high: Z) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= (high + 1 ))) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) (PreH9 : (query_forward_result map_l map_size_pre target_pre (-1) )) ,
-  (IntArray.full map_pre map_size_pre map_l )
-|--
-  “ (query_forward_result map_l map_size_pre target_pre (-1) ) ”
-  &&  (IntArray.full map_pre map_size_pre map_l )
+Definition query_forward_return_wit_1_split_goal_1 := 
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (high: Z) (low: Z) (PreH1 : (low > high)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= (high + 1 ))) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+  (query_forward_result map_l target_pre (-1) )
 .
 
 Definition query_forward_return_wit_2 := 
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) = target_pre)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= mid)) (PreH8 : (mid <= high)) (PreH9 : (high < map_size_pre)) (PreH10 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) = target_pre)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= mid)) (PreH6 : (mid <= high)) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ (query_forward_result map_l map_size_pre target_pre mid ) ”
+  “ (query_forward_result map_l target_pre mid ) ”
   &&  (IntArray.full map_pre map_size_pre map_l )
 ) \/
 (
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) = target_pre)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= mid)) (PreH8 : (mid <= high)) (PreH9 : (high < map_size_pre)) (PreH10 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) = target_pre)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= mid)) (PreH6 : (mid <= high)) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   TT && emp 
 |--
-  “ (query_forward_result map_l map_size_pre target_pre mid ) ”
+  “ (query_forward_result map_l target_pre mid ) ”
   &&  emp
 ).
 
 Definition query_forward_return_wit_2_split_goal_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) = target_pre)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= mid)) (PreH8 : (mid <= high)) (PreH9 : (high < map_size_pre)) (PreH10 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
-  (query_forward_result map_l map_size_pre target_pre mid )
+forall (target_pre: Z) (map_size_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) = target_pre)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= mid)) (PreH6 : (mid <= high)) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+  (query_forward_result map_l target_pre mid )
 .
 
 Definition query_forward_partial_solve_wit_1 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Zlength (map_l)) = map_size_pre)) (PreH2 : (0 <= map_size_pre)) (PreH3 : (map_size_pre <= 50000)) (PreH4 : (strict_increasing map_l )) (PreH5 : (0 <= low)) (PreH6 : (low <= mid)) (PreH7 : (mid <= high)) (PreH8 : (high < map_size_pre)) (PreH9 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : (map_size_pre <= 50000)) (PreH2 : (strict_increasing map_l )) (PreH3 : (0 <= low)) (PreH4 : (low <= mid)) (PreH5 : (mid <= high)) (PreH6 : (high < map_size_pre)) (PreH7 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
-  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
-  &&  “ (map_size_pre <= 50000) ” 
+  “ (map_size_pre <= 50000) ” 
   &&  “ (strict_increasing map_l ) ” 
   &&  “ (0 <= low) ” 
   &&  “ (low <= mid) ” 
@@ -1838,12 +1784,10 @@ forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z
 .
 
 Definition query_forward_partial_solve_wit_2 := 
-forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) <> target_pre)) (PreH2 : ((Zlength (map_l)) = map_size_pre)) (PreH3 : (0 <= map_size_pre)) (PreH4 : (map_size_pre <= 50000)) (PreH5 : (strict_increasing map_l )) (PreH6 : (0 <= low)) (PreH7 : (low <= mid)) (PreH8 : (mid <= high)) (PreH9 : (high < map_size_pre)) (PreH10 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
+forall (target_pre: Z) (map_size_pre: Z) (map_pre: Z) (map_l: (@list Z)) (low: Z) (mid: Z) (high: Z) (PreH1 : ((Znth mid map_l 0) <> target_pre)) (PreH2 : (map_size_pre <= 50000)) (PreH3 : (strict_increasing map_l )) (PreH4 : (0 <= low)) (PreH5 : (low <= mid)) (PreH6 : (mid <= high)) (PreH7 : (high < map_size_pre)) (PreH8 : (query_forward_search_inv map_l map_size_pre target_pre low high )) ,
   (IntArray.full map_pre map_size_pre map_l )
 |--
   “ ((Znth mid map_l 0) <> target_pre) ” 
-  &&  “ ((Zlength (map_l)) = map_size_pre) ” 
-  &&  “ (0 <= map_size_pre) ” 
   &&  “ (map_size_pre <= 50000) ” 
   &&  “ (strict_increasing map_l ) ” 
   &&  “ (0 <= low) ” 
@@ -1922,7 +1866,6 @@ Axiom proof_of_discretize_entail_wit_3 : discretize_entail_wit_3.
 Axiom proof_of_discretize_entail_wit_4 : discretize_entail_wit_4.
 Axiom proof_of_discretize_entail_wit_5_1 : discretize_entail_wit_5_1.
 Axiom proof_of_discretize_entail_wit_5_2 : discretize_entail_wit_5_2.
-Axiom proof_of_discretize_entail_wit_6 : discretize_entail_wit_6.
 Axiom proof_of_discretize_return_wit_1 : discretize_return_wit_1.
 Axiom proof_of_discretize_partial_solve_wit_1 : discretize_partial_solve_wit_1.
 Axiom proof_of_discretize_partial_solve_wit_2 : discretize_partial_solve_wit_2.
@@ -1949,7 +1892,6 @@ Axiom proof_of_query_forward_entail_wit_1 : query_forward_entail_wit_1.
 Axiom proof_of_query_forward_entail_wit_2 : query_forward_entail_wit_2.
 Axiom proof_of_query_forward_entail_wit_3_1 : query_forward_entail_wit_3_1.
 Axiom proof_of_query_forward_entail_wit_3_2 : query_forward_entail_wit_3_2.
-Axiom proof_of_query_forward_entail_wit_4 : query_forward_entail_wit_4.
 Axiom proof_of_query_forward_return_wit_1 : query_forward_return_wit_1.
 Axiom proof_of_query_forward_return_wit_2 : query_forward_return_wit_2.
 Axiom proof_of_query_forward_partial_solve_wit_1 : query_forward_partial_solve_wit_1.

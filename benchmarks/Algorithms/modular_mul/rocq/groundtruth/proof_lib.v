@@ -1,12 +1,11 @@
+Require Export PVbench.Algorithms.modular_mul.rocq.helper_lib.
 From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
+
 Require Import Coq.micromega.Lia.
 Require Import Coq.setoid_ring.Ring.
 From Coq Require Import Lia.
-Require Export PVbench.Algorithms.modular_mul.rocq.spec_lib.
-Require Export PVbench.Algorithms.modular_mul.rocq.helper_lib.
-
 Lemma modular_mul_progress_odd_step__odd_transition :
   forall original_multiplicand original_multiplier modulus
          current_multiplicand remaining_multiplier accumulator sign,
@@ -57,7 +56,6 @@ Proof.
   rewrite Hmultiplicand at 1.
   ring.
 Qed.
-
 Lemma modular_mul_progress_even_step__even_transition :
   forall original_multiplicand original_multiplier modulus
          current_multiplicand remaining_multiplier accumulator sign,
@@ -85,7 +83,6 @@ Proof.
     as Hcurrent.
   nia.
 Qed.
-
 Lemma z_rem_strict_bounds__even_transition :
   forall value modulus,
     0 < modulus ->
@@ -101,7 +98,6 @@ Proof.
     rewrite Z.rem_opp_l in Hremainder by lia.
     lia.
 Qed.
-
 Lemma modular_mul_progress_finish__final_result :
   forall original_multiplicand original_multiplier modulus
          current_multiplicand remaining_multiplier accumulator sign,
@@ -126,4 +122,3 @@ Proof.
   - lia.
   - exists quotient. nia.
 Qed.
-

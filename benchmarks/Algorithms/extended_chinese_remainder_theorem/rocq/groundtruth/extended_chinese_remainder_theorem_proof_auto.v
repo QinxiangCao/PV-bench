@@ -19,7 +19,6 @@ Local Open Scope list.
 Import naive_C_Rules.
 Require Import PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.spec_lib.
 Require Import PVbench.Algorithms.extended_chinese_remainder_theorem.rocq.helper_lib.
-Require Import PVbench.Algorithms.modular_mul.rocq.spec_lib.
 Local Open Scope sac.
 
 Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_1 : extended_chinese_remainder_theorem_safety_wit_1.
@@ -43,13 +42,34 @@ Proof. Admitted.
 Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_8 : extended_chinese_remainder_theorem_safety_wit_8.
 Proof. Admitted. 
 
-Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_9 : extended_chinese_remainder_theorem_safety_wit_9.
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_10 : extended_chinese_remainder_theorem_safety_wit_10.
 Proof. Admitted. 
 
-Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_12 : extended_chinese_remainder_theorem_safety_wit_12.
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_11 : extended_chinese_remainder_theorem_safety_wit_11.
 Proof. Admitted. 
 
-Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_13 : extended_chinese_remainder_theorem_safety_wit_13.
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_22 : extended_chinese_remainder_theorem_safety_wit_22.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_23 : extended_chinese_remainder_theorem_safety_wit_23.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_24 : extended_chinese_remainder_theorem_safety_wit_24.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_25 : extended_chinese_remainder_theorem_safety_wit_25.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_26 : extended_chinese_remainder_theorem_safety_wit_26.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_27 : extended_chinese_remainder_theorem_safety_wit_27.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_28 : extended_chinese_remainder_theorem_safety_wit_28.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_safety_wit_29 : extended_chinese_remainder_theorem_safety_wit_29.
 Proof. Admitted. 
 
 Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_1 : extended_chinese_remainder_theorem_partial_solve_wit_1.
@@ -70,9 +90,15 @@ Proof. Admitted.
 Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_6 : extended_chinese_remainder_theorem_partial_solve_wit_6.
 Proof. Admitted. 
 
-Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_7_pure : extended_chinese_remainder_theorem_partial_solve_wit_7_pure.
+Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_7 : extended_chinese_remainder_theorem_partial_solve_wit_7.
 Proof. Admitted. 
 
-Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_7 : extended_chinese_remainder_theorem_partial_solve_wit_7.
+Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_8 : extended_chinese_remainder_theorem_partial_solve_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_9 : extended_chinese_remainder_theorem_partial_solve_wit_9.
+Proof. Admitted. 
+
+Lemma proof_of_extended_chinese_remainder_theorem_partial_solve_wit_10 : extended_chinese_remainder_theorem_partial_solve_wit_10.
 Proof. Admitted. 
 

@@ -1,8 +1,5 @@
-/*
- * Sort a contiguous row-major matrix of decimal digits in descending greedy
- * order.  Row i starts at numbers + i * number_width, and lengths[i] records
- * the number of valid digits in that row.
- */
+#include "array2_def.h"
+
 void quicksort_numbers(int *numbers, int *lengths, int count,
                        int number_width, int low, int high)
 
@@ -19,27 +16,20 @@ void quicksort_numbers(int *numbers, int *lengths, int count,
             int comparison = 0;
             int position;
 
-            /* Compare current+pivot with pivot+current without constructing
-             * either temporary concatenation. */
-
             for (position = 0; position < total_length; ++position) {
                 int left_digit;
                 int right_digit;
 
                 if (position < current_length) {
-
                     left_digit = numbers[scan * number_width + position];
                 } else {
-
                     left_digit = numbers[high * number_width +
                                          (position - current_length)];
                 }
 
                 if (position < pivot_length) {
-
                     right_digit = numbers[high * number_width + position];
                 } else {
-
                     right_digit = numbers[scan * number_width +
                                           (position - pivot_length)];
                 }
@@ -57,7 +47,6 @@ void quicksort_numbers(int *numbers, int *lengths, int count,
                 ++boundary;
 
                 for (column = 0; column < number_width; ++column) {
-
                     int temporary_digit =
                         numbers[boundary * number_width + column];
                     numbers[boundary * number_width + column] =
@@ -75,7 +64,6 @@ void quicksort_numbers(int *numbers, int *lengths, int count,
         pivot = boundary + 1;
 
         for (int column = 0; column < number_width; ++column) {
-
             int temporary_digit =
                 numbers[pivot * number_width + column];
             numbers[pivot * number_width + column] =
@@ -101,15 +89,11 @@ void quicksort_numbers(int *numbers, int *lengths, int count,
     }
 }
 
-/*
- * numbers contains count rows of number_width integer cells.  Each row holds
- * one positive integer as decimal digits in 0..9.  result receives the largest
- * possible concatenation and the return value is result itself.
- */
 int* concatenating_numbers(int *numbers, int count, int number_width,
                           int *lengths, int *result)
 
 {
+
     int result_length = 0;
     int i;
 
@@ -122,7 +106,6 @@ int* concatenating_numbers(int *numbers, int count, int number_width,
         int j;
 
         for (j = 0; j < lengths[i]; ++j) {
-
             result[result_length] = numbers[i * number_width + j];
             ++result_length;
         }

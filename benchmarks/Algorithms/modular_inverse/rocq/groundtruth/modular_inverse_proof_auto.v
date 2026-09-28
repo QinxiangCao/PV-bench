@@ -17,6 +17,8 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import PVbench.Algorithms.modular_inverse.rocq.spec_lib.
+Require Import PVbench.Algorithms.modular_inverse.rocq.helper_lib.
 Local Open Scope sac.
 
 Lemma proof_of_modular_inverse_safety_wit_1 : modular_inverse_safety_wit_1.

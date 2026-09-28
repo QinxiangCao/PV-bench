@@ -16,7 +16,6 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.majority_element.rocq.spec_lib.
 Require Import PVbench.Algorithms.majority_element.rocq.helper_lib.
 Local Open Scope sac.
 

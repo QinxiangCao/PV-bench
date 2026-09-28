@@ -1,8 +1,3 @@
-/*
- * Stable counting sort for values in the fixed range [0, 99].
- * The cumulative histogram gives the end of each value's bucket; walking the
- * input from right to left makes the placement phase stable.
- */
 void sort(int *a, int n)
 
 {

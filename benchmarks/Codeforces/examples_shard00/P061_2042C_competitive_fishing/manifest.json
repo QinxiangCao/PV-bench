@@ -1,0 +1,19 @@
+{
+  "id": "P061_2042C_competitive_fishing",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "2042/C",
+    "title": "Competitive Fishing",
+    "url": "https://codeforces.com/problemset/problem/2042/C",
+    "rating": 1800,
+    "tags": [
+      "greedy"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": true
+  }
+}

@@ -1,7 +1,13 @@
-int *get_prime(int n, int tot, int *flag, int *prime)
+int *get_prime(int n, int tot, int *prime)
 
 {
-	tot = 0;
+     int flag[46341];
+
+     for (int z = 2; z <= n; ++z) {
+          flag[z] = 0;
+     }
+
+     tot = 0;
 
      for (int i = 2; i <= n; i++)
 		flag[i] = i;

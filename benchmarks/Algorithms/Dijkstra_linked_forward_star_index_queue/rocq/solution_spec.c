@@ -16,9 +16,7 @@
 	      (graph_state_model : G -> (Z -> Prop) -> list Z -> state -> Prop)
 	      (visited_set_empty : (Z -> Prop) -> Prop)
 	      (visited_set_add : (Z -> Prop) -> Z -> (Z -> Prop) -> Prop)
-	      (dijkstra_heap_lfs_initial_refines :
-	        G -> Z -> list Z -> list Z -> list Z -> list Z ->
-	        (unit -> state -> Prop) -> Prop)
+
       (vector_shape : list Z -> Prop)
       (graph_has_size : G -> Z -> Prop)
       (vertex_valid : G -> Z -> Prop)
@@ -36,24 +34,10 @@
 	      (dijkstra_heap_edge_loop_state :
 	        G -> Z -> (Z -> Prop) -> Z -> Z -> Z ->
 	        list Z -> multiset (Z * Z) -> Prop)
-	      (dijkstra_heap_loop_refines :
-	        G -> Z -> list Z -> list Z -> list Z -> list Z ->
-	        (Z -> Prop) -> list Z -> multiset (Z * Z) ->
-	        (unit -> state -> Prop) -> Prop)
-	      (dijkstra_heap_after_pop_refines :
-	        G -> Z -> list Z -> list Z -> list Z -> list Z ->
-	        (Z -> Prop) -> list Z -> multiset (Z * Z) -> Z -> Z ->
-	        (unit -> state -> Prop) -> Prop)
-	      (dijkstra_heap_edge_loop_refines :
-	        G -> Z -> Z -> Z -> Z ->
-	        list Z -> list Z -> list Z -> list Z ->
-	        (Z -> Prop) -> list Z -> multiset (Z * Z) ->
-	        (unit -> state -> Prop) -> Prop)
-	      (dijkstra_heap_after_relax_refines :
-	        G -> Z -> Z -> Z -> Z -> Z -> Z ->
-	        list Z -> list Z -> list Z -> list Z ->
-	        (Z -> Prop) -> list Z -> multiset (Z * Z) ->
-	        (unit -> state -> Prop) -> Prop)
+
+
+
+
  */
 
 #define MAX_VERTEX_COUNT 10
