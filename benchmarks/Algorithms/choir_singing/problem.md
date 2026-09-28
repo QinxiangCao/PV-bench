@@ -1,19 +1,24 @@
 # P1091 Choir Formation
 
-## Description
+## Abstract model
+
+Choose a subsequence of the students' heights that is strictly increasing up
+to one peak and strictly decreasing afterward. If the longest such bitonic
+subsequence has length $k$, the required number of removals is $n-k$. The
+verification case computes increasing and decreasing DP lengths for every
+possible peak.
+
+## Problem statement
 
 $n$ students stand in a fixed left-to-right order. Remove as few students as
 possible so that the remaining heights have the form
 $t_1<\cdots<t_i>\cdots>t_k$. The relative order of retained students may not
 change. Output the minimum number removed.
 
-## Input
+## Input and output
 
-The first line contains $n$. The second line contains the $n$ heights in their original order.
-
-## Output
-
-Print the minimum number of students that must be removed.
+The first line contains $n$ and the second line contains the $n$ heights.
+Output the minimum removal count.
 
 ## Constraints
 

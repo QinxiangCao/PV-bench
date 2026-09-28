@@ -1,28 +1,25 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (MSISMaximum : list Z -> Z -> Prop)
-      (MSISDPTablePrefix : list Z -> list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.max_sum_increasing_sequence.rocq.spec_lib */
 
-int maxSumIncreasingSequence(int *nums, int numsSize, int *dp)
+int maxSumIncreasingSequence(int *nums, int numsSize)
 /*@ With (l : list Z)
     Require
       1 <= numsSize && numsSize <= 100000 &&
       Zlength(l) == numsSize &&
-      (forall (k : Z),
-        (0 <= k && k < numsSize) =>
-        (1 <= l[k] && l[k] <= 10000)) &&
-      IntArray::full(nums, numsSize, l) *
-      IntArray::undef_full(dp, numsSize)
+      Forall(Z::le(1), l) && Forall(Z::ge(10000), l) &&
+      IntArray::full(nums, numsSize, l)
     Ensure
-      exists d,
       MSISMaximum(l, __return) &&
-      1 <= __return && __return <= INT_MAX &&
-      MSISDPTablePrefix(l, d, numsSize) &&
-      IntArray::full(nums, numsSize, l) *
-      IntArray::full(dp, numsSize, d)
+      IntArray::full(nums, numsSize, l)
  */
 {
+  int dp[100000];
+
   dp[0] = nums[0];
   int ans = nums[0];
 
@@ -42,5 +39,6 @@ int maxSumIncreasingSequence(int *nums, int numsSize, int *dp)
       ans = dp[i];
     }
   }
+
   return ans;
 }

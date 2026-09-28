@@ -1,14 +1,3 @@
-/*
- * Compute a modular inverse with Euler's theorem.
- *
- * If a and modulus are coprime, Euler's theorem gives
- *
- *     a ^ phi(modulus) = 1 (mod modulus),
- *
- * so a ^ (phi(modulus) - 1) is an inverse of a modulo modulus.
- * This small example deliberately uses int throughout, following 2.cpp.
- */
-
 /*@ Extern Coq
       (Zgcd : Z -> Z -> Z)
       (EulerTheoremInverse : Z -> Z -> Z -> Prop)
@@ -22,7 +11,7 @@ int euler_phi(int value)
 
     for (int factor = 2; factor * factor <= value; ++factor) {
         if (value % factor == 0) {
-
+            
             while (value % factor == 0) {
                 value /= factor;
             }

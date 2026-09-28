@@ -1,6 +1,8 @@
-int lengthOfLIS(int *nums, int numsSize, int *dp)
+int lengthOfLIS(int *nums, int numsSize)
 
 {
+  int dp[100000];
+
   int ans = 1;
 
   for (int i = 0; i < numsSize; ++i) {

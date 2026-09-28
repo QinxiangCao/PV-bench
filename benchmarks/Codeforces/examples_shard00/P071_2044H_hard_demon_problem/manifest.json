@@ -1,0 +1,23 @@
+{
+  "id": "P071_2044H_hard_demon_problem",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "2044/H",
+    "title": "Hard Demon Problem",
+    "url": "https://codeforces.com/problemset/problem/2044/H",
+    "rating": 2100,
+    "tags": [
+      "constructive algorithms",
+      "data structures",
+      "dp",
+      "implementation",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": true
+  }
+}

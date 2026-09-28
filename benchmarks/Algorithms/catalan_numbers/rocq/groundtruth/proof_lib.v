@@ -1,13 +1,35 @@
+Require Export PVbench.Algorithms.catalan_numbers.rocq.helper_lib.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 From AUXLib Require Import ListLib.
-
 Import ListNotations.
 Local Open Scope Z_scope.
-Require Import PVbench.Algorithms.catalan_numbers.rocq.spec_lib.
-Require Import PVbench.Algorithms.catalan_numbers.rocq.helper_lib.
+Local Open Scope list_scope.
+From SumLib Require Import Sum FiniteExtra ZRange.
+Require Import Coq.Lists.ListDec.
+
+Definition legal_stack_completion_nat
+    (pushes depth : nat) (ops : list bool) : Prop :=
+  length ops = (2 * pushes + depth)%nat /\
+  stack_push_count ops = pushes /\
+  stack_run depth ops = Some O.
+
+Definition LegalStackCompletion
+    (pushes depth : Z) (ops : list bool) : Prop :=
+  0 <= pushes /\
+  0 <= depth /\
+  legal_stack_completion_nat (Z.to_nat pushes) (Z.to_nat depth) ops.
+
+Definition LegalStackBehavior (pushes : Z) (ops : list bool) : Prop :=
+  LegalStackCompletion pushes 0 ops.
+
+Definition StackSequenceSet (pushes : Z) : list (list bool) :=
+  stack_completion_set (Z.to_nat pushes) O.
+
+Definition StackOperationWordCount (pushes value : Z) : Prop :=
+  value = Zlength (StackSequenceSet pushes).
 
 Lemma all_stack_words_spec :
   forall len ops,
@@ -87,104 +109,41 @@ Qed.
 
 Lemma StackCompletionCount_zero_to_StackSequenceCount :
   forall pushes value,
-    StackCompletionCount pushes 0 value ->
-    StackSequenceCount pushes value.
-Proof.
-  intros pushes value Hcount.
-  unfold StackCompletionCount in Hcount.
-  destruct Hcount as [Hpushes [_ Hvalue]].
-  unfold StackSequenceCount, StackSequenceSet.
-  split; [exact Hpushes |].
-  split; [exact Hvalue |].
-  exact (fun ops => StackSequenceSet_spec pushes ops Hpushes).
-Qed.
+    StackCompletionCount pushes 0 value -> StackOperationWordCount pushes value.
+Proof. intros pushes value H; exact H. Qed.
 
 Lemma bounded_0_7_cases__cell_dp :
   forall x : Z,
     0 <= x <= 7 ->
     x = 0 \/ x = 1 \/ x = 2 \/ x = 3 \/ x = 4 \/ x = 5 \/ x = 6 \/ x = 7.
 Proof. intros; lia. Qed.
+
 Lemma bounded_1_7_cases__cell_dp :
   forall x : Z,
     1 <= x <= 7 ->
     x = 1 \/ x = 2 \/ x = 3 \/ x = 4 \/ x = 5 \/ x = 6 \/ x = 7.
 Proof. intros; lia. Qed.
-Lemma StackTablePrefix_snoc__cell_dp :
-  forall n table written row col v,
-    StackTablePrefix n table written ->
-    Zlength table = written ->
-    0 <= row <= n ->
-    0 <= col <= n ->
-    StackCellIndex n row col = written ->
-    StackCellBound row col v ->
-    StackCellCorrect n row col v ->
-    StackTablePrefix n (table ++ v :: nil) (written + 1).
-Proof.
-  intros n table written row col v Hprefix Hlen Hrow Hcol Hindex Hbound Hcorrect.
-  unfold StackTablePrefix in *.
-  destruct Hprefix as [Hn [Hwritten Hcells]].
-  split; [exact Hn |].
-  split.
-  - rewrite Zlength_app_cons. lia.
-  - intros r c Hr Hc Hlt.
-    destruct (Z_lt_ge_dec (StackCellIndex n r c) written) as [Hold | Hnew].
-    + specialize (Hcells r c Hr Hc ltac:(lia)).
-      rewrite app_Znth1 by (rewrite Hlen; lia).
-      exact Hcells.
-    + assert (Hrrow : r = row) by
-          (unfold StackCellIndex in *; nia).
-      subst r.
-      assert (Hccol : c = col) by
-          (unfold StackCellIndex in *; nia).
-      subst c.
-      rewrite app_Znth2 by (rewrite Hlen; lia).
-      rewrite Hlen, Hindex.
-      replace (written - written) with 0 by lia.
-      simpl.
-      split; assumption.
-Qed.
-Lemma StackRowProgress_snoc__cell_dp :
-  forall n table row col v,
-    StackRowProgress n table row col ->
-    Zlength table = row * (n + 1) + col ->
-    0 <= row <= n ->
-    0 <= col <= n ->
-    StackCellBound row col v ->
-    StackCellCorrect n row col v ->
-    StackRowProgress n (table ++ v :: nil) row (col + 1).
-Proof.
-  intros n table row col v Hprogress Hlen Hrow Hcol Hbound Hcorrect.
-  unfold StackRowProgress in *.
-  destruct Hprogress as [Hrow0 [Hcolprog Hprefix]].
-  split; [exact Hrow0 |].
-  split; [lia |].
-  replace (row * (n + 1) + (col + 1))
-    with (row * (n + 1) + col + 1) by lia.
-  eapply StackTablePrefix_snoc__cell_dp with
-      (written := row * (n + 1) + col) (row := row) (col := col);
-    eauto.
-Qed.
+
 Lemma StackCellBound_zero_row__cell_dp :
   forall col,
     0 <= col <= 7 ->
-    StackCellBound 0 col 1.
+    (0 <= 0 /\ 0 <= col /\ 0 <= 1 <= 2 ^ (2 * 0 + col)).
 Proof.
   intros col Hcol.
-  unfold StackCellBound.
   split; [lia |].
   split; [lia |].
   split; [lia |].
   pose proof (Z.pow_pos_nonneg 2 col ltac:(lia) ltac:(lia)).
   lia.
 Qed.
+
 Lemma StackCellBound_copy_boundary__cell_dp :
   forall row value,
     1 <= row <= 7 ->
-    StackCellBound (row - 1) 1 value ->
-    StackCellBound row 0 value.
+    (0 <= (row - 1) /\ 0 <= 1 /\ 0 <= value <= 2 ^ (2 * (row - 1) + 1)) ->
+    (0 <= row /\ 0 <= 0 /\ 0 <= value <= 2 ^ (2 * row + 0)).
 Proof.
   intros row value Hrow Hbound.
-  unfold StackCellBound in *.
   destruct Hbound as [_ [_ [Hnonneg Hupper]]].
   split; [lia |].
   split; [lia |].
@@ -193,16 +152,16 @@ Proof.
     as [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]];
     cbn [Z.pow] in Hupper |-; lia.
 Qed.
+
 Lemma StackCellBound_add_step__cell_dp :
   forall row col a b,
     1 <= row <= 7 ->
     1 <= col <= 7 ->
-    StackCellBound (row - 1) (col + 1) a ->
-    StackCellBound row (col - 1) b ->
-    StackCellBound row col (a + b).
+    (0 <= (row - 1) /\ 0 <= (col + 1) /\ 0 <= a <= 2 ^ (2 * (row - 1) + (col + 1))) ->
+    (0 <= row /\ 0 <= (col - 1) /\ 0 <= b <= 2 ^ (2 * row + (col - 1))) ->
+    (0 <= row /\ 0 <= col /\ 0 <= (a + b) <= 2 ^ (2 * row + col)).
 Proof.
   intros row col a b Hrow Hcol Ha Hb.
-  unfold StackCellBound in *.
   destruct Ha as [_ [_ [Ha0 Hau]]].
   destruct Hb as [_ [_ [Hb0 Hbu]]].
   split; [lia |].
@@ -214,15 +173,15 @@ Proof.
     as [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]];
     cbn [Z.pow] in Hau, Hbu |-; lia.
 Qed.
+
 Lemma StackCellBound_normalize_row_end__cell_dp :
   forall row col value,
     1 <= row <= 7 ->
     1 <= col <= 7 ->
-    StackCellBound row 0 value ->
-    StackCellBound (row - 1) (col + 1) value.
+    (0 <= row /\ 0 <= 0 /\ 0 <= value <= 2 ^ (2 * row + 0)) ->
+    (0 <= (row - 1) /\ 0 <= (col + 1) /\ 0 <= value <= 2 ^ (2 * (row - 1) + (col + 1))).
 Proof.
   intros row col value Hrow Hcol Hbound.
-  unfold StackCellBound in *.
   destruct Hbound as [_ [_ [Hnonneg Hupper]]].
   split; [lia |].
   split; [lia |].
@@ -233,15 +192,15 @@ Proof.
     as [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]];
     cbn [Z.pow] in Hupper |-; lia.
 Qed.
+
 Lemma StackCellBound_int_range__cell_dp :
   forall row col value,
     0 <= row <= 7 ->
     0 <= col <= 7 ->
-    StackCellBound row col value ->
+    (0 <= row /\ 0 <= col /\ 0 <= value <= 2 ^ (2 * row + col)) ->
     -2147483648 <= value <= 2147483647.
 Proof.
   intros row col value Hrow Hcol Hbound.
-  unfold StackCellBound in *.
   destruct Hbound as [_ [_ [Hnonneg Hupper]]].
   split; [lia |].
   destruct (bounded_0_7_cases__cell_dp row Hrow)
@@ -250,6 +209,7 @@ Proof.
     as [-> | [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]]];
     cbn [Z.pow] in Hupper |-; lia.
 Qed.
+
 Lemma StackCompletionCount_zero_row__cell_dp :
   forall depth,
     0 <= depth <= 7 ->
@@ -257,12 +217,11 @@ Lemma StackCompletionCount_zero_row__cell_dp :
 Proof.
   intros depth Hdepth.
   unfold StackCompletionCount.
-  split; [lia |].
-  split; [lia |].
   destruct (bounded_0_7_cases__cell_dp depth Hdepth)
     as [-> | [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]]];
     vm_compute; reflexivity.
 Qed.
+
 Lemma StackCompletionCount_push_boundary__cell_dp :
   forall pushes value,
     1 <= pushes <= 7 ->
@@ -271,13 +230,12 @@ Lemma StackCompletionCount_push_boundary__cell_dp :
 Proof.
   intros pushes value Hpushes Hcount.
   unfold StackCompletionCount in *.
-  destruct Hcount as [_ [_ Hvalue]].
-  split; [lia |].
-  split; [lia |].
+  rename Hcount into Hvalue.
   destruct (bounded_1_7_cases__cell_dp pushes Hpushes)
     as [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]];
     vm_compute in Hvalue |-; exact Hvalue.
 Qed.
+
 Lemma StackCompletionCount_step__cell_dp :
   forall pushes depth a b,
     1 <= pushes ->
@@ -289,10 +247,6 @@ Lemma StackCompletionCount_step__cell_dp :
 Proof.
   intros pushes depth a b Hpushes Hdepth Hsum Ha Hb.
   unfold StackCompletionCount in *.
-  destruct Ha as [_ [_ Ha]].
-  destruct Hb as [_ [_ Hb]].
-  split; [lia |].
-  split; [lia |].
   assert (Hpushes7 : 1 <= pushes <= 7) by lia.
   assert (Hdepth7 : 1 <= depth <= 7) by lia.
   destruct (bounded_1_7_cases__cell_dp pushes Hpushes7)
@@ -302,186 +256,221 @@ Proof.
     try lia; vm_compute in Ha, Hb; subst a; subst b; vm_compute; reflexivity.
 Qed.
 
-(** The following three lemmas package the pure part of one table update.
-    [StackTablePrefix] records the exact length of the written prefix, so the
-    appended value is also the value at the newly written matrix cell. *)
-Lemma StackRowProgress_zero_row_extend__cell_dp :
+(** The old snoc proof works for any cell property.  Both correctness and
+    the separately stated numerical bounds use this same list argument. *)
+Lemma table_snoc_pointwise :
+  forall (P : Z -> Z -> Z -> Prop) n table row col v,
+    0 <= row <= n -> 0 <= col <= n ->
+    Zlength table = row * (n + 1) + col ->
+    (forall r c, 0 <= r <= n -> 0 <= c <= n ->
+      StackCellIndex n r c < row * (n + 1) + col ->
+      P r c (Znth (StackCellIndex n r c) table 0)) ->
+    P row col v ->
+    forall r c, 0 <= r <= n -> 0 <= c <= n ->
+      StackCellIndex n r c < row * (n + 1) + (col + 1) ->
+      P r c (Znth (StackCellIndex n r c) (table ++ [v]) 0).
+Proof.
+  intros P n table row col v Hrow Hcol Hlen Hcells Hnew r c Hr Hc Hlt.
+  destruct (Z_lt_ge_dec (StackCellIndex n r c)
+    (row * (n + 1) + col)) as [Hold | Hlast].
+  - rewrite app_Znth1 by (rewrite Hlen; unfold StackCellIndex in *; nia).
+    apply Hcells; assumption.
+  - assert (r = row) by (unfold StackCellIndex in *; nia).
+    subst r.
+    assert (c = col) by (unfold StackCellIndex in *; nia).
+    subst c.
+    unfold StackCellIndex.
+    rewrite app_Znth2 by lia.
+    rewrite Hlen, Z.sub_diag. exact Hnew.
+Qed.
+
+Lemma StackTablePrefix_snoc__cell_dp :
+  forall n table row col v,
+    0 <= row <= n -> 0 <= col <= n ->
+    Zlength table = row * (n + 1) + col ->
+    StackTablePrefix n table (row * (n + 1) + col) ->
+    StackCellCorrect n row col v ->
+    StackTablePrefix n (table ++ [v]) (row * (n + 1) + (col + 1)).
+Proof.
+  intros n table row col v Hr Hc Hl Hp Hnew.
+  exact (table_snoc_pointwise (StackCellCorrect n)
+    n table row col v Hr Hc Hl Hp Hnew).
+Qed.
+
+Lemma StackTablePrefix_zero_row_extend__cell_dp :
   forall n table col,
-    0 <= n <= 7 ->
-    0 <= col <= n ->
-    StackRowProgress n table 0 col ->
-    let table' := table ++ 1 :: nil in
-    StackRowProgress n table' 0 (col + 1) /\
-    StackCellCorrect n 0 col
-      (Znth (StackCellIndex n 0 col) table' 0) /\
-    StackCellBound 0 col
-      (Znth (StackCellIndex n 0 col) table' 0).
+    0 <= n <= 7 -> 0 <= col <= n -> Zlength table = col ->
+    StackTablePrefix n table col ->
+    StackTablePrefix n (table ++ [1]) (col + 1).
 Proof.
-  intros n table col Hn Hcol Hprogress.
-  cbn.
-  assert (Hlen : Zlength table = col).
-  { unfold StackRowProgress, StackTablePrefix in Hprogress.
-    destruct Hprogress as [_ [_ [_ [[_ Hlen] _]]]].
-    lia. }
-  assert (Hnew : Znth col (table ++ 1 :: nil) 0 = 1).
-  { rewrite app_Znth2 by lia.
-    rewrite Hlen.
-    replace (col - col) with 0 by lia.
-    reflexivity. }
-  assert (Hbound : StackCellBound 0 col 1).
-  { apply StackCellBound_zero_row__cell_dp. lia. }
-  assert (Hcorrect : StackCellCorrect n 0 col 1).
-  { unfold StackCellCorrect.
-    intros _.
-    apply StackCompletionCount_zero_row__cell_dp.
-    lia. }
-  assert (Hprogress' :
-      StackRowProgress n (table ++ 1 :: nil) 0 (col + 1)).
-  { eapply StackRowProgress_snoc__cell_dp; eauto; lia. }
-  split; [exact Hprogress' |].
-  unfold StackCellIndex.
-  replace (0 * (n + 1) + col) with col by lia.
-  rewrite Hnew.
-  split; assumption.
+  intros n table col Hn Hcol Hlen Hprefix.
+  apply (StackTablePrefix_snoc__cell_dp n table 0 col 1);
+    try assumption; try lia.
+  unfold StackCellCorrect. intros.
+  apply StackCompletionCount_zero_row__cell_dp. lia.
 Qed.
 
-Lemma StackRowProgress_copy_boundary_extend__cell_dp :
+Lemma StackTablePrefix_copy_boundary_extend__cell_dp :
   forall n table row,
-    0 <= n <= 7 ->
-    1 <= row <= n ->
-    StackRowProgress n table row 0 ->
-    let v := Znth (StackCellIndex n (row - 1) 1) table 0 in
-    let table' := table ++ v :: nil in
-    StackRowProgress n table' row 1 /\
-    StackCellCorrect n row 0
-      (Znth (StackCellIndex n row 0) table' 0) /\
-    StackCellBound row 0
-      (Znth (StackCellIndex n row 0) table' 0).
+    0 <= n <= 7 -> 1 <= row <= n -> Zlength table = row * (n + 1) ->
+    StackTablePrefix n table (row * (n + 1)) ->
+    StackTablePrefix n
+      (table ++ [Znth (StackCellIndex n (row - 1) 1) table 0])
+      (row * (n + 1) + 1).
 Proof.
-  intros n table row Hn Hrow Hprogress.
-  cbn.
-  set (v := Znth (StackCellIndex n (row - 1) 1) table 0).
-  assert (Hlen : Zlength table = row * (n + 1)).
-  { unfold StackRowProgress, StackTablePrefix in Hprogress.
-    destruct Hprogress as [_ [_ [_ [[_ Hlen] _]]]].
-    lia. }
-  assert (Hnew :
-      Znth (StackCellIndex n row 0) (table ++ v :: nil) 0 = v).
-  { unfold StackCellIndex.
-    rewrite app_Znth2 by lia.
-    rewrite Hlen.
-    replace (row * (n + 1) + 0 - row * (n + 1)) with 0 by lia.
-    reflexivity. }
-  unfold StackRowProgress in Hprogress.
-  destruct Hprogress as [_ [_ Hprefix]].
-  pose proof Hprefix as Hprefix_keep.
-  unfold StackTablePrefix in Hprefix.
-  destruct Hprefix as [_ [_ Hcells]].
-  pose proof (Hcells (row - 1) 1 ltac:(lia) ltac:(lia)
-    ltac:(unfold StackCellIndex; nia)) as [Hsrc_bound Hsrc_correct].
-  fold v in Hsrc_bound, Hsrc_correct.
-  assert (Hbound : StackCellBound row 0 v).
-  { eapply StackCellBound_copy_boundary__cell_dp; eauto; lia. }
-  assert (Hcorrect : StackCellCorrect n row 0 v).
-  { unfold StackCellCorrect.
-    intros Htri.
-    unfold StackCellCorrect in Hsrc_correct.
-    pose proof (Hsrc_correct ltac:(lia)) as Hsrc_count.
-    eapply StackCompletionCount_push_boundary__cell_dp; eauto; lia. }
-  assert (Hprogress' :
-      StackRowProgress n (table ++ v :: nil) row 1).
-  { eapply StackRowProgress_snoc__cell_dp with
-      (row := row) (col := 0) (v := v).
-    - unfold StackRowProgress.
-      split; [lia |]. split; [lia | exact Hprefix_keep].
-    - lia.
-    - lia.
-    - lia.
-    - exact Hbound.
-    - exact Hcorrect. }
-  split; [exact Hprogress' |].
-  rewrite Hnew.
-  split; assumption.
+  intros n table row Hn Hrow Hlen Hprefix.
+  apply (StackTablePrefix_snoc__cell_dp n table row 0);
+    try (rewrite Z.add_0_r; assumption); try lia.
+  unfold StackCellCorrect. intros Htri.
+  pose proof (Hprefix (row - 1) 1 ltac:(lia) ltac:(lia)
+    ltac:(unfold StackCellIndex; nia)) as Hsrc.
+  apply StackCompletionCount_push_boundary__cell_dp; [lia |].
+  apply Hsrc. lia.
 Qed.
 
-Lemma StackRowProgress_add_step_extend__cell_dp :
+Lemma StackTablePrefix_add_step_extend__cell_dp :
   forall n table row col,
-    0 <= n <= 7 ->
-    1 <= row <= n ->
-    1 <= col <= n ->
-    StackRowProgress n table row col ->
-    let a := Znth (StackCellIndex n (row - 1) (col + 1)) table 0 in
-    let b := Znth (StackCellIndex n row (col - 1)) table 0 in
-    let v := a + b in
-    let table' := table ++ v :: nil in
-    StackRowProgress n table' row (col + 1) /\
-    StackCellCorrect n row col
-      (Znth (StackCellIndex n row col) table' 0) /\
-    StackCellBound row col
-      (Znth (StackCellIndex n row col) table' 0).
+    0 <= n <= 7 -> 1 <= row <= n -> 1 <= col <= n ->
+    Zlength table = row * (n + 1) + col ->
+    StackTablePrefix n table (row * (n + 1) + col) ->
+    StackTablePrefix n
+      (table ++ [Znth (StackCellIndex n (row - 1) (col + 1)) table 0 +
+                 Znth (StackCellIndex n row (col - 1)) table 0])
+      (row * (n + 1) + (col + 1)).
 Proof.
-  intros n table row col Hn Hrow Hcol Hprogress.
-  cbn.
-  set (a := Znth (StackCellIndex n (row - 1) (col + 1)) table 0).
-  set (b := Znth (StackCellIndex n row (col - 1)) table 0).
-  set (v := a + b).
-  assert (Hlen : Zlength table = row * (n + 1) + col).
-  { unfold StackRowProgress, StackTablePrefix in Hprogress.
-    destruct Hprogress as [_ [_ [_ [[_ Hlen] _]]]].
-    lia. }
-  assert (Hnew :
-      Znth (StackCellIndex n row col) (table ++ v :: nil) 0 = v).
-  { unfold StackCellIndex.
-    rewrite app_Znth2 by lia.
-    rewrite Hlen.
-    replace (row * (n + 1) + col - (row * (n + 1) + col)) with 0 by lia.
-    reflexivity. }
-  unfold StackRowProgress in Hprogress.
-  destruct Hprogress as [_ [_ Hprefix]].
-  pose proof Hprefix as Hprefix_keep.
-  unfold StackTablePrefix in Hprefix.
-  destruct Hprefix as [_ [_ Hcells]].
-  assert (Ha_bound : StackCellBound (row - 1) (col + 1) a).
-  { unfold a.
-    destruct (Z_lt_ge_dec col n) as [Hcol_lt | Hcol_end].
-    - exact (proj1 (Hcells (row - 1) (col + 1) ltac:(lia) ltac:(lia)
-        ltac:(unfold StackCellIndex; nia))).
-    - assert (Hcol_eq : col = n) by lia.
-      pose proof (proj1 (Hcells row 0 ltac:(lia) ltac:(lia)
-        ltac:(unfold StackCellIndex; lia))) as Ha0.
-      assert (Hidxeq : StackCellIndex n row 0 =
-                       StackCellIndex n (row - 1) (col + 1)) by
-        (unfold StackCellIndex; nia).
-      rewrite Hidxeq in Ha0.
-      eapply StackCellBound_normalize_row_end__cell_dp; eauto; lia. }
+  intros n table row col Hn Hrow Hcol Hlen Hprefix.
+  apply StackTablePrefix_snoc__cell_dp; try assumption; try lia.
+  unfold StackCellCorrect. intros Htri.
+  apply StackCompletionCount_step__cell_dp; try lia.
+  - apply (Hprefix (row - 1) (col + 1));
+      try (unfold StackCellIndex; nia).
+  - apply (Hprefix row (col - 1));
+      try (unfold StackCellIndex; nia).
+Qed.
+
+(** This bound depends on row and column, so its annotation uses indexed
+    quantification, rather than a value-only Forall predicate. *)
+Lemma table_add_bound__cell_dp :
+  forall n table row col,
+    0 <= n <= 7 -> 1 <= row <= n -> 1 <= col <= n ->
+    (forall r c, 0 <= r <= n -> 0 <= c <= n ->
+      StackCellIndex n r c < row * (n + 1) + col ->
+      0 <= Znth (StackCellIndex n r c) table 0 <= 2 ^ (2 * r + c)) ->
+    0 <= Znth (StackCellIndex n (row - 1) (col + 1)) table 0 +
+         Znth (StackCellIndex n row (col - 1)) table 0 <= 2 ^ (2 * row + col).
+Proof.
+  intros n table row col Hn Hrow Hcol Hcells.
+  assert (Ha : 0 <= Znth (StackCellIndex n (row - 1) (col + 1)) table 0
+                  <= 2 ^ (2 * (row - 1) + (col + 1))).
+  { destruct (Z_lt_ge_dec col n) as [Hlt | Hend].
+    - apply Hcells; try lia; unfold StackCellIndex; nia.
+    - assert (Heq : StackCellIndex n row 0 =
+                    StackCellIndex n (row - 1) (col + 1))
+        by (unfold StackCellIndex; nia).
+      pose proof (Hcells row 0 ltac:(lia) ltac:(lia)
+        ltac:(unfold StackCellIndex; nia)) as Ha0.
+      rewrite Heq in Ha0.
+      pose proof (StackCellBound_normalize_row_end__cell_dp row col
+        (Znth (StackCellIndex n (row - 1) (col + 1)) table 0)
+        ltac:(lia) ltac:(lia) ltac:(repeat split; tauto || lia)) as [_ [_ Ha]].
+      exact Ha. }
   pose proof (Hcells row (col - 1) ltac:(lia) ltac:(lia)
-    ltac:(unfold StackCellIndex; lia)) as [Hb_bound Hb_correct].
-  fold b in Hb_bound, Hb_correct.
-  assert (Hbound : StackCellBound row col v).
-  { unfold v. eapply StackCellBound_add_step__cell_dp; eauto; lia. }
-  assert (Hcorrect : StackCellCorrect n row col v).
-  { unfold StackCellCorrect.
-    intros Htri.
-    assert (Hcol_lt : col < n) by lia.
-    unfold a.
-    pose proof (proj2 (Hcells (row - 1) (col + 1) ltac:(lia) ltac:(lia)
-      ltac:(unfold StackCellIndex; nia))) as Ha_correct.
-    unfold StackCellCorrect in Ha_correct, Hb_correct.
-    pose proof (Ha_correct ltac:(lia)) as Ha_count.
-    pose proof (Hb_correct ltac:(lia)) as Hb_count.
-    unfold v.
-    eapply StackCompletionCount_step__cell_dp; eauto; lia. }
-  assert (Hprogress' :
-      StackRowProgress n (table ++ v :: nil) row (col + 1)).
-  { eapply StackRowProgress_snoc__cell_dp.
-    - unfold StackRowProgress.
-      split; [lia |]. split; [lia | exact Hprefix_keep].
-    - exact Hlen.
-    - lia.
-    - lia.
-    - exact Hbound.
-    - exact Hcorrect. }
-  split; [exact Hprogress' |].
-  rewrite Hnew.
-  split; assumption.
+    ltac:(unfold StackCellIndex; nia)) as Hb.
+  pose proof (StackCellBound_add_step__cell_dp row col
+    (Znth (StackCellIndex n (row - 1) (col + 1)) table 0)
+    (Znth (StackCellIndex n row (col - 1)) table 0)
+    ltac:(lia) ltac:(lia) ltac:(repeat split; tauto || lia)
+    ltac:(repeat split; tauto || lia)) as [_ [_ Hsum]].
+  exact Hsum.
+Qed.
+
+Lemma StackTablePrefix_result :
+  forall n table,
+    0 <= n ->
+    StackTablePrefix n table ((n + 1) * (n + 1)) ->
+    StackOperationWordCount n (Znth (n * (n + 1)) table 0).
+Proof.
+  intros n table Hn Hprefix.
+  pose proof (Hprefix n 0 ltac:(lia) ltac:(lia)
+    ltac:(unfold StackCellIndex; nia)) as Hcell.
+  unfold StackCellCorrect, StackCellIndex in Hcell.
+  repeat rewrite Z.add_0_r in Hcell.
+  apply StackCompletionCount_zero_to_StackSequenceCount.
+  apply Hcell. lia.
+Qed.
+
+Lemma nodup_mapped_injective {A B} (f : A -> B) xs :
+  NoDup (map f xs) -> forall x y,
+    In x xs -> In y xs -> f x = f y -> x = y.
+Proof.
+  induction xs as [|a xs IH]; simpl; intros Hnd x y Hx Hy He; [contradiction |].
+  inversion Hnd as [|? ? Hnot Htail]; subst.
+  destruct Hx as [<- | Hx], Hy as [<- | Hy]; [reflexivity | | |].
+  - exfalso. apply Hnot. rewrite He. apply in_map. exact Hy.
+  - exfalso. apply Hnot. rewrite <- He. apply in_map. exact Hx.
+  - eapply IH; eauto.
+Qed.
+
+(** A checked bijection over the entire documented verification domain.
+    Computation establishes totality, enumeration equality and injectivity
+    for all legal words, rather than comparing only eight numeric answers. *)
+Lemma stack_output_bijection_data n :
+  0 <= n <= 7 ->
+  Forall (fun ops => StackCompleteWord n ops = true) (StackSequenceSet n) /\
+  StackOutputEnumeration n = map (StackWordOutput n) (StackSequenceSet n) /\
+  NoDup (map (StackWordOutput n) (StackSequenceSet n)).
+Proof.
+  intros Hn.
+  destruct (bounded_0_7_cases__cell_dp n Hn) as [-> | [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]]];
+  split.
+  all: try (rewrite Forall_forall; apply (proj1 (forallb_forall _ _)); vm_compute; reflexivity).
+  all: split; [vm_compute; reflexivity |].
+  all: match goal with |- NoDup ?outputs =>
+    assert (Hcheck : (if @AUXLib.ListLib.NoDup_dec (list Z) outputs (list_eq_dec Z.eq_dec) then true else false) = true)
+      by (vm_compute; reflexivity);
+    destruct (@AUXLib.ListLib.NoDup_dec (list Z) outputs (list_eq_dec Z.eq_dec)) as [Hyes | Hno];
+      [exact Hyes | discriminate]
+  end.
+Qed.
+
+Lemma stack_operations_outputs_bijection n :
+  0 <= n <= 7 ->
+  (forall ops, LegalStackBehavior n ops ->
+    exists output, StackValueExecution n ops = Some ([], [], output)) /\
+  (forall output, StackOutput n output ->
+    exists ops, LegalStackBehavior n ops /\ StackWordOutput n ops = output) /\
+  (forall first second, LegalStackBehavior n first -> LegalStackBehavior n second ->
+    StackWordOutput n first = StackWordOutput n second -> first = second).
+Proof.
+  intros Hn. destruct (stack_output_bijection_data n Hn) as [Htotal [Henum Hnd]].
+  split.
+  - intros ops Hlegal. apply (proj2 (StackSequenceSet_spec n ops ltac:(lia))) in Hlegal.
+    rewrite Forall_forall in Htotal. specialize (Htotal ops Hlegal).
+    apply StackCompleteWord_spec in Htotal. tauto.
+  - split.
+    + intros output Hout. apply StackOutputEnumeration_spec in Hout. rewrite Henum in Hout.
+      apply in_map_iff in Hout as [ops [He Hin]]. exists ops. split; [|exact He].
+      apply (proj1 (StackSequenceSet_spec n ops ltac:(lia))). exact Hin.
+    + intros first second Hfirst Hsecond He.
+      eapply nodup_mapped_injective; [exact Hnd | | | exact He];
+      apply (proj2 (StackSequenceSet_spec n _ ltac:(lia))); assumption.
+Qed.
+
+Lemma StackOperationWordCount_to_output n value :
+  0 <= n <= 7 -> StackOperationWordCount n value -> StackSequenceCount n value.
+Proof.
+  intros Hn Hcount.
+  destruct (stack_output_bijection_data n Hn) as [_ [Henum Hnd]].
+  unfold StackOperationWordCount in Hcount. unfold StackSequenceCount, SumLib.Sum.sum.
+  change (value = fold_right (fun (_ : list Z) acc => 1 + acc) 0
+    (nodup (list_eq_dec Z.eq_dec) (StackOutputEnumeration n))).
+  rewrite Henum, nodup_fixed_point by exact Hnd.
+  assert (Hlength : Zlength (map (StackWordOutput n) (StackSequenceSet n)) =
+    Zlength (StackSequenceSet n)) by (rewrite !Zlength_correct, map_length; reflexivity).
+  rewrite <- Hlength in Hcount.
+  rewrite Hcount. clear Hcount Hn Henum Hnd Hlength.
+  induction (map (StackWordOutput n) (StackSequenceSet n)) as [| output outputs IH]; [reflexivity |].
+  change (Zlength (output :: outputs) =
+    1 + fold_right (fun (_ : list Z) acc => 1 + acc) 0 outputs).
+  rewrite Zlength_cons, IH. lia.
 Qed.

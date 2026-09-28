@@ -1,18 +1,24 @@
+/*@ Import Coq Require Import PVbench.Algorithms.sort_point.rocq.spec_lib */
+/*@ Extern Coq (Z::ge : Z -> Z -> Prop) */
+/*@ Extern Coq (map : {A B} -> (A -> B) -> list A -> list B) */
+/*@ Extern Coq (Z::le : Z -> Z -> Prop) */
+/*@ Extern Coq (Forall : {A} -> (A -> Prop) -> list A -> Prop) */
+/*@ Extern Coq (point :: *) */
+/*@ Extern Coq (mk_point : Z -> Z -> point) */
+/*@ Extern Coq (point_x : point -> Z) */
+/*@ Extern Coq (point_y : point -> Z) */
+/*@ Extern Coq (default_point : point) */
+/*@ Extern Coq (FlatPoints : list Z -> list point -> Prop) */
+/*@ Extern Coq (PointPermutation : list point -> list point -> Prop) */
+/*@ Extern Coq (PolarCmpResult : point -> point -> point -> Z -> Prop) */
+/*@ Extern Coq (PolarLe : point -> point -> point -> Prop) */
+/*@ Extern Coq (PolarSorted : point -> list point -> Prop) */
 struct Point {
   int x;
   int y;
 };
 
 static struct Point gp;
-
-/*@ Extern Coq
-      (mk_point : Z -> Z -> point)
-      (PointCoordsBound : list point -> Prop)
-      (FlatPoints : list Z -> list point -> Prop)
-      (PointPermutation : list point -> list point -> Prop)
-      (PolarSorted : point -> list point -> Prop)
- */
-/*@ Import Coq Require Import PVbench.Algorithms.sort_point.rocq.spec_lib */
 
 int cmp_polar_values(int gx, int gy, int a_x, int a_y, int b_x, int b_y)
 
@@ -127,13 +133,16 @@ void sort(struct Point *pts, int n)
       0 <= n && n <= 50000 &&
       Zlength(pts_l) == n &&
       FlatPoints(flat, pts_l) &&
-      PointCoordsBound(cons(mk_point(gx, gy), pts_l)) &&
+      Forall(Z::le(-10000), map(point_x, cons(mk_point(gx, gy), pts_l))) &&
+          Forall(Z::ge(10000), map(point_x, cons(mk_point(gx, gy), pts_l))) &&
+          Forall(Z::le(-10000), map(point_y, cons(mk_point(gx, gy), pts_l))) &&
+          Forall(Z::ge(10000), map(point_y, cons(mk_point(gx, gy), pts_l))) &&
       gp.x == gx && gp.y == gy &&
       IntArray::full(pts, 2 * n, flat)
     Ensure
       exists flat_out pts_out,
         FlatPoints(flat_out, pts_out) &&
-        PointCoordsBound(cons(mk_point(gx, gy), pts_out)) &&
+
         PointPermutation(pts_l, pts_out) &&
         PolarSorted(mk_point(gx, gy), pts_out) &&
         gp.x == gx && gp.y == gy &&

@@ -18,7 +18,7 @@ Local Open Scope string.
 Local Open Scope list.
 Import ListNotations.
 Import naive_C_Rules.
-From PVbench.Algorithms.insertion_sort.rocq.groundtruth Require Import proof_lib.
+Require Import PVbench.Algorithms.insertion_sort.rocq.groundtruth.proof_lib.
 Local Open Scope sac.
 
 Lemma proof_of_sortArray_entail_wit_1 : sortArray_entail_wit_1.
@@ -435,5 +435,4 @@ Proof.
 			rewrite app_nil_r.
 			exact PreH10.
 		+ dump_pre_spatial. exact PreH11.
-		+ dump_pre_spatial. exact Hlen0.
 Qed.

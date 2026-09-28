@@ -1,0 +1,21 @@
+{
+  "id": "P070_886D_restoration_of_string",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "886/D",
+    "title": "Restoration of string",
+    "url": "https://codeforces.com/problemset/problem/886/D",
+    "rating": 2000,
+    "tags": [
+      "constructive algorithms",
+      "graphs",
+      "implementation"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": false
+  }
+}

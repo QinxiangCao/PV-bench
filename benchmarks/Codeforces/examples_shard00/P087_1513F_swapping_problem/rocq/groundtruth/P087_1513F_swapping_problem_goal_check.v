@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P087_1513F_swapping_problem.rocq.groundtruth Require Import P087_1513F_swapping_problem_goal P087_1513F_swapping_problem_proof_auto P087_1513F_swapping_problem_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P087_1513F_swapping_problem_proof_auto.
+  Include P087_1513F_swapping_problem_proof_manual.
+End VC_Correctness.

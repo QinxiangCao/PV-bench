@@ -1,42 +1,32 @@
-From Coq Require Import ZArith List.
+From Coq Require Import ZArith List Lia.
+Require Import MaxMinLib.MaxMin AUXLib.MonotonicList.
 Require Import AUXLib.ListLib.
 Import ListNotations.
 Local Open Scope Z_scope.
+From Coq Require Import Lia.
+From Coq Require Import Lia Ring.
 
 Definition CRTLCMPrefix (moduli : list Z) (count : Z) : Z :=
-  fold_left Z.lcm (firstn (Z.to_nat count) moduli) 1.
+  fold_left Z.lcm (sublist 0 count moduli) 1.
+
 Definition CRTCongruent (value residue modulus : Z) : Prop :=
   exists quotient, value = residue + modulus * quotient.
+
 Definition CRTAllCongruences
     (residues moduli : list Z) (count value : Z) : Prop :=
-  forall index,
-    0 <= index < count ->
-    CRTCongruent value (Znth index residues 0) (Znth index moduli 0).
-Definition ExtendedCRTInputs
-    (residues moduli : list Z) (n : Z) : Prop :=
-  1 <= n /\
-  Zlength residues = n /\
-  Zlength moduli = n /\
-  forall index,
-    0 <= index < n ->
-    0 < Znth index moduli 0 <= 2147483647 /\
-    0 <= Znth index residues 0 < Znth index moduli 0.
+  Forall2 (fun residue modulus => CRTCongruent value residue modulus)
+    (sublist 0 count residues) (sublist 0 count moduli).
+
 Definition ExtendedCRTSystemCompatible
     (residues moduli : list Z) (n : Z) : Prop :=
   exists solution, CRTAllCongruences residues moduli n solution.
-Definition ExtendedCRTIntSafe (moduli : list Z) (n : Z) : Prop :=
-  (forall count,
-     1 <= count <= n ->
-     0 < CRTLCMPrefix moduli count <= 2147483647) /\
-  (forall index,
-     1 <= index < n ->
-     2 * Z.quot
-       (Znth index moduli 0)
-       (Z.gcd (CRTLCMPrefix moduli index) (Znth index moduli 0))
-       <= 2147483647).
+
+(* The candidate's nonnegativity is part of the requested mathematical
+   answer; machine bounds and input restrictions belong to the C contract. *)
 Definition ExtendedCRTSystemResult
     (residues moduli : list Z)
     (n result combined_modulus : Z) : Prop :=
   combined_modulus = CRTLCMPrefix moduli n /\
-  0 <= result < combined_modulus /\
-  CRTAllCongruences residues moduli n result.
+  min_value_of_subset Z.le
+    (fun value => 0 <= value /\ CRTAllCongruences residues moduli n value)
+    (fun value : Z => value) result.

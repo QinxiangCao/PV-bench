@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P061_2042C_competitive_fishing.rocq.groundtruth Require Import P061_2042C_competitive_fishing_goal P061_2042C_competitive_fishing_proof_auto P061_2042C_competitive_fishing_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P061_2042C_competitive_fishing_proof_auto.
+  Include P061_2042C_competitive_fishing_proof_manual.
+End VC_Correctness.

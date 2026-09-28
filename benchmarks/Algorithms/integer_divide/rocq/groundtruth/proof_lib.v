@@ -1,16 +1,7 @@
+Require Export PVbench.Algorithms.integer_divide.rocq.helper_lib.
 From Coq Require Import ZArith List Znumtheory Sorting.Sorted.
 Import ListNotations.
 Local Open Scope Z_scope.
-
-(** [PrimeFactorization original factors] is the public mathematical meaning of
-    the initialized output segment.  Membership is deliberately bidirectional:
-    the segment contains no non-prime/non-divisor and omits no prime divisor of
-    [original].  [Sorted Z.le] records the program's increasing trial-divisor
-    order, while the product equation fixes multiplicities to the actual prime
-    factorization rather than merely listing each distinct divisor once. *)
-
-Require Import PVbench.Algorithms.integer_divide.rocq.spec_lib.
-Require Import PVbench.Algorithms.integer_divide.rocq.helper_lib.
 From Coq Require Import Lia.
 
 Lemma prime_product_exceeds_length__progress_transitions :
@@ -27,6 +18,7 @@ Proof.
     { rewrite Zlength_correct. lia. }
     nia.
 Qed.
+
 Lemma fold_right_mul_snoc__progress_transitions :
   forall (factors : list Z) (factor : Z),
     fold_right Z.mul 1 (factors ++ [factor]) =
@@ -38,6 +30,7 @@ Proof.
     now rewrite Z.mul_1_r, Z.mul_1_l.
   - simpl. rewrite IH, Z.mul_assoc. reflexivity.
 Qed.
+
 Lemma sorted_snoc_le__progress_transitions :
   forall (factors : list Z) (factor : Z),
     Sorted Z.le factors ->
@@ -55,6 +48,7 @@ Proof.
       * constructor. exact Hhead_bound.
       * inversion Hhead_rel; subst. constructor. assumption.
 Qed.
+
 Lemma factorization_progress_room__progress_transitions :
   forall (original : Z) (factors : list Z) (remaining candidate : Z),
     2 <= candidate ->
@@ -73,6 +67,7 @@ Proof.
   rewrite <- Hproduct.
   nia.
 Qed.
+
 Lemma factorization_progress_extract__progress_transitions :
   forall (original : Z) (factors : list Z) (remaining candidate : Z),
     1 <= remaining ->
@@ -142,6 +137,7 @@ Proof.
       rewrite Hdivide_exact, Hquotient. ring.
   - exact Hquotient_cases.
 Qed.
+
 Lemma factorization_progress_advance__progress_transitions :
   forall (original : Z) (factors : list Z) (remaining candidate : Z),
     2 <= candidate ->
@@ -169,6 +165,7 @@ Proof.
       apply (proj2 (Z.rem_divide remaining candidate Hcandidate_nonzero)).
       exact Hdivisor_remaining.
 Qed.
+
 Lemma prime_divides_factor_product_iff_in__final_result :
   forall (q : Z) (factors : list Z),
     prime q ->
@@ -215,6 +212,7 @@ Proof.
         exists (a * k).
         nia.
 Qed.
+
 Lemma factorization_progress_complete__final_result :
   forall (original : Z) (factors : list Z) (remaining candidate : Z),
     1 <= remaining ->

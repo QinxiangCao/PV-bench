@@ -18,6 +18,7 @@ Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
 Require Import PVbench.Algorithms.climbing_stairs.rocq.spec_lib.
+Require Import PVbench.Algorithms.climbing_stairs.rocq.helper_lib.
 Local Open Scope sac.
 
 Lemma proof_of_climbStairs_safety_wit_1 : climbStairs_safety_wit_1.
@@ -27,9 +28,6 @@ Lemma proof_of_climbStairs_safety_wit_2 : climbStairs_safety_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_climbStairs_safety_wit_3 : climbStairs_safety_wit_3.
-Proof. Admitted. 
-
-Lemma proof_of_climbStairs_safety_wit_4 : climbStairs_safety_wit_4.
 Proof. Admitted. 
 
 Lemma proof_of_climbStairs_safety_wit_5 : climbStairs_safety_wit_5.

@@ -17,7 +17,6 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.maximum_subarray.rocq.spec_lib.
 Require Import PVbench.Algorithms.maximum_subarray.rocq.helper_lib.
 Local Open Scope sac.
 
@@ -36,13 +35,7 @@ Proof. Admitted.
 Lemma proof_of_max_sub_array_safety_wit_5 : max_sub_array_safety_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_max_sub_array_safety_wit_6 : max_sub_array_safety_wit_6.
-Proof. Admitted. 
-
 Lemma proof_of_max_sub_array_safety_wit_7 : max_sub_array_safety_wit_7.
-Proof. Admitted. 
-
-Lemma proof_of_max_sub_array_return_wit_1 : max_sub_array_return_wit_1.
 Proof. Admitted. 
 
 Lemma proof_of_max_sub_array_partial_solve_wit_1 : max_sub_array_partial_solve_wit_1.

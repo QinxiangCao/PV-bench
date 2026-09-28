@@ -1,18 +1,19 @@
+Require Export PVbench.Algorithms.maximum_subarray.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 From AUXLib Require Import ListLib.
 From MaxMinLib Require Import MaxMin Interface.
+
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
-Require Import Coq.micromega.Lia.
-Require Import SetsClass.SetsClass.
-Import SetsNotation.
-Require Export PVbench.Algorithms.maximum_subarray.rocq.spec_lib.
-Require Export PVbench.Algorithms.maximum_subarray.rocq.helper_lib.
 
 Definition SubarraySum (l : list Z) (lo hi s : Z) : Prop :=
   0 <= lo /\ lo < hi /\ hi <= Zlength l /\ s = sum (sublist lo hi l).
+
+Require Import Coq.micromega.Lia.
+Require Import SetsClass.SetsClass.
+Import SetsNotation.
 
 Lemma sum_sublist_single :
   forall (l : list Z) (n : Z),
@@ -250,4 +251,3 @@ Proof.
     exact Hbound.
   - lia.
 Qed.
-

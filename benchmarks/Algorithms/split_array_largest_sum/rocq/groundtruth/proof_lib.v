@@ -1,3 +1,4 @@
+Require Export PVbench.Algorithms.split_array_largest_sum.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Lists.List.
@@ -7,13 +8,43 @@ From MaxMinLib Require Import MaxMin Interface.
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+(* Facts connecting the greedy splitter state with partition semantics. *)
 Local Open Scope list_scope.
-Require Export PVbench.Algorithms.split_array_largest_sum.rocq.spec_lib.
-Require Export PVbench.Algorithms.split_array_largest_sum.rocq.helper_lib.
+Require Import Coq.Relations.Relation_Operators.
+Require Import AUXLib.MonotonicList.
+
+(** Retained internal foundation of the existing partition helper proofs.
+    Public annotations use the partition minimum SplitProgress below. *)
+Inductive PrefixSplitState
+    (l : list Z) (cap : Z) : Z -> Z -> Z -> Prop :=
+  | PrefixSplitState_zero :
+      0 <= cap ->
+      PrefixSplitState l cap 0 1 0
+  | PrefixSplitState_new_segment :
+      forall i cnt cur,
+        0 <= i < Zlength l ->
+        0 <= Znth i l 0 <= cap ->
+        cur + Znth i l 0 > cap ->
+        PrefixSplitState l cap i cnt cur ->
+        PrefixSplitState l cap (i + 1) (cnt + 1) (Znth i l 0)
+  | PrefixSplitState_extend :
+      forall i cnt cur,
+        0 <= i < Zlength l ->
+        0 <= Znth i l 0 <= cap ->
+        cur + Znth i l 0 <= cap ->
+        PrefixSplitState l cap i cnt cur ->
+        PrefixSplitState l cap (i + 1) cnt (cur + Znth i l 0).
+
+Definition CanSplit (l : list Z) (m cap : Z) : Prop :=
+  exists cnt cur,
+    PrefixSplitState l cap (Zlength l) cnt cur /\ cnt <= m.
+
+Definition CannotSplit (l : list Z) (m cap : Z) : Prop :=
+  forall cnt cur,
+    PrefixSplitState l cap (Zlength l) cnt cur -> m < cnt.
 
 Definition NotPartitionMaxSegmentSum (l : list Z) (m max_sum : Z) : Prop :=
   ~ PartitionMaxSegmentSum l m max_sum.
-
 
 Lemma minimized_partition_witness:
   forall l m answer,
@@ -194,9 +225,6 @@ Proof.
       end.
       split; reflexivity.
 Qed.
-
-(* Facts connecting the greedy splitter state with partition semantics. *)
-Local Open Scope list_scope.
 
 Lemma sum_snoc :
   forall l x, sum (l ++ x :: nil) = sum l + x.
@@ -1099,4 +1127,241 @@ Proof.
     l m answer cap Hcap Hnonneg Hpart Hanswer_cap) as Hcan.
   exfalso.
   eapply can_split_cannot_contradiction; eassumption.
+Qed.
+
+Lemma SplitFeasible_legacy l m cap :
+  1 <= m <= Zlength l -> 0 <= cap -> Forall (Z.le 0) l ->
+  (SplitFeasible l m cap <-> CanSplit l m cap).
+Proof.
+  intros Hm Hcap Hvalues. split.
+  - intros [v [Hpart Hv]]. eapply partition_max_to_can_split; try eassumption.
+    exact (proj1 (Forall_Znth _ 0 _) Hvalues).
+  - intros Hcan. unfold SplitFeasible.
+    eapply can_split_to_partition_max; try eassumption; lia.
+Qed.
+
+Lemma SplitInfeasible_legacy l m cap :
+  1 <= m <= Zlength l -> 0 <= cap -> Forall (Z.le 0) l ->
+  (SplitInfeasible l m cap <-> CannotSplit l m cap).
+Proof.
+  intros Hm Hcap Hvalues. unfold SplitInfeasible.
+  rewrite SplitFeasible_legacy by assumption. unfold CanSplit, CannotSplit.
+  split.
+  - intros Hno cnt cur Hstate. destruct (Z_le_gt_dec cnt m); [exfalso; apply Hno; eauto | lia].
+  - intros Hno [cnt [cur [Hs Hc]]]. specialize (Hno cnt cur Hs). lia.
+Qed.
+
+Lemma split_progress_view prefix cap cnt cur :
+  SplitProgress prefix cap cnt cur <->
+  exists parts,
+    concat parts = prefix /\
+    Forall (fun segment => segment <> [] /\ sum segment <= cap) parts /\
+    Z.max 1 (Zlength parts) = cnt /\ sum (last parts []) = cur /\
+    forall other, concat other = prefix ->
+      Forall (fun segment => segment <> [] /\ sum segment <= cap) other ->
+      cnt < Z.max 1 (Zlength other) \/
+      (cnt = Z.max 1 (Zlength other) /\ cur <= sum (last other [])).
+Proof.
+  unfold SplitProgress, min_value_of_subset, min_object_of_subset. cbn.
+  split.
+  - intros [parts [[[Hcat Hgood] Hmin] Heq]]. inversion Heq; subst cnt cur.
+    exists parts. repeat split; try assumption; try reflexivity.
+    intros other Hcat' Hgood'. apply Hmin. split; assumption.
+  - intros [parts [Hcat [Hgood [Hcnt [Hcur Hmin]]]]].
+    exists parts. split.
+    + split; [split; assumption |]. intros other [Hcat' Hgood'].
+      rewrite Hcnt, Hcur. apply Hmin; assumption.
+    + rewrite Hcnt, Hcur. reflexivity.
+Qed.
+
+Lemma split_partition_empty cap parts :
+  concat parts = [] ->
+  Forall (fun segment : list Z => segment <> [] /\ sum segment <= cap) parts ->
+  parts = [].
+Proof.
+  intros Hcat Hgood. destruct parts as [|part parts]; [reflexivity |].
+  inversion Hgood as [|? ? [Hne _] _]; subst.
+  cbn in Hcat. apply app_eq_nil in Hcat as [Hpart _]. contradiction.
+Qed.
+
+Lemma split_progress_empty cap : SplitProgress [] cap 1 0.
+Proof.
+  apply split_progress_view. exists []. split; [reflexivity |].
+  split; [constructor |]. split; [reflexivity |]. split; [reflexivity |].
+  intros parts Hcat Hgood. pose proof (split_partition_empty cap parts Hcat Hgood) as Hempty. subst parts.
+  right. split; reflexivity.
+Qed.
+
+Lemma split_progress_empty_values cap cnt cur :
+  SplitProgress [] cap cnt cur -> cnt = 1 /\ cur = 0.
+Proof.
+  intros H. apply split_progress_view in H as [parts [Hcat [Hgood [Hcnt [Hcur _]]]]].
+  pose proof (split_partition_empty cap parts Hcat Hgood). subst parts. cbn in *. auto.
+Qed.
+
+Lemma split_list_last {A : Type} (xs : list A) :
+  xs = [] \/ exists initial final, xs = initial ++ [final].
+Proof.
+  induction xs using rev_ind; [left; reflexivity | right; eauto].
+Qed.
+
+Lemma split_progress_extension_bound prefix cap cnt cur x other :
+  Forall (Z.le 0) prefix -> 0 <= x <= cap ->
+  SplitProgress prefix cap cnt cur ->
+  concat other = prefix ++ [x] ->
+  Forall (fun segment => segment <> [] /\ sum segment <= cap) other ->
+  (cur + x <= cap ->
+    cnt < Z.max 1 (Zlength other) \/
+    (cnt = Z.max 1 (Zlength other) /\ cur + x <= sum (last other []))) /\
+  (cap < cur + x ->
+    cnt + 1 < Z.max 1 (Zlength other) \/
+    (cnt + 1 = Z.max 1 (Zlength other) /\ x <= sum (last other []))).
+Proof.
+  intros Hnonnegative Hx Hprogress Hcat Hgood.
+  pose proof Hprogress as Hview. apply split_progress_view in Hview as
+    [chosen [_ [_ [_ [_ Hminimal]]]]].
+  destruct (split_list_last other) as [-> | [done [tail ->]]].
+  { cbn in Hcat. pose proof (f_equal (@Zlength Z) Hcat).
+    rewrite Zlength_nil, Zlength_app, Zlength_cons, Zlength_nil in H.
+    pose proof (Zlength_nonneg prefix). lia. }
+  apply Forall_app in Hgood as [Hdone Htail].
+  inversion Htail as [|? ? [Htail_ne Htail_sum] _]; subst.
+  destruct (split_list_last tail) as [Hnil | [initial [final Htail_eq]]]; [contradiction |].
+  subst tail.
+  rewrite concat_app in Hcat. cbn [concat] in Hcat. rewrite app_nil_r in Hcat.
+  rewrite app_assoc in Hcat. apply app_inj_tail in Hcat as [Hprefix Hfinal]. subst final.
+  rewrite Zlength_app, Zlength_cons, Zlength_nil, last_last, sum_snoc.
+  pose proof (Zlength_nonneg done) as Hdone_length.
+  replace (Z.max 1 (Zlength done + (0 + 1))) with (Zlength done + 1) by lia.
+  rewrite sum_snoc in Htail_sum.
+  assert (Hinitial_nonnegative : 0 <= sum initial).
+  { rewrite <- Hprefix in Hnonnegative. apply Forall_app in Hnonnegative as [_ Hinit].
+    apply sum_nonnegative. intros y Hy. eapply Forall_forall; eauto. }
+  destruct initial as [|head initial].
+  - rewrite app_nil_r in Hprefix. cbn [sum].
+    destruct done as [|part done].
+    + cbn in Hprefix. subst prefix.
+      destruct (split_progress_empty_values cap cnt cur Hprogress) as [-> ->]. cbn. lia.
+    + specialize (Hminimal (part :: done) Hprefix Hdone).
+      rewrite Zlength_cons in *. pose proof (Zlength_nonneg done).
+      replace (Z.max 1 (Zlength done + 1)) with (Zlength done + 1) in Hminimal by lia.
+      lia.
+  - assert (Hold : concat (done ++ [head :: initial]) = prefix).
+    { rewrite concat_app. cbn [concat]. rewrite app_nil_r. exact Hprefix. }
+    assert (Hvalid : Forall (fun segment => segment <> [] /\ sum segment <= cap)
+      (done ++ [head :: initial])).
+    { apply Forall_app. split; [exact Hdone |]. constructor; [split; [discriminate | lia] | constructor]. }
+    specialize (Hminimal (done ++ [head :: initial]) Hold Hvalid).
+    rewrite Zlength_app, Zlength_cons, Zlength_nil, last_last in Hminimal.
+    replace (Z.max 1 (Zlength done + (0 + 1))) with (Zlength done + 1) in Hminimal by lia.
+    lia.
+Qed.
+
+Lemma split_progress_extend prefix cap cnt cur x :
+  Forall (Z.le 0) prefix -> 0 <= x <= cap ->
+  SplitProgress prefix cap cnt cur -> cur + x <= cap ->
+  SplitProgress (prefix ++ [x]) cap cnt (cur + x).
+Proof.
+  intros Hv Hx Hp Hfits.
+  assert (Hlower : forall other, concat other = prefix ++ [x] ->
+    Forall (fun segment => segment <> [] /\ sum segment <= cap) other ->
+    cnt < Z.max 1 (Zlength other) \/
+      (cnt = Z.max 1 (Zlength other) /\ cur + x <= sum (last other []))).
+  { intros other Hcat Hgood.
+    exact (proj1 (split_progress_extension_bound prefix cap cnt cur x other Hv Hx Hp Hcat Hgood) Hfits). }
+  apply split_progress_view in Hp as [parts [Hcat [Hgood [Hcnt [Hcur Hmin]]]]].
+  apply split_progress_view.
+  destruct (split_list_last parts) as [-> | [done [tail ->]]].
+  - cbn in Hcat, Hcnt, Hcur. subst prefix cnt cur.
+    exists [[x]]. split; [reflexivity |].
+    split; [constructor; [split; [discriminate | cbn; lia] | constructor] |].
+    split; [reflexivity |]. split; [cbn; lia | exact Hlower].
+  - rewrite concat_app in Hcat. cbn [concat] in Hcat. rewrite app_nil_r in Hcat.
+    apply Forall_app in Hgood as [Hdone Htail].
+    rewrite last_last in Hcur.
+    exists (done ++ [tail ++ [x]]). split.
+    + rewrite concat_app. cbn [concat]. rewrite app_nil_r, app_assoc, Hcat. reflexivity.
+    + split.
+      * apply Forall_app. split; [exact Hdone |]. constructor; [|constructor].
+        split; [intro Hnil; apply app_eq_nil in Hnil; destruct Hnil as [_ Hbad]; discriminate |].
+        rewrite sum_snoc. lia.
+      * split.
+        -- rewrite Zlength_app, Zlength_cons, Zlength_nil in Hcnt |- *. exact Hcnt.
+        -- split; [rewrite last_last, sum_snoc, Hcur; reflexivity | exact Hlower].
+Qed.
+
+Lemma split_progress_new_segment prefix cap cnt cur x :
+  Forall (Z.le 0) prefix -> 0 <= x <= cap ->
+  SplitProgress prefix cap cnt cur -> cap < cur + x ->
+  SplitProgress (prefix ++ [x]) cap (cnt + 1) x.
+Proof.
+  intros Hv Hx Hp Hover.
+  assert (Hlower : forall other, concat other = prefix ++ [x] ->
+    Forall (fun segment => segment <> [] /\ sum segment <= cap) other ->
+    cnt + 1 < Z.max 1 (Zlength other) \/
+      (cnt + 1 = Z.max 1 (Zlength other) /\ x <= sum (last other []))).
+  { intros other Hcat Hgood.
+    exact (proj2 (split_progress_extension_bound prefix cap cnt cur x other Hv Hx Hp Hcat Hgood) Hover). }
+  apply split_progress_view in Hp as [parts [Hcat [Hgood [Hcnt [Hcur Hmin]]]]].
+  assert (Hparts : parts <> []).
+  { intros ->. cbn in Hcur. lia. }
+  assert (Hlength : 1 <= Zlength parts).
+  { destruct parts; [contradiction |]. rewrite Zlength_cons. pose proof (Zlength_nonneg parts). lia. }
+  replace (Z.max 1 (Zlength parts)) with (Zlength parts) in Hcnt by lia.
+  apply split_progress_view. exists (parts ++ [[x]]). split.
+  - rewrite concat_app. cbn [concat]. rewrite app_nil_r, Hcat. reflexivity.
+  - split.
+    + apply Forall_app. split; [exact Hgood |]. constructor; [|constructor].
+      split; [discriminate | cbn; lia].
+    + split.
+      * rewrite Zlength_app, Zlength_cons, Zlength_nil. lia.
+      * split; [rewrite last_last; cbn; lia | exact Hlower].
+Qed.
+
+Lemma split_prefix_nonnegative l i :
+  Forall (Z.le 0) l -> 0 <= i <= Zlength l ->
+  Forall (Z.le 0) (sublist 0 i l).
+Proof.
+  intros Hv Hi. apply (proj2 (Forall_Znth (Z.le 0) 0 (sublist 0 i l))).
+  intros k Hk. rewrite Zlength_sublist in Hk by lia.
+  rewrite Znth_sublist by lia. rewrite Z.add_0_r.
+  exact (proj1 (Forall_Znth (Z.le 0) 0 l) Hv k ltac:(lia)).
+Qed.
+
+Lemma split_progress_feasible l cap cnt cur m :
+  1 <= m <= Zlength l -> 0 <= cap -> Forall (Z.le 0) l ->
+  SplitProgress l cap cnt cur -> cnt <= m -> SplitFeasible l m cap.
+Proof.
+  intros Hm Hcap Hv Hp Hcnt_m.
+  apply split_progress_view in Hp as [parts [Hcat [Hgood [Hcnt [_ _]]]]].
+  assert (Hparts : parts <> []).
+  { intros Hnil. subst parts. cbn in Hcat. rewrite <- Hcat, Zlength_nil in Hm. lia. }
+  assert (Hgood' : Forall
+    (fun seg => seg <> [] /\ sum seg <= cap /\ forall x, In x seg -> 0 <= x) parts).
+  { apply Forall_forall. intros seg Hin.
+    pose proof (proj1 (Forall_forall _ _) Hgood seg Hin) as [Hne Hsum].
+    split; [exact Hne |]. split; [exact Hsum |]. intros x Hx.
+    apply (proj1 (Forall_forall _ _) Hv x). rewrite <- Hcat.
+    apply in_concat. exists seg. auto. }
+  pose proof (bounded_partition_to_can_split l (Zlength parts) cap parts Hcap Hparts Hcat eq_refl Hgood') as Hcan.
+  assert (Hcan_m : CanSplit l m cap).
+  { destruct Hcan as [c [v [Hstate Hc]]]. exists c, v. split; [exact Hstate | lia]. }
+  unfold SplitFeasible. apply can_split_to_partition_max; try assumption; lia.
+Qed.
+
+Lemma split_progress_infeasible l cap cnt cur m :
+  1 <= m -> Forall (Z.le 0) l -> SplitProgress l cap cnt cur ->
+  m < cnt -> SplitInfeasible l m cap.
+Proof.
+  intros Hm Hv Hp Htoo [maximum [Hpartition Hmaximum]].
+  apply split_progress_view in Hp as [chosen [_ [_ [_ [_ Hminimal]]]]].
+  destruct Hpartition as [parts [[Hne [Hcat Hnonempty]] [Hlength Hmax]]].
+  pose proof (partition_max_segments_good l parts maximum cap Hcat Hnonempty Hmax Hmaximum
+    (proj1 (Forall_Znth (Z.le 0) 0 l) Hv)) as Hgood.
+  assert (Hbounds : Forall (fun seg => seg <> [] /\ sum seg <= cap) parts).
+  { apply Forall_forall. intros seg Hin.
+    pose proof (proj1 (Forall_forall _ _) Hgood seg Hin) as [Hempty [Hsum _]].
+    split; assumption. }
+  specialize (Hminimal parts Hcat Hbounds). rewrite Hlength in Hminimal.
+  replace (Z.max 1 m) with m in Hminimal by lia. lia.
 Qed.

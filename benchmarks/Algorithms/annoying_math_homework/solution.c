@@ -2,9 +2,13 @@
 #define M 10
 #define P 1000000007
 
+#include "int_array_def.h"
+
 void digits_sum_init(int *dp, int *power)
+
 {
   power[0] = 1;
+  
   for (int i = 1; i < N; i++) {
     long long bef = power[i - 1];
     bef = bef * 10 % P;
@@ -12,6 +16,7 @@ void digits_sum_init(int *dp, int *power)
   }
 
   for (int i = 0; i < N; i++) {
+    
     for (int j = 0; j < M; j++) {
       dp[i * M + j] = 0;
     }
@@ -22,7 +27,9 @@ void digits_sum_init(int *dp, int *power)
   }
 
   for (int i = 2; i < N; i++) {
+    
     for (int j = 0; j < M; j++) {
+      
       for (int k = 0; k < M; k++) {
         long long sub_power = power[i - 2];
         long long moving =
@@ -35,6 +42,7 @@ void digits_sum_init(int *dp, int *power)
 }
 
 int prefix_digits_sum(long long x, int *dp, int *digits)
+
 {
   int m = 0;
   int ans = 0;
@@ -49,6 +57,7 @@ int prefix_digits_sum(long long x, int *dp, int *digits)
   }
 
   long long tmpx = x;
+  
   while (tmpx) {
     m = m + 1;
     digits[m] = (int)(tmpx % 10);
@@ -60,6 +69,7 @@ int prefix_digits_sum(long long x, int *dp, int *digits)
   }
 
   for (int i = m; i > 0; i--) {
+    
     for (int j = 0; j < digits[i]; j++) {
       ans = (ans + dp[i * M + j]) % P;
     }
@@ -78,11 +88,16 @@ int prefix_digits_sum(long long x, int *dp, int *digits)
   return ans;
 }
 
-int interval_digits_sum(long long x, long long y, int *dp, int *power,
-                        int *digits)
+int interval_digits_sum(long long x, long long y)
+
 {
+  int dp[200];
+  int power[20];
+  int digits[20];
+  
   digits_sum_init(dp, power);
   int ans1 = prefix_digits_sum(y, dp, digits);
   int ans2 = prefix_digits_sum(x - 1, dp, digits);
+  
   return ((ans1 - ans2) % P + P) % P;
 }

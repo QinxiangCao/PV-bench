@@ -17,6 +17,7 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import PVbench.Algorithms.quicksort_hoare_fill_index.rocq.spec_lib.
 Require Import PVbench.Algorithms.quicksort_hoare_fill_index.rocq.helper_lib.
 Local Open Scope sac.
 
@@ -48,12 +49,6 @@ Lemma proof_of_partition_safety_wit_9 : partition_safety_wit_9.
 Proof. Admitted. 
 
 Lemma proof_of_partition_entail_wit_2 : partition_entail_wit_2.
-Proof. Admitted. 
-
-Lemma proof_of_partition_entail_wit_3 : partition_entail_wit_3.
-Proof. Admitted. 
-
-Lemma proof_of_partition_entail_wit_5 : partition_entail_wit_5.
 Proof. Admitted. 
 
 Lemma proof_of_partition_partial_solve_wit_1 : partition_partial_solve_wit_1.

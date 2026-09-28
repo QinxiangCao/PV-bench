@@ -1,0 +1,27 @@
+{
+  "id": "P068_1416C_xor_inverse",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1416/C",
+    "title": "XOR Inverse",
+    "url": "https://codeforces.com/problemset/problem/1416/C",
+    "rating": 2000,
+    "tags": [
+      "bitmasks",
+      "data structures",
+      "divide and conquer",
+      "dp",
+      "greedy",
+      "math",
+      "sortings",
+      "strings",
+      "trees"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "OTHER",
+    "interactive": false,
+    "multi_test": false
+  }
+}

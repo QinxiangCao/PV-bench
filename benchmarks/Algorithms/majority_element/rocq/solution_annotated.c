@@ -1,7 +1,11 @@
+
+
+
+
+/* Mathematical progress excludes the vote counter bounds, which are explicit below. */
 /*@ Extern Coq (IsMajorityElement : Z -> list Z -> Prop) */
 /*@ Extern Coq (MajorityOnReduced : Z -> Z -> Z -> list Z -> Prop) */
 
-/*@ Import Coq Require Import PVbench.Algorithms.majority_element.rocq.spec_lib */
 /*@ Import Coq Require Import PVbench.Algorithms.majority_element.rocq.helper_lib */
 
 int majorityElement(int* nums, int numsSize)

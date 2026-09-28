@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P082_1989E_distance_to_different.rocq.groundtruth Require Import P082_1989E_distance_to_different_goal P082_1989E_distance_to_different_proof_auto P082_1989E_distance_to_different_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P082_1989E_distance_to_different_proof_auto.
+  Include P082_1989E_distance_to_different_proof_manual.
+End VC_Correctness.

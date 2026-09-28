@@ -1,18 +1,19 @@
 # LeetCode 435: Non-overlapping Intervals
 
-## Description
+## Abstract model
+
+Choose a maximum-cardinality subset of half-open-compatible intervals: after
+sorting by nondecreasing right endpoint, greedily retain each interval whose
+left endpoint is at least the last retained right endpoint. The requested
+removal count is the input size minus the maximum retained count. The C case
+stores endpoints in parallel arrays and preserves each endpoint pair while
+sorting.
+
+## Problem statement
 
 Given intervals $[start_i,end_i]$, remove as few as possible so that the
 remaining intervals are pairwise non-overlapping. Intervals that only touch at
 one endpoint, such as $[1,2]$ and $[2,3]$, do not overlap.
-
-## Input
-
-The function receives a collection of intervals represented by parallel start and end arrays.
-
-## Output
-
-Return the minimum number of intervals that must be removed so the remainder do not overlap.
 
 ## Constraints
 

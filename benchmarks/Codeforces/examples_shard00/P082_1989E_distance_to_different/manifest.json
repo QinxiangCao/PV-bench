@@ -1,0 +1,21 @@
+{
+  "id": "P082_1989E_distance_to_different",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1989/E",
+    "title": "Distance to Different",
+    "url": "https://codeforces.com/problemset/problem/1989/E",
+    "rating": 2300,
+    "tags": [
+      "combinatorics",
+      "dp",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

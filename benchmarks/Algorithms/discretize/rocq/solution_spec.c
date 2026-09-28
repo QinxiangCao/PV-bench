@@ -1,3 +1,11 @@
+/*@ Extern Coq
+      (strict_increasing : list Z -> Prop)
+ */
+
+/*@ Extern Coq
+      (discretize_result : list Z -> list Z -> Z -> Prop)
+ */
+
 /*@ Import Coq Require Import PVbench.Algorithms.discretize.rocq.spec_lib */
 
 void swap(int *arr, int i, int j)
@@ -44,14 +52,13 @@ void int_array_quicksort(int *arr, int n)
     quicksort_range(arr, n, 0, n - 1);
 }
 
-int discretize(const int *src, int n, int *dest_map) 
+int discretize(const int *src, int n, int *dest_map)
 /*@ With src_l
-    Require Zlength(src_l) == n &&
-            1 <= n && n <= 50000 &&
+    Require 1 <= n && n <= 50000 &&
             IntArray::full(src, n, src_l) *
             IntArray::undef_full(dest_map, n)
     Ensure exists out_l,
-            discretize_result(src_l, n, out_l, __return) &&
+            discretize_result(src_l, out_l, __return) &&
             IntArray::full(src, n, src_l) *
             IntArray::full(dest_map, n, out_l)
 */
@@ -70,12 +77,10 @@ int discretize(const int *src, int n, int *dest_map)
             dest_map[slow] = dest_map[fast];
         }
     }
-
     return slow + 1;
 }
 
-int query_forward(const int *map, int map_size, int target) 
-
+int query_forward(const int *map, int map_size, int target)
 {
     int low = 0;
     int high = map_size - 1;
@@ -91,6 +96,5 @@ int query_forward(const int *map, int map_size, int target)
             high = mid - 1;
         }
     }
-
-    return -1; 
+    return -1;
 }

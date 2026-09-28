@@ -1,40 +1,24 @@
-/*
- * Huffman encoding: minimum weighted path length of a binary prefix code.
- *
- * Repeatedly merging the two smallest live weights constructs a Huffman tree.
- * The sum of all merge weights is that tree's weighted path length and is
- * minimum among all full binary prefix-code trees over the input frequencies.
- *
- * This verification-oriented implementation uses a fresh selection scan for
- * each of the two minima.  Removing a selected item is done by moving the last
- * live item into its slot, so only the prefix work[0..active) is live.
- */
-
 /*@ Extern Coq
-      (HuffmanInputBounded : list Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
       (HuffmanOptimalCost : list Z -> Z -> Prop)
-      (HuffmanScratchFinal : list Z -> list Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.huffman_encoding.rocq.spec_lib */
 
-int huffman_cost(int *weights, int n, int *work)
+int huffman_cost(int *weights, int n)
 /*@ With (weights_l : list Z)
     Require
       1 <= n && n <= 8 &&
       Zlength(weights_l) == n &&
-      HuffmanInputBounded(weights_l) &&
-      IntArray::full(weights, n, weights_l) *
-      IntArray::undef_full(work, n)
+      Forall(Z::le(1), weights_l) && Forall(Z::ge(1000), weights_l) &&
+      IntArray::full(weights, n, weights_l)
     Ensure
-      exists work_l,
-        Zlength(work_l) == n &&
-        HuffmanOptimalCost(weights_l, __return) &&
-        HuffmanScratchFinal(weights_l, work_l) &&
-        0 <= __return && __return <= 56000 &&
-        IntArray::full(weights, n, weights_l) *
-        IntArray::full(work, n, work_l)
+      HuffmanOptimalCost(weights_l, __return) &&
+      IntArray::full(weights, n, weights_l)
  */
 {
+  int work[8];
 
   for (int i = 0; i < n; ++i) {
     work[i] = weights[i];

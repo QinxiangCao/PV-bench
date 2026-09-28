@@ -1,30 +1,34 @@
+Require Export PVbench.Algorithms.bucket_sort.rocq.spec_lib.
 From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
 From Coq Require Import Sorting.Permutation.
 From AUXLib Require Import ListLib.
+From MaxMinLib Require Import MaxMin.
+Require Import SetsClass.SetsClass.
+Import SetsNotation.
+From Coq Require Import Lia.
+Require Import Coq.ZArith.Zquot.
+(** Group-local mathematical support for the reverse stable-placement loop. *)
+Require Import Coq.Sorting.Sorted Coq.micromega.Lia Coq.micromega.Psatz.
+From Coq Require Import Lia Zquot.
 
+(** The decimal digit selected by one LSD pass.  [exponent] is kept as an
+    explicit argument because the C annotation separately owns its positivity
+    and machine range. *)
 Definition RadixDigit (value exponent : Z) : Z :=
   (value / exponent) mod 10.
 
-(** [maximum] is an attained upper bound for the mathematical prefix [0,hi).
-    The C loop invariant separately owns the machine ranges for [hi] and the
-    array access that materializes each element. *)
+(** Maximum of the mathematical prefix [0,hi), using the shared extremum
+    semantics. Valid prefix indices are the candidate set; access safety is
+    supplied separately by the C contract. *)
 Definition PrefixMaximum (values : list Z) (hi maximum : Z) : Prop :=
-  (exists index,
-      0 <= index < hi /\
-      maximum = Znth index values 0) /\
-  forall index,
-    0 <= index < hi ->
-    Znth index values 0 <= maximum.
+  max_value_of_subset Z.le (fun index : Z => 0 <= index < hi)
+    (fun index => Znth index values 0) maximum.
 
-(** Exponents used by the bounded program are the first ten decimal powers.
-    Numeric bounds remain explicit C facts so symbolic execution need not
-    project them from this predicate. *)
+(** Decimal powers, independent of the implementation's machine bounds. *)
 Definition DecimalExponent (exponent : Z) : Prop :=
-  exists power : Z,
-    0 <= power <= 9 /\
-    exponent = 10 ^ power.
+  exists power : Z, 0 <= power /\ exponent = 10 ^ power.
 
 (** Ordering by all decimal positions already processed before [exponent]. *)
 Definition RadixLowerDigitsOrdered
@@ -39,11 +43,13 @@ Definition RadixPassState
     (input current : list Z) (exponent : Z) : Prop :=
   Permutation input current /\
   RadixLowerDigitsOrdered current exponent.
+
 Definition RadixBucket
     (values : list Z) (exponent digit : Z) : list Z :=
   filter
     (fun value => Z.eqb (RadixDigit value exponent) digit)
     values.
+
 Definition RadixDigitCount
     (values : list Z) (exponent hi digit : Z) : Z :=
   Zlength (RadixBucket (sublist 0 hi values) exponent digit).
@@ -65,8 +71,10 @@ Definition DigitPrefixTotals
        Znth digit totals 0 = sum (sublist 0 (digit + 1) histogram)) /\
     (processed <= digit ->
        Znth digit totals 0 = Znth digit histogram 0).
+
 Definition RadixBucketStart (histogram : list Z) (digit : Z) : Z :=
   sum (sublist 0 digit histogram).
+
 Definition RadixBucketEnd (histogram : list Z) (digit : Z) : Z :=
   sum (sublist 0 (digit + 1) histogram).
 
@@ -79,6 +87,7 @@ Definition RadixStableOutput
     (map
        (fun digit => RadixBucket source exponent digit)
        [0; 1; 2; 3; 4; 5; 6; 7; 8; 9]).
+
 Definition StableDigitPass
     (source output : list Z) (exponent : Z) : Prop :=
   output = RadixStableOutput source exponent.
@@ -91,7 +100,6 @@ Definition BucketPlacementProgress
     (source : list Z) (exponent remaining : Z)
     (histogram counters : list Z)
     (mixed_output : list (option Z)) : Prop :=
-  Zlength mixed_output = 1000 /\
   (forall digit,
       0 <= digit < 10 ->
       Znth digit counters 0 =
@@ -108,7 +116,7 @@ Definition BucketPlacementProgress
       Znth position mixed_output None =
         Some (Znth position (RadixStableOutput source exponent) 0)) /\
   (forall position,
-      0 <= position < 1000 ->
+      0 <= position < Zlength mixed_output ->
       (forall digit,
           0 <= digit < 10 ->
           position < Znth digit counters 0 \/

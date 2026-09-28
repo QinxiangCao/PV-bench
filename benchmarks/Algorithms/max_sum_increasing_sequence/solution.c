@@ -1,6 +1,8 @@
-int maxSumIncreasingSequence(int *nums, int numsSize, int *dp)
+int maxSumIncreasingSequence(int *nums, int numsSize)
 
 {
+  int dp[100000];
+
   dp[0] = nums[0];
   int ans = nums[0];
 
@@ -20,5 +22,6 @@ int maxSumIncreasingSequence(int *nums, int numsSize, int *dp)
       ans = dp[i];
     }
   }
+
   return ans;
 }

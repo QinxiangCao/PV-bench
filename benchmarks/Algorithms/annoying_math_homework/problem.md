@@ -1,30 +1,34 @@
-# P4999 — Annoying Math Homework
+# P4999 Annoying Math Homework
 
-## Description
+## Abstract model
 
-For a nonnegative integer $x$, let $s(x)$ be the sum of its decimal digits.
-For every query containing two integers $L$ and $R$, compute
+For an integer interval $[L,R]$, let $s(x)$ be the sum of the decimal digits
+of $x$. Compute
 
 $$
 \left(\sum_{x=L}^{R}s(x)\right) \bmod (10^9+7).
 $$
 
-## Input
+The verification case exposes initialization, prefix-sum, and interval-query
+functions. It models an interval answer as the difference between two digit-DP
+prefix answers.
 
-The first line contains one integer $T$, the number of queries.
+## Problem statement
 
-Each of the next $T$ lines contains two integers $L$ and $R$.
+Mr. G gives $T$ queries. Each query contains two integers $L$ and $R$. For every
+query, find the sum of the digit sums of all integers from $L$ through $R$,
+inclusive, and report the result modulo $10^9+7$.
 
-## Output
+## Input and output
 
-For each query, print one line containing the sum of the decimal-digit sums of
-all integers in $[L,R]$, modulo $10^9+7$.
+The first input line contains $T$. Each of the next $T$ lines contains $L$ and
+$R$. Output one answer per query.
 
 ## Constraints
 
 - $1 \le T \le 20$.
 - $1 \le L \le R \le 10^{18}$.
-- For 50% of the test data, $R \le 10^8$.
+- For 50% of the original tests, $R \le 10^8$.
 
 ## Source
 

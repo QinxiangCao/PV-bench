@@ -17,7 +17,6 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.chinese_remainder_theorem.rocq.spec_lib.
 Require Import PVbench.Algorithms.chinese_remainder_theorem.rocq.helper_lib.
 Local Open Scope sac.
 
@@ -37,6 +36,9 @@ Lemma proof_of_chinese_remainder_theorem_safety_wit_6 : chinese_remainder_theore
 Proof. Admitted. 
 
 Lemma proof_of_chinese_remainder_theorem_safety_wit_8 : chinese_remainder_theorem_safety_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_chinese_remainder_theorem_safety_wit_9 : chinese_remainder_theorem_safety_wit_9.
 Proof. Admitted. 
 
 Lemma proof_of_chinese_remainder_theorem_safety_wit_10 : chinese_remainder_theorem_safety_wit_10.

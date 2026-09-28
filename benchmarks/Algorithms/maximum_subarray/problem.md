@@ -1,17 +1,15 @@
 # LeetCode 53: Maximum Subarray
 
-## Description
+## Abstract model
+
+Maximize $\sum_{i=l}^{r}nums_i$ over every nonempty contiguous interval
+$0\le l\le r<n$. The verification case uses Kadane's recurrence, storing the
+best suffix ending at the current element and the best interval seen so far.
+
+## Problem statement
 
 Given an integer array `nums`, return the sum of the contiguous nonempty
 subarray with the largest sum.
-
-## Input
-
-The function receives an integer array `nums`.
-
-## Output
-
-Return the largest sum of a nonempty contiguous subarray.
 
 ## Constraints
 

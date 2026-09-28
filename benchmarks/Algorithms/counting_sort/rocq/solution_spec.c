@@ -4,24 +4,22 @@
 /*@ Extern Coq
       (increasing : list Z -> Prop)
  */
-
-/*
- * Stable counting sort for values in the fixed range [0, 99].
- * The cumulative histogram gives the end of each value's bucket; walking the
- * input from right to left makes the placement phase stable.
+/*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::gt : Z -> Z -> Prop)
  */
+/*@ Import Coq Require Import PVbench.Algorithms.counting_sort.rocq.spec_lib */
+
 void sort(int *a, int n)
 /*@ With (input : list Z)
     Require
       0 <= n && n <= 100 &&
       Zlength(input) == n &&
-      (forall (i : Z),
-         (0 <= i && i < n) =>
-         (0 <= Znth(i, input, 0) && Znth(i, input, 0) < 100)) &&
+      Forall(Z::le(0), input) && Forall(Z::gt(100), input) &&
       IntArray::full(a, n, input)
     Ensure
       exists output,
-        Zlength(output) == n &&
         Permutation(input, output) &&
         increasing(output) &&
         IntArray::full(a, n, output)

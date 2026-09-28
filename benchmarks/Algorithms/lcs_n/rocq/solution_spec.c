@@ -1,25 +1,23 @@
 /*@ Extern Coq
-      (LCSNTableResult : list Z -> list Z -> Z -> list Z -> Prop)
+      (LCSNLength : list Z -> list Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.lcs_n.rocq.spec_lib */
 
-int lcs_n(int *x, int *y, int n, int *table)
+int longest_common_sequence(int *x, int *y, int n)
 /*@ With (xs ys : list Z)
     Require
       0 <= n && n <= 1000 &&
       Zlength(xs) == n && Zlength(ys) == n &&
       IntArray::full(x, n, xs) *
-      IntArray::full(y, n, ys) *
-      IntArray::undef_full(table, (n + 1) * (n + 1))
+      IntArray::full(y, n, ys)
     Ensure
-      exists table_l,
-      LCSNTableResult(xs, ys, n, table_l) &&
-      __return == Znth((n + 1) * n + n, table_l, 0) &&
+      LCSNLength(xs, ys, __return) &&
       IntArray::full(x, n, xs) *
-      IntArray::full(y, n, ys) *
-      IntArray::full(table, (n + 1) * (n + 1), table_l)
+      IntArray::full(y, n, ys)
  */
 {
+  int table[1002001];
+
   int stride;
   int i;
   int j;
@@ -71,5 +69,7 @@ int lcs_n(int *x, int *y, int n, int *table)
     i = i + 1;
   }
 
-  return table[stride * n + n];
+  int result = table[stride * n + n];
+
+  return result;
 }

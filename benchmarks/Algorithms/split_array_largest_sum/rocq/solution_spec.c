@@ -1,4 +1,8 @@
 /*@ Extern Coq
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::gt : Z -> Z -> Prop)
+      (sum : list Z -> Z)
       (MinimizedMaxSegmentSum : list Z -> Z -> Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.split_array_largest_sum.rocq.spec_lib */
@@ -36,8 +40,9 @@ int splitArrayLargestSum(int *arr, int n, int m)
       1 <= m && m <= n &&
       Zlength(l) == n &&
       IntArray::full(arr, n, l) &&
-      (forall (i : Z), (0 <= i && i < n) => (0 <= l[i] && l[i] < 100000000)) &&
+      Forall(Z::le(0), l) && Forall(Z::gt(100000000), l) &&
 
+      sum(l) <= 1000000000 &&
       MinimizedMaxSegmentSum(l, m, ans) &&
       0 <= ans &&
       ans <= 1000000000

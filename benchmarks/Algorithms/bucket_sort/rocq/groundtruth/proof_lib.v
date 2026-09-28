@@ -1,16 +1,18 @@
+Require Export PVbench.Algorithms.bucket_sort.rocq.helper_lib.
 From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
 From Coq Require Import Sorting.Permutation.
 From AUXLib Require Import ListLib.
-Require Import PVbench.Algorithms.bucket_sort.rocq.helper_lib.
-
+From MaxMinLib Require Import MaxMin.
+Require Import SetsClass.SetsClass.
+Import SetsNotation.
 From Coq Require Import Lia.
 Require Import Coq.ZArith.Zquot.
-
 (** Group-local mathematical support for the reverse stable-placement loop. *)
 Require Import Coq.Sorting.Sorted Coq.micromega.Lia Coq.micromega.Psatz.
 From Coq Require Import Lia Zquot.
+
 Lemma prefix_maximum_extend_greater__maximum_pass_entry :
   forall values hi maximum,
     0 <= hi ->
@@ -19,20 +21,17 @@ Lemma prefix_maximum_extend_greater__maximum_pass_entry :
     PrefixMaximum values (hi + 1) (Znth hi values 0).
 Proof.
   intros values hi maximum Hhi Hmaximum Hgreater.
-  unfold PrefixMaximum in *.
-  destruct Hmaximum as [_ Hupper].
-  split.
-  - exists hi.
-    split; lia.
-  - intros index Hindex.
-    destruct (Z.lt_ge_cases index hi) as [Hlt | Hge].
-    + eapply Z.le_trans.
-      * apply Hupper; lia.
-      * lia.
-    + assert (index = hi) by lia.
-      subst index.
-      lia.
+  unfold PrefixMaximum, max_value_of_subset, max_object_of_subset in *.
+  sets_unfold in Hmaximum.
+  sets_unfold.
+  destruct Hmaximum as [attained [[Hattained Hupper] Heq]].
+  exists hi; split; [split | reflexivity]; try lia.
+  intros index Hindex.
+  destruct (Z.lt_ge_cases index hi) as [Hlt | Hge].
+  - specialize (Hupper index ltac:(lia)); lia.
+  - assert (index = hi) by lia; subst; lia.
 Qed.
+
 Lemma prefix_maximum_extend_bounded__maximum_pass_entry :
   forall values hi maximum,
     PrefixMaximum values hi maximum ->
@@ -40,18 +39,17 @@ Lemma prefix_maximum_extend_bounded__maximum_pass_entry :
     PrefixMaximum values (hi + 1) maximum.
 Proof.
   intros values hi maximum Hmaximum Hbounded.
-  unfold PrefixMaximum in *.
-  destruct Hmaximum as [[index [Hindex Hattained]] Hupper].
-  split.
-  - exists index.
-    split; [lia | exact Hattained].
-  - intros k Hk.
-    destruct (Z.lt_ge_cases k hi) as [Hlt | Hge].
-    + apply Hupper; lia.
-    + assert (k = hi) by lia.
-      subst k.
-      exact Hbounded.
+  unfold PrefixMaximum, max_value_of_subset, max_object_of_subset in *.
+  sets_unfold in Hmaximum.
+  sets_unfold.
+  destruct Hmaximum as [index [[Hindex Hupper] Heq]].
+  exists index; split; [split | exact Heq]; try lia.
+  intros k Hk.
+  destruct (Z.lt_ge_cases k hi) as [Hlt | Hge].
+  - apply Hupper; lia.
+  - assert (k = hi) by lia; subst; lia.
 Qed.
+
 Lemma decimal_exponent_active_bound__maximum_pass_entry :
   forall exponent maximum,
     DecimalExponent exponent ->
@@ -63,18 +61,20 @@ Proof.
   intros exponent maximum Hexponent Hmaximum_nonnegative
     Hmaximum_bound Hactive.
   unfold DecimalExponent in Hexponent.
-  destruct Hexponent as [power [[Hpower_nonnegative Hpower_bound] ->]].
-  assert
-    (power = 0 \/ power = 1 \/ power = 2 \/ power = 3 \/
-     power = 4 \/ power = 5 \/ power = 6 \/ power = 7 \/
-     power = 8 \/ power = 9) as Hpower by lia.
-  destruct Hpower as
-      [-> | [-> | [-> | [-> | [-> | [-> | [-> | [-> | [-> | ->]]]]]]]]];
-    cbn in *; try lia.
-  assert (Z.quot maximum 1000000000 < 1) as Hquot.
-  { apply Z.quot_lt_upper_bound; lia. }
-  lia.
+  destruct Hexponent as [power [Hpower_nonnegative ->]].
+  assert (Hpower_bound : power <= 8).
+  {
+    destruct (Z_le_gt_dec power 8); auto.
+    assert (1000000000 <= 10 ^ power).
+    { change (10 ^ 9 <= 10 ^ power). apply Z.pow_le_mono_r; lia. }
+    assert (Z.quot maximum (10 ^ power) < 1).
+    { apply Z.quot_lt_upper_bound; lia. }
+    lia.
+  }
+  change (10 ^ power <= 10 ^ 8).
+  apply Z.pow_le_mono_r; lia.
 Qed.
+
 Lemma digit_histogram_prefix_zero__count_zero_init :
   forall values exponent counts,
     (forall digit, 0 <= digit < 10 -> Znth digit counts 0 = 0) ->
@@ -86,6 +86,7 @@ Proof.
   simpl.
   reflexivity.
 Qed.
+
 Lemma digit_histogram_prefix_step__histogram_update :
   forall values exponent hi counts,
     0 <= hi < Zlength values ->
@@ -125,6 +126,7 @@ Proof.
     rewrite Zlength_nil.
     lia.
 Qed.
+
 Lemma digit_prefix_totals_init__prefix_totals :
   forall histogram,
     Zlength histogram = 10 ->
@@ -140,6 +142,7 @@ Proof.
     lia.
   - reflexivity.
 Qed.
+
 Lemma digit_prefix_totals_step__prefix_totals :
   forall histogram totals digit,
     Zlength histogram = 10 ->
@@ -180,6 +183,7 @@ Proof.
     apply (proj2 (Hprefix index Hindex)).
     lia.
 Qed.
+
 Lemma digit_histogram_prefix_mass_bound__prefix_totals :
   forall values exponent hi histogram digit,
     0 <= hi <= Zlength values ->
@@ -287,9 +291,11 @@ Proof.
   simpl.
   lia.
 Qed.
+
 Lemma radix_digits_length__stable_placement :
   Zlength [0; 1; 2; 3; 4; 5; 6; 7; 8; 9] = 10.
 Proof. reflexivity. Qed.
+
 Lemma radix_digit_c_bridge__stable_placement :
   forall value exponent,
     0 <= value ->
@@ -303,6 +309,7 @@ Proof.
     (try apply Z_div_nonneg_nonneg; lia).
   reflexivity.
 Qed.
+
 Lemma c_radix_digit_range__stable_placement :
   forall value exponent,
     0 <= value ->
@@ -313,6 +320,7 @@ Proof.
   pose proof (Z_quot_pos value exponent ltac:(lia) ltac:(lia)) as Hquot.
   apply Zrem_lt_pos_pos; lia.
 Qed.
+
 Lemma radix_digits_Znth__stable_placement :
   forall index,
     0 <= index < 10 ->
@@ -326,6 +334,7 @@ Proof.
   | H : _ \/ _ |- _ => destruct H as [H | H]
   end; subst; reflexivity.
 Qed.
+
 Lemma Znth_map_valid__stable_placement :
   forall {A B : Type} (f : A -> B) (values : list A)
          (default_a : A) (default_b : B) index,
@@ -345,6 +354,7 @@ Proof.
   rewrite Hdefault.
   apply map_nth.
 Qed.
+
 Lemma sublist_map__stable_placement :
   forall {A B : Type} (f : A -> B) lo hi (values : list A),
     sublist lo hi (map f values) = map f (sublist lo hi values).
@@ -354,6 +364,7 @@ Proof.
   rewrite firstn_map, skipn_map.
   reflexivity.
 Qed.
+
 Lemma Zlength_map__stable_placement :
   forall {A B : Type} (f : A -> B) (values : list A),
     Zlength (map f values) = Zlength values.
@@ -362,6 +373,7 @@ Proof.
   repeat rewrite Zlength_correct.
   now rewrite length_map.
 Qed.
+
 Lemma Znth_app_left__stable_placement :
   forall {A : Type} (default : A) (left right : list A) index,
     0 <= index < Zlength left ->
@@ -372,6 +384,7 @@ Proof.
   apply app_nth1.
   rewrite Zlength_correct in Hindex. lia.
 Qed.
+
 Lemma Znth_app_right__stable_placement :
   forall {A : Type} (default : A) (left right : list A) index,
     Zlength left <= index ->
@@ -384,6 +397,7 @@ Proof.
   - f_equal. rewrite Zlength_correct. lia.
   - rewrite Zlength_correct in Hindex. lia.
 Qed.
+
 Lemma sum_sublist_ext__stable_placement :
   forall (left right : list Z) hi,
     0 <= hi <= Zlength left ->
@@ -410,6 +424,7 @@ Proof.
   }
   now rewrite Hlists.
 Qed.
+
 Lemma Zlength_radix_concat__stable_placement :
   forall source exponent digits,
     Zlength
@@ -423,6 +438,7 @@ Proof.
   - cbn.
     rewrite Zlength_app, IH. reflexivity.
 Qed.
+
 Lemma radix_output_as_concat__stable_placement :
   forall source exponent,
     RadixStableOutput source exponent =
@@ -430,6 +446,7 @@ Lemma radix_output_as_concat__stable_placement :
       (map (fun digit => RadixBucket source exponent digit)
          [0; 1; 2; 3; 4; 5; 6; 7; 8; 9]).
 Proof. reflexivity. Qed.
+
 Lemma histogram_start_as_prefix_length__stable_placement :
   forall source exponent histogram digit,
     Zlength histogram = 10 ->
@@ -457,6 +474,7 @@ Proof.
     rewrite sublist_self in Hhist by reflexivity.
     exact Hhist.
 Qed.
+
 Lemma radix_output_split__stable_placement :
   forall source exponent digit,
     0 <= digit < 10 ->
@@ -478,6 +496,7 @@ Proof.
   end; subst; unfold RadixStableOutput; simpl;
     repeat rewrite app_nil_r; repeat rewrite app_assoc; reflexivity.
 Qed.
+
 Lemma bucket_end_start_count__stable_placement :
   forall source exponent histogram digit,
     Zlength histogram = 10 ->
@@ -498,6 +517,7 @@ Proof.
   rewrite sublist_self in Hhist by reflexivity.
   lia.
 Qed.
+
 Lemma stable_output_bucket_Znth__stable_placement :
   forall source exponent histogram digit position,
     Zlength histogram = 10 ->
@@ -519,6 +539,7 @@ Proof.
   rewrite Znth_app_left__stable_placement by lia.
   now rewrite <- Hstart.
 Qed.
+
 Lemma sum_nonnegative_Znth__stable_placement :
   forall values : list Z,
     (forall index, 0 <= index < Zlength values ->
@@ -545,6 +566,7 @@ Proof.
     }
     apply Z.add_nonneg_nonneg; assumption.
 Qed.
+
 Lemma histogram_sublist_sum_nonnegative__stable_placement :
   forall source exponent histogram lo hi,
     Zlength histogram = 10 ->
@@ -562,6 +584,7 @@ Proof.
   unfold RadixDigitCount.
   apply Zlength_nonneg.
 Qed.
+
 Lemma bucket_end_le_start__stable_placement :
   forall source exponent histogram left right,
     Zlength histogram = 10 ->
@@ -581,6 +604,7 @@ Proof.
                 Hhist_len Hhist ltac:(lia) ltac:(lia)).
   lia.
 Qed.
+
 Lemma bucket_ranges_overlap_digit_eq__stable_placement :
   forall source exponent histogram first second first_pos second_pos,
     Zlength histogram = 10 ->
@@ -608,6 +632,7 @@ Proof.
                   Hsecond ltac:(lia) Hgt).
     lia.
 Qed.
+
 Lemma radix_digit_count_step__stable_placement :
   forall source exponent index digit,
     0 <= index < Zlength source ->
@@ -625,6 +650,7 @@ Proof.
   destruct (Z.eqb (RadixDigit (Znth index source 0) exponent) digit);
     simpl; rewrite ?Zlength_cons, ?Zlength_nil; lia.
 Qed.
+
 Lemma radix_digit_count_prefix_le_full__stable_placement :
   forall source exponent remaining digit,
     0 <= remaining <= Zlength source ->
@@ -656,6 +682,7 @@ Proof.
       exponent digit)).
   lia.
 Qed.
+
 Lemma radix_digit_count_prefix_mono__stable_placement :
   forall source exponent lo hi digit,
     0 <= lo <= hi ->
@@ -672,6 +699,7 @@ Proof.
        (sublist lo hi source))).
   lia.
 Qed.
+
 Lemma radix_digit_count_contains_index__stable_placement :
   forall source exponent remaining index,
     0 <= index < remaining ->
@@ -695,6 +723,7 @@ Proof.
     ltac:(lia) Hremaining) as Hmono.
   lia.
 Qed.
+
 Lemma bucket_progress_counter_for_index__stable_placement :
   forall source exponent remaining histogram counters mixed_output index,
     Zlength histogram = 10 ->
@@ -709,7 +738,7 @@ Proof.
   intros source exponent remaining histogram counters mixed_output index
          Hhist_len Hhist Hprogress Hindex Hremaining Hdigit.
   unfold BucketPlacementProgress in Hprogress.
-  destruct Hprogress as [_ [Hcounter _]].
+  destruct Hprogress as [Hcounter _].
   rewrite Hcounter by exact Hdigit.
   pose proof (radix_digit_count_contains_index__stable_placement
     source exponent remaining index Hindex Hremaining) as Hpositive.
@@ -720,6 +749,7 @@ Proof.
   unfold RadixBucketStart.
   lia.
 Qed.
+
 Lemma radix_bucket_current_position__stable_placement :
   forall source exponent index digit,
     0 <= index < Zlength source ->
@@ -777,6 +807,7 @@ Proof.
         exponent digit)).
     lia.
 Qed.
+
 Lemma radix_current_stable_position__stable_placement :
   forall source exponent histogram index,
     Zlength histogram = 10 ->
@@ -836,10 +867,12 @@ Proof.
             (RadixDigit (Znth index source 0) exponent)) by lia.
   exact Hposition.
 Qed.
+
 Lemma bucket_placement_step__stable_placement :
   forall source exponent histogram counters mixed_output index,
     Zlength histogram = 10 ->
     Zlength counters = 10 ->
+    Zlength mixed_output = 1000 ->
     0 <= index < Zlength source ->
     0 <= RadixDigit (Znth index source 0) exponent < 10 ->
     DigitHistogramPrefix source exponent (Zlength source) histogram ->
@@ -854,7 +887,7 @@ Lemma bucket_placement_step__stable_placement :
       (replace_Znth write_index (Some (Znth index source 0)) mixed_output).
 Proof.
   intros source exponent histogram counters mixed_output index
-         Hhist_len Hcounters_len Hindex Hdigit Hhist Hprogress.
+         Hhist_len Hcounters_len Hmixed_len Hindex Hdigit Hhist Hprogress.
   cbn.
   set (digit := RadixDigit (Znth index source 0) exponent).
   set (next_counters :=
@@ -863,7 +896,7 @@ Proof.
   intros Hwrite_valid.
   unfold BucketPlacementProgress in Hprogress |- *.
   destruct Hprogress as
-    [Hmixed_len [Hcounter [Hbounds [Hplaced Hnone]]]].
+    [Hcounter [Hbounds [Hplaced Hnone]]].
   assert (0 <= digit < 10) as Hdigit_range by
     (unfold digit; exact Hdigit).
   assert (Znth digit next_counters 0 = Znth digit counters 0 - 1)
@@ -979,8 +1012,6 @@ Proof.
     exact Hstable.
   }
   split.
-  - rewrite Zlength_replace_Znth. exact Hmixed_len.
-  - split.
     + exact Hcounter_next.
     + split.
       * exact Hbounds_next.
@@ -1058,6 +1089,7 @@ Proof.
       exact Hold.
         }
         { intros position Hposition Hall_buckets.
+    rewrite Zlength_replace_Znth in Hposition.
     assert (position <> write_index) as Hnot_write.
     {
       intro Heq_position. subst position.
@@ -1081,7 +1113,7 @@ Proof.
     rewrite Znth_replace_Znth_Diff.
     - exact Hold.
     - rewrite Hmixed_len. exact Hwrite_valid.
-    - rewrite Hmixed_len. exact Hposition.
+    - exact Hposition.
     - congruence.
         }
 Qed.
@@ -1098,8 +1130,6 @@ Proof.
          Hhist Htotals.
   unfold BucketPlacementProgress.
   split.
-  - rewrite Zlength_correct, repeat_length. lia.
-  - split.
     + intros digit Hdigit.
       specialize (Htotals digit Hdigit).
       destruct Htotals as [Hend _].
@@ -1176,6 +1206,7 @@ Proof.
       simpl; repeat rewrite app_nil_r; repeat rewrite app_assoc;
       reflexivity.
 Qed.
+
 Lemma radix_stable_output_permutation__stable_placement :
   forall source exponent,
     (forall index,
@@ -1212,6 +1243,7 @@ Proof.
     + apply perm_skip. exact IH.
     + apply Permutation_middle.
 Qed.
+
 Lemma radix_stable_output_properties__stable_placement :
   forall source exponent lower upper,
     (forall index,
@@ -1260,6 +1292,7 @@ Proof.
       rewrite Hnth in Hvalues.
       tauto.
 Qed.
+
 Lemma radix_position_bucket__stable_placement :
   forall source exponent histogram position,
     Zlength histogram = 10 ->
@@ -1333,10 +1366,12 @@ Proof.
                   *** exists 8. split; lia.
                   *** exists 9. split; lia.
 Qed.
+
 Lemma bucket_placement_complete__stable_placement :
   forall source exponent histogram counters mixed_output,
     Zlength histogram = 10 ->
     Zlength source <= 1000 ->
+    Zlength mixed_output = 1000 ->
     DigitHistogramPrefix source exponent (Zlength source) histogram ->
     (forall index,
       0 <= index < Zlength source ->
@@ -1349,11 +1384,11 @@ Lemma bucket_placement_complete__stable_placement :
       map (@Some Z) (RadixStableOutput source exponent).
 Proof.
   intros source exponent histogram counters mixed_output
-         Hhist_len Hsource_bound Hhist Hdigits Hprogress.
+         Hhist_len Hsource_bound Hmixed_len Hhist Hdigits Hprogress.
   pose proof (Zlength_nonneg source) as Hsource_nonneg.
   unfold BucketPlacementProgress in Hprogress.
   destruct Hprogress as
-    [Hmixed_len [Hcounter [Hbounds [Hplaced Hnone]]]].
+    [Hcounter [Hbounds [Hplaced Hnone]]].
   assert (forall digit,
     0 <= digit < 10 ->
     Znth digit counters 0 = RadixBucketStart histogram digit)
@@ -1396,6 +1431,7 @@ Proof.
       pose proof (Hplaced digit position Hdigit Hold_range) as Hvalue.
       exact Hvalue.
 Qed.
+
 Lemma radix_copy_prefix_zero__copy_back :
   forall source pass_output,
     RadixCopyPrefix source pass_output source 0.
@@ -1406,6 +1442,7 @@ Proof.
   - intros index Hindex. lia.
   - intros index Hindex. reflexivity.
 Qed.
+
 Lemma radix_copy_prefix_step__copy_back :
   forall source pass_output working i,
     0 <= i < Zlength source ->
@@ -1428,6 +1465,7 @@ Proof.
     rewrite Znth_replace_Znth_Diff by lia.
     apply Hsuffix. lia.
 Qed.
+
 Lemma count_occ_radix_bucket__pass_transition :
   forall source exponent digit value,
     count_occ Z.eq_dec (RadixBucket source exponent digit) value =
@@ -1448,6 +1486,7 @@ Proof.
         simpl; destruct (Z.eq_dec head value); try contradiction;
         rewrite IH; reflexivity.
 Qed.
+
 Lemma stable_digit_pass_permutation__pass_transition :
   forall source output exponent,
     StableDigitPass source output exponent ->
@@ -1494,6 +1533,7 @@ Proof.
       [Hdigit_value | Hdigit_value]]]]]]]]];
     rewrite Hdigit_value; simpl; lia.
 Qed.
+
 Lemma forall_znth__pass_transition :
   forall {A : Type} (P : A -> Prop) (default : A) values,
     Forall P values <->
@@ -1523,6 +1563,7 @@ Proof.
         replace (index + 1 - 1) with index in Hpoint by lia.
         exact Hpoint.
 Qed.
+
 Lemma strongly_sorted_cons_iff__pass_transition :
   forall (R : Z -> Z -> Prop) head tail,
     StronglySorted R (head :: tail) <->
@@ -1532,6 +1573,7 @@ Proof.
   - intros Hsorted. inversion Hsorted; subst. split; assumption.
   - intros [Hhead Htail]. constructor; assumption.
 Qed.
+
 Lemma strongly_sorted_iff_index__pass_transition :
   forall (R : Z -> Z -> Prop) values,
     StronglySorted R values <->
@@ -1572,6 +1614,7 @@ Proof.
         replace (index + 1 - 1) with index in Hindex by lia.
         exact Hindex.
 Qed.
+
 Lemma strongly_sorted_app__pass_transition :
   forall (R : Z -> Z -> Prop) left_values right_values,
     StronglySorted R (left_values ++ right_values) <->
@@ -1607,6 +1650,7 @@ Proof.
       intros left right Hleft Hright_in.
       apply Hcross; [simpl; auto | exact Hright_in].
 Qed.
+
 Lemma strongly_sorted_filter__pass_transition :
   forall (R : Z -> Z -> Prop) (test : Z -> bool) values,
     StronglySorted R values ->
@@ -1624,6 +1668,7 @@ Proof.
         apply Hhead. exact Hvalue.
     + exact IH.
 Qed.
+
 Lemma strongly_sorted_weaken__pass_transition :
   forall (R S : Z -> Z -> Prop) values,
     StronglySorted R values ->
@@ -1644,6 +1689,7 @@ Proof.
       * simpl; auto.
       * apply Hhead. exact Hright.
 Qed.
+
 Lemma radix_mod_decompose__pass_transition :
   forall value exponent,
     0 < exponent ->
@@ -1658,6 +1704,7 @@ Proof.
   rewrite <- (Z.div_div value exponent 10) by lia.
   ring.
 Qed.
+
 Lemma radix_bucket_chain__pass_transition :
   forall source exponent digit,
     0 < exponent ->
@@ -1681,6 +1728,7 @@ Proof.
     rewrite Hleft_digit, Hright_digit.
     apply Z.add_le_mono_l. exact Hlower.
 Qed.
+
 Lemma radix_bucket_cross__pass_transition :
   forall source exponent left_digit right_digit left right,
     0 < exponent ->
@@ -1702,6 +1750,7 @@ Proof.
   assert (left_digit + 1 <= right_digit) by lia.
   nia.
 Qed.
+
 Lemma radix_buckets_chain__pass_transition :
   forall digits source exponent,
     0 < exponent ->
@@ -1736,6 +1785,7 @@ Proof.
         -- exact Hleft.
         -- exact Hright.
 Qed.
+
 Lemma stable_digit_pass_next_order__pass_transition :
   forall source output exponent,
     0 < exponent ->
@@ -1777,19 +1827,14 @@ Proof.
       (proj1 (strongly_sorted_iff_index__pass_transition _ _) Houtput_chain);
       lia.
 Qed.
+
 Lemma decimal_exponent_next__pass_transition :
   forall exponent,
     DecimalExponent exponent ->
     exponent <= 100000000 ->
     DecimalExponent (exponent * 10).
 Proof.
-  intros exponent [power [[Hpower_nonneg Hpower_bound] Hexponent]] Hbound.
-  assert (Hpower_not_nine : power <> 9).
-  {
-    intro Hpower. subst power.
-    simpl in Hexponent. subst exponent. lia.
-  }
-  assert (Hpower_next_bound : power + 1 <= 9) by lia.
+  intros exponent [power [Hpower_nonneg Hexponent]] Hbound.
   exists (power + 1).
   split.
   - lia.
@@ -1798,6 +1843,7 @@ Proof.
     rewrite Z.pow_succ_r by lia.
     ring.
 Qed.
+
 Lemma upperbound_permutation__final_result :
   forall (maximum : Z) (left right : list Z),
     Permutation left right ->
@@ -1813,6 +1859,7 @@ Proof.
     repeat split; auto.
   - auto.
 Qed.
+
 Lemma radix_lower_order_increasing__final_result :
   forall (values : list Z) (exponent maximum : Z),
     0 < exponent ->
@@ -1869,6 +1916,7 @@ Proof.
         rewrite Hleft_shift, Hright_shift in Hordered.
         exact Hordered.
 Qed.
+
 Lemma radix_pass_state_final_increasing__final_result :
   forall (input current : list Z) (n exponent maximum : Z),
     Zlength input = n ->
@@ -1892,7 +1940,9 @@ Proof.
     }
     lia.
   }
-  destruct Hprefix as [_ Hinput_upper_points].
+  destruct Hprefix as [attained [[Hattained Hinput_upper_points] Heq]].
+  sets_unfold in Hinput_upper_points.
+  rewrite Heq in Hinput_upper_points.
   destruct Hstate as [Hperm Hlower_order].
   assert (Hinput_upper : upperbound maximum input).
   {
@@ -1916,6 +1966,7 @@ Proof.
   }
   eapply radix_lower_order_increasing__final_result; eauto.
 Qed.
+
 Lemma increasing_short_list__final_result :
   forall (values : list Z),
     Zlength values <= 1 ->

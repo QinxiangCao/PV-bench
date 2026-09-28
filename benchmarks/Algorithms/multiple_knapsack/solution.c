@@ -1,11 +1,17 @@
 int multipleKnapsack(int *weights, int *values, int *counts,
-                     int n, int capacity,
-                     int *dp, int *old, int *q_idx, int *q_val)
+                     int n, int capacity)
 
 {
+  int dp[1001];
+  int old[1001];
+  int q_idx[1001];
+  int q_val[1001];
 
   for (int j = 0; j <= capacity; ++j) {
     dp[j] = 0;
+    old[j] = 0;
+    q_idx[j] = 0;
+    q_val[j] = 0;
   }
 
   for (int i = 0; i < n; ++i) {
@@ -46,5 +52,7 @@ int multipleKnapsack(int *weights, int *values, int *counts,
 
   }
 
-  return dp[capacity];
+  int answer = dp[capacity];
+
+  return answer;
 }

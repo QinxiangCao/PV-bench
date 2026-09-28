@@ -17,6 +17,8 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
+Require Import PVbench.Algorithms.selection_sort.rocq.spec_lib.
+Require Import PVbench.Algorithms.selection_sort.rocq.helper_lib.
 Local Open Scope sac.
 
 Lemma proof_of_sortArray_safety_wit_1 : sortArray_safety_wit_1.
@@ -35,9 +37,6 @@ Lemma proof_of_sortArray_safety_wit_5 : sortArray_safety_wit_5.
 Proof. Admitted. 
 
 Lemma proof_of_sortArray_safety_wit_6 : sortArray_safety_wit_6.
-Proof. Admitted. 
-
-Lemma proof_of_sortArray_entail_wit_3_2 : sortArray_entail_wit_3_2.
 Proof. Admitted. 
 
 Lemma proof_of_sortArray_partial_solve_wit_1 : sortArray_partial_solve_wit_1.

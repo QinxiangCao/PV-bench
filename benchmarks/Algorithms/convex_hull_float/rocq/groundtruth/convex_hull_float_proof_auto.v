@@ -22,25 +22,25 @@ Require Import PVbench.Algorithms.convex_hull_float.rocq.spec_lib.
 Require Import PVbench.Algorithms.convex_hull_float.rocq.helper_lib.
 Local Open Scope sac.
 
-Lemma proof_of_point_cmp_xy_safety_wit_1 : point_cmp_xy_safety_wit_1.
-Proof. Admitted. 
-
 Lemma proof_of_point_cmp_xy_safety_wit_2 : point_cmp_xy_safety_wit_2.
 Proof. Admitted. 
 
 Lemma proof_of_point_cmp_xy_safety_wit_3 : point_cmp_xy_safety_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_point_cmp_xy_safety_wit_4 : point_cmp_xy_safety_wit_4.
-Proof. Admitted. 
-
 Lemma proof_of_point_cmp_xy_safety_wit_5 : point_cmp_xy_safety_wit_5.
 Proof. Admitted. 
 
-Lemma proof_of_point_cmp_xy_safety_wit_6 : point_cmp_xy_safety_wit_6.
+Lemma proof_of_point_cmp_xy_safety_wit_7 : point_cmp_xy_safety_wit_7.
 Proof. Admitted. 
 
-Lemma proof_of_point_cmp_xy_safety_wit_7 : point_cmp_xy_safety_wit_7.
+Lemma proof_of_point_cmp_xy_safety_wit_8 : point_cmp_xy_safety_wit_8.
+Proof. Admitted. 
+
+Lemma proof_of_point_cmp_xy_safety_wit_10 : point_cmp_xy_safety_wit_10.
+Proof. Admitted. 
+
+Lemma proof_of_point_cmp_xy_safety_wit_11 : point_cmp_xy_safety_wit_11.
 Proof. Admitted. 
 
 Lemma proof_of_swap_points_partial_solve_wit_1 : swap_points_partial_solve_wit_1.
@@ -139,25 +139,13 @@ Proof. Admitted.
 Lemma proof_of_quicksort_xy_points_safety_wit_7 : quicksort_xy_points_safety_wit_7.
 Proof. Admitted. 
 
-Lemma proof_of_quicksort_xy_points_partial_solve_wit_1_pure : quicksort_xy_points_partial_solve_wit_1_pure.
-Proof. Admitted. 
-
 Lemma proof_of_quicksort_xy_points_partial_solve_wit_1 : quicksort_xy_points_partial_solve_wit_1.
-Proof. Admitted. 
-
-Lemma proof_of_quicksort_xy_points_partial_solve_wit_2_pure : quicksort_xy_points_partial_solve_wit_2_pure.
 Proof. Admitted. 
 
 Lemma proof_of_quicksort_xy_points_partial_solve_wit_2 : quicksort_xy_points_partial_solve_wit_2.
 Proof. Admitted. 
 
-Lemma proof_of_quicksort_xy_points_partial_solve_wit_3_pure : quicksort_xy_points_partial_solve_wit_3_pure.
-Proof. Admitted. 
-
 Lemma proof_of_quicksort_xy_points_partial_solve_wit_3 : quicksort_xy_points_partial_solve_wit_3.
-Proof. Admitted. 
-
-Lemma proof_of_quicksort_xy_points_partial_solve_wit_4_pure : quicksort_xy_points_partial_solve_wit_4_pure.
 Proof. Admitted. 
 
 Lemma proof_of_quicksort_xy_points_partial_solve_wit_4 : quicksort_xy_points_partial_solve_wit_4.
@@ -172,22 +160,7 @@ Proof. Admitted.
 Lemma proof_of_andrew_build_from_sorted_safety_wit_3 : andrew_build_from_sorted_safety_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_andrew_build_from_sorted_safety_wit_4 : andrew_build_from_sorted_safety_wit_4.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_5 : andrew_build_from_sorted_safety_wit_5.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_6 : andrew_build_from_sorted_safety_wit_6.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_7 : andrew_build_from_sorted_safety_wit_7.
-Proof. Admitted. 
-
 Lemma proof_of_andrew_build_from_sorted_safety_wit_8 : andrew_build_from_sorted_safety_wit_8.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_9 : andrew_build_from_sorted_safety_wit_9.
 Proof. Admitted. 
 
 Lemma proof_of_andrew_build_from_sorted_safety_wit_10 : andrew_build_from_sorted_safety_wit_10.
@@ -196,16 +169,7 @@ Proof. Admitted.
 Lemma proof_of_andrew_build_from_sorted_safety_wit_11 : andrew_build_from_sorted_safety_wit_11.
 Proof. Admitted. 
 
-Lemma proof_of_andrew_build_from_sorted_safety_wit_12 : andrew_build_from_sorted_safety_wit_12.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_13 : andrew_build_from_sorted_safety_wit_13.
-Proof. Admitted. 
-
 Lemma proof_of_andrew_build_from_sorted_safety_wit_14 : andrew_build_from_sorted_safety_wit_14.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_15 : andrew_build_from_sorted_safety_wit_15.
 Proof. Admitted. 
 
 Lemma proof_of_andrew_build_from_sorted_safety_wit_16 : andrew_build_from_sorted_safety_wit_16.
@@ -256,22 +220,7 @@ Proof. Admitted.
 Lemma proof_of_andrew_build_from_sorted_safety_wit_31 : andrew_build_from_sorted_safety_wit_31.
 Proof. Admitted. 
 
-Lemma proof_of_andrew_build_from_sorted_safety_wit_32 : andrew_build_from_sorted_safety_wit_32.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_33 : andrew_build_from_sorted_safety_wit_33.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_34 : andrew_build_from_sorted_safety_wit_34.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_35 : andrew_build_from_sorted_safety_wit_35.
-Proof. Admitted. 
-
 Lemma proof_of_andrew_build_from_sorted_safety_wit_36 : andrew_build_from_sorted_safety_wit_36.
-Proof. Admitted. 
-
-Lemma proof_of_andrew_build_from_sorted_safety_wit_37 : andrew_build_from_sorted_safety_wit_37.
 Proof. Admitted. 
 
 Lemma proof_of_andrew_build_from_sorted_safety_wit_38 : andrew_build_from_sorted_safety_wit_38.
@@ -280,10 +229,49 @@ Proof. Admitted.
 Lemma proof_of_andrew_build_from_sorted_safety_wit_39 : andrew_build_from_sorted_safety_wit_39.
 Proof. Admitted. 
 
-Lemma proof_of_andrew_build_from_sorted_safety_wit_40 : andrew_build_from_sorted_safety_wit_40.
+Lemma proof_of_andrew_build_from_sorted_safety_wit_42 : andrew_build_from_sorted_safety_wit_42.
 Proof. Admitted. 
 
-Lemma proof_of_andrew_build_from_sorted_safety_wit_41 : andrew_build_from_sorted_safety_wit_41.
+Lemma proof_of_andrew_build_from_sorted_safety_wit_44 : andrew_build_from_sorted_safety_wit_44.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_45 : andrew_build_from_sorted_safety_wit_45.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_46 : andrew_build_from_sorted_safety_wit_46.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_47 : andrew_build_from_sorted_safety_wit_47.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_48 : andrew_build_from_sorted_safety_wit_48.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_49 : andrew_build_from_sorted_safety_wit_49.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_50 : andrew_build_from_sorted_safety_wit_50.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_51 : andrew_build_from_sorted_safety_wit_51.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_52 : andrew_build_from_sorted_safety_wit_52.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_53 : andrew_build_from_sorted_safety_wit_53.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_54 : andrew_build_from_sorted_safety_wit_54.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_55 : andrew_build_from_sorted_safety_wit_55.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_56 : andrew_build_from_sorted_safety_wit_56.
+Proof. Admitted. 
+
+Lemma proof_of_andrew_build_from_sorted_safety_wit_57 : andrew_build_from_sorted_safety_wit_57.
 Proof. Admitted. 
 
 Lemma proof_of_andrew_build_from_sorted_partial_solve_wit_1 : andrew_build_from_sorted_partial_solve_wit_1.
@@ -391,13 +379,7 @@ Proof. Admitted.
 Lemma proof_of_convex_hull_float_safety_wit_3 : convex_hull_float_safety_wit_3.
 Proof. Admitted. 
 
-Lemma proof_of_convex_hull_float_partial_solve_wit_1_pure : convex_hull_float_partial_solve_wit_1_pure.
-Proof. Admitted. 
-
 Lemma proof_of_convex_hull_float_partial_solve_wit_1 : convex_hull_float_partial_solve_wit_1.
-Proof. Admitted. 
-
-Lemma proof_of_convex_hull_float_partial_solve_wit_2_pure : convex_hull_float_partial_solve_wit_2_pure.
 Proof. Admitted. 
 
 Lemma proof_of_convex_hull_float_partial_solve_wit_2 : convex_hull_float_partial_solve_wit_2.

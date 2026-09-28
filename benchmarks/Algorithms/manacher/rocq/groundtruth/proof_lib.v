@@ -1,7 +1,8 @@
+Require Export PVbench.Algorithms.manacher.rocq.helper_lib.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 Require Import Coq.Bool.Bool.
-From AUXLib Require Import ListLib.
+From AUXLib Require Import ListLib MonotonicList.
 From MaxMinLib Require Import MaxMin Interface.
 Import ListNotations.
 Local Open Scope Z_scope.
@@ -13,7 +14,8 @@ Require Import Coq.Classes.Morphisms.
 Require Import Coq.micromega.Psatz.
 Require Import Coq.Sorting.Permutation.
 From AUXLib Require Import int_auto Axioms Feq Idents VMap.
-Require Import SetsClass.SetsClass. Import SetsNotation.
+Require Import SetsClass.SetsClass.
+Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Require Import SimpleC.StdLib.string_lib.
@@ -22,25 +24,106 @@ Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
 Local Open Scope sac.
-Require Export PVbench.Algorithms.manacher.rocq.spec_lib.
-Require Export PVbench.Algorithms.manacher.rocq.helper_lib.
 
-Ltac zlength_simpl := rewrite ?Zlength_cons, ?Zlength_nil in *.
+Lemma forall_sublist_Znth : forall (P : Z -> Prop) xs lo hi,
+  0 <= lo <= hi -> hi <= Zlength xs ->
+  (Forall P (sublist lo hi xs) <->
+   forall k, lo <= k < hi -> P (Znth k xs 0)).
+Proof.
+  intros P xs lo hi Hlo Hhi.
+  rewrite (Forall_Znth P 0), Zlength_sublist by lia. split.
+  - intros H k Hk. specialize (H (k - lo) ltac:(lia)).
+    rewrite Znth_sublist in H by lia.
+    replace (k - lo + lo) with k in H by lia. exact H.
+  - intros H k Hk. rewrite Znth_sublist by lia. apply H; lia.
+Qed.
 
+Lemma manacher_transformed_string_iff : forall s s2 len,
+  ManacherTransformedString s s2 len <->
+  len = 2 * Zlength s + 2 /\ Zlength s2 = len + 1 /\
+  Znth 0 s2 0 = 36 /\ Znth (len - 1) s2 0 = 35 /\ Znth len s2 0 = 0 /\
+  (forall k, 0 < k < len -> Znth k s2 0 <> 36) /\
+  (forall k, 0 <= k < Zlength s ->
+    Znth (2 * k + 1) s2 0 = 35 /\ Znth (2 * k + 2) s2 0 = Znth k s 0) /\
+  (forall k, 0 <= k < len -> Znth k s2 0 <> 0).
+Proof.
+  intros s s2 len. unfold ManacherTransformedString.
+  pose proof (Zlength_nonneg s).
+  split; intros [Hlen [Hs2 Hrest]].
+  - split; [assumption|]. split; [assumption|]. rewrite !forall_sublist_Znth in Hrest by lia.
+    firstorder lia.
+  - split; [assumption|]. split; [assumption|]. rewrite !forall_sublist_Znth by lia.
+    firstorder lia.
+Qed.
+
+Lemma center_radius_maximal_iff : forall s2 len center radius,
+  CenterRadiusMaximal s2 len center radius <->
+  CenterRadiusPalindrome s2 len center radius /\
+  (center - radius < 0 \/ len <= center + radius \/
+   Znth (center - radius) s2 0 <> Znth (center + radius) s2 0).
+Proof.
+  intros s2 len c r. unfold CenterRadiusMaximal, max_value_of_subset,
+    max_object_of_subset. cbn.
+  split.
+  - intros [v [[Hpal Hmax] Heq]]. subst v. split; [exact Hpal|].
+    destruct (Z_lt_ge_dec (c - r) 0); [tauto|].
+    destruct (Z_le_gt_dec len (c + r)); [tauto|].
+    destruct (Z.eq_dec (Znth (c - r) s2 0) (Znth (c + r) s2 0)); [|tauto].
+    exfalso. assert (Hnext : CenterRadiusPalindrome s2 len c (r + 1)).
+    { unfold CenterRadiusPalindrome in *. destruct Hpal as [Hc [Hr [Hl [Hu Hsym]]]].
+      repeat split; try lia. intros d Hd.
+      destruct (Z_lt_ge_dec d r); [apply Hsym; lia|].
+      assert (d = r) by lia. subst d. assumption. }
+    specialize (Hmax (r + 1) Hnext). lia.
+  - intros [Hpal Hstop]. exists r. split; [|reflexivity].
+    split; [exact Hpal|]. intros r' Hpal'.
+    unfold CenterRadiusPalindrome in Hpal, Hpal'.
+    destruct Hpal as [_ [Hr [_ [_ _]]]].
+    destruct Hpal' as [_ [Hr' [Hl [Hu Hsym]]]].
+    destruct (Z_le_gt_dec r' r); [lia|].
+    specialize (Hsym r ltac:(lia)).
+    destruct Hstop as [Hleft|[Hright|Hneq]]; lia || congruence.
+Qed.
+
+(* A proof view of the library maximum; the definition itself uses MaxMinLib. *)
+Lemma best_radius_prefix_iff : forall s2 len p upto maxId maxLen,
+  BestRadiusPrefix s2 len p upto maxId maxLen <->
+  (maxLen = 0 \/
+   CenterRadiusPalindrome s2 len maxId (maxLen + 1)) /\
+  (forall k, 1 <= k < upto -> Znth k p 0 - 1 <= maxLen) /\
+  (maxLen = 0 \/
+   exists k, 1 <= k < upto /\ k = maxId /\ Znth k p 0 - 1 = maxLen).
+Proof.
+  intros. unfold BestRadiusPrefix, max_value_of_subset, max_object_of_subset.
+  cbn. split.
+  - intros [Hpal [[v [[Hin Hmax] Heq]] Hatt]]. subst v.
+    split; [exact Hpal|]. split; [|exact Hatt].
+    intros k Hk. apply Hmax. right. exists k. auto.
+  - intros [Hpal [Hmax Hatt]]. split; [exact Hpal|]. split; [|exact Hatt].
+    exists maxLen. split; [|reflexivity]. split.
+    + destruct Hatt as [->|[k [Hk [_ Hv]]]].
+      * left; reflexivity.
+      * right; exists k; auto.
+    + intros v [->|[k [Hk ->]]].
+      * destruct Hpal as [->|Hpal]; [lia|].
+        unfold CenterRadiusPalindrome in Hpal; lia.
+      * apply Hmax; auto.
+Qed.
+
+(* Extends the transformed-prefix invariant after writing one input character
+   and its following '#'.  Used by the transformed-string construction loop. *)
 Lemma manacher_transformed_prefix_append_char :
   forall str s2 i,
     ManacherTransformedPrefix str s2 i ->
+    Zlength s2 = 2 * i + 1 ->
     0 <= i < Zlength str ->
     ManacherTransformedPrefix str
       ((s2 ++ 35 :: nil) ++ Znth i str 0 :: nil) (i + 1).
 Proof.
-  intros str s2 i Hpre Hi.
+  intros str s2 i Hpre Hlen Hi.
   unfold ManacherTransformedPrefix in *.
-  destruct Hpre as (Hb & Hlen & Hzero & Hstep).
+  destruct Hpre as (Hzero & Hstep).
   repeat split.
-  - lia.
-  - lia.
-  - rewrite !Zlength_app_cons, Hlen. lia.
   - rewrite app_Znth1.
     + rewrite app_Znth1; auto. lia.
     + rewrite Zlength_app_cons, Hlen. lia.
@@ -69,19 +152,24 @@ Proof.
       * rewrite Zlength_app_cons, Hlen. lia.
 Qed.
 
+(* Turns a completed transformed prefix into the full transformed-string
+   predicate after writing the final '#' and trailing '\0'. *)
 Lemma manacher_transformed_prefix_close_string :
   forall str s2 i,
-    AlnumString str ->
+    Forall AlnumCode str ->
     string_length str = i ->
     ManacherTransformedPrefix str s2 i ->
+    Zlength s2 = 2 * i + 1 ->
     ManacherTransformedString str ((s2 ++ 35 :: nil) ++ 0 :: nil) (2 * i + 2).
 Proof.
-  intros str s2 i Halnum Hstrlen Hpre.
+  intros str s2 i Halnum Hstrlen Hpre Hlen.
+  rewrite (Forall_Znth AlnumCode 0) in Halnum.
   unfold ManacherTransformedPrefix in Hpre.
-  unfold ManacherTransformedString.
-  destruct Hpre as (Hb & Hlen & Hzero & Hstep).
+  rewrite manacher_transformed_string_iff.
+  destruct Hpre as (Hzero & Hstep).
   assert (HZlen_str : Zlength str = i).
   { rewrite <- Hstrlen. unfold string_length. reflexivity. }
+  pose proof (Zlength_nonneg str) as Hnonneg_str.
   assert (Hchar_not_special :
     forall q, 0 <= q < i -> Znth q str 0 <> 36 /\ Znth q str 0 <> 0).
   {
@@ -204,7 +292,7 @@ Proof.
             + rewrite Hlen. lia.
           - rewrite Zlength_app_cons, Hlen. lia. }
 Qed.
-
+(* Any smaller radius around the same center remains a palindrome. *)
 Lemma center_radius_palindrome_shrink:
   forall s2 len center r r',
     CenterRadiusPalindrome s2 len center r ->
@@ -219,6 +307,8 @@ Proof.
   apply Hsym; lia.
 Qed.
 
+(* Transfers palindrome information from a mirror center across the current
+   rightmost window; this is the core mirror argument in Manacher's algorithm. *)
 Lemma manacher_mirror_palindrome_transfer:
   forall s2 len id limit i mirror r,
     mirror = 2 * id - i ->
@@ -265,6 +355,8 @@ Proof.
   symmetry; exact Hmd.
 Qed.
 
+(* When the mirror radius stays strictly inside the rightmost window, it is a
+   valid expansion candidate for the current center. *)
 Lemma manacher_mirror_candidate_inside:
   forall s s2 len id limit i mirror radius,
     ManacherTransformedString s s2 len ->
@@ -275,7 +367,11 @@ Lemma manacher_mirror_candidate_inside:
     CenterRadiusPalindrome s2 len id (limit - id) ->
     CenterRadiusPalindrome s2 len mirror radius ->
     1 <= radius < limit - i ->
-    ExpansionCandidate s2 len i radius.
+    (1 <= i < len /\ 1 <= radius /\
+     0 <= i - radius /\ i + radius <= len /\
+     CenterRadiusPalindrome s2 len i radius /\
+     (Znth (i - radius) s2 0 = Znth (i + radius) s2 0 ->
+      i + radius < len /\ 0 < i - radius)).
 Proof.
   intros s s2 len id limit i mirror radius Htrans Hmirror Hi Hmirpos Hlimit Hwin Hmir Hrad.
   assert (Hpal: CenterRadiusPalindrome s2 len i radius).
@@ -285,7 +381,6 @@ Proof.
   }
   unfold CenterRadiusPalindrome in Hwin.
   destruct Hwin as (_ & _ & Hwin_l & _ & _).
-  unfold ExpansionCandidate.
   split; [lia|].
   split; [lia|].
   split; [lia|].
@@ -294,6 +389,8 @@ Proof.
   intros _; split; lia.
 Qed.
 
+(* Shows the mirror index is positive in the branch where the current center is
+   inside the rightmost window. *)
 Lemma manacher_mirror_positive:
   forall s s2 len id limit i mirror,
     ManacherTransformedString s s2 len ->
@@ -305,7 +402,7 @@ Lemma manacher_mirror_positive:
     0 < mirror.
 Proof.
   intros s s2 len id limit i mirror Htrans Hmirror Hi Hmirror_nonneg Hlimit Hpal.
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as (_ & _ & Hstart & _ & _ & Hnot36 & _ & _).
   unfold CenterRadiusPalindrome in Hpal.
   destruct Hpal as (_ & _ & _ & _ & Hsym).
@@ -322,6 +419,8 @@ Proof.
   congruence.
 Qed.
 
+(* A palindrome radius in the transformed string cannot correspond to an
+   original-string length greater than the input length. *)
 Lemma center_radius_palindrome_radius_minus_one_bound:
   forall s2 len center radius n,
     CenterRadiusPalindrome s2 len center (radius + 1) ->
@@ -334,20 +433,24 @@ Proof.
   lia.
 Qed.
 
+(* The best-so-far original length [maxLen] is bounded by the input length. *)
 Lemma best_radius_prefix_maxLen_bound:
   forall s2 len p upto maxId maxLen n,
     BestRadiusPrefix s2 len p upto maxId maxLen ->
     len = 2 * n + 2 ->
+    0 <= n ->
     maxLen <= n.
 Proof.
-  intros s2 len p upto maxId maxLen n Hbest Hlen.
-  unfold BestRadiusPrefix in Hbest.
-  destruct Hbest as (Hrange & _ & _ & Hpal & _ & _).
-  destruct Hpal as [(Hz & _)|Hpal].
+  intros s2 len p upto maxId maxLen n Hbest Hlen Hn.
+  rewrite best_radius_prefix_iff in Hbest.
+  destruct Hbest as (Hpal & _ & _).
+  destruct Hpal as [Hz|Hpal].
   - lia.
   - eapply center_radius_palindrome_radius_minus_one_bound; eauto.
 Qed.
 
+(* If the mirror palindrome reaches the current right boundary, the current
+   center can start expansion from [limit - i]. *)
 Lemma manacher_mirror_candidate_at_limit:
   forall s s2 len id limit i mirror mirror_radius,
     ManacherTransformedString s s2 len ->
@@ -358,7 +461,11 @@ Lemma manacher_mirror_candidate_at_limit:
     CenterRadiusPalindrome s2 len id (limit - id) ->
     CenterRadiusPalindrome s2 len mirror mirror_radius ->
     mirror_radius >= limit - i ->
-    ExpansionCandidate s2 len i (limit - i).
+    (1 <= i < len /\ 1 <= (limit - i) /\
+     0 <= i - (limit - i) /\ i + (limit - i) <= len /\
+     CenterRadiusPalindrome s2 len i (limit - i) /\
+     (Znth (i - (limit - i)) s2 0 = Znth (i + (limit - i)) s2 0 ->
+      i + (limit - i) < len /\ 0 < i - (limit - i))).
 Proof.
   intros s s2 len id limit i mirror mirror_radius Htrans Hmirror Hi Hmirpos
     Hlimit Hwin Hmir Hrad.
@@ -377,9 +484,8 @@ Proof.
     apply (manacher_mirror_palindrome_transfer s2 len id limit i mirror (limit - i));
       try lia; auto.
   }
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as (_ & _ & Hstart & _ & Hend & Hnot36 & _ & Hnonzero).
-  unfold ExpansionCandidate.
   split; [lia|].
   split; [lia|].
   split; [lia|].
@@ -416,285 +522,89 @@ Proof.
     congruence.
 Qed.
 
-Lemma manacher_best_zero_keep_edge_contradiction:
-  forall str s2 len i r maxLen,
-    ManacherTransformedString str s2 len ->
-    ExpansionCandidate s2 len i r ->
-    maxLen = 0 ->
-    maxLen >= r - 1 ->
-    1 <= i ->
-    i <= 2 ->
-    Znth (i + r - 0) s2 0 <> Znth (i - r - 0) s2 0 ->
-    i + 1 <= 2.
+(* Extend the mathematical table prefix after the current comparison stops. *)
+Lemma radius_table_prefix_extend : forall s2 len p i r,
+  RadiusTablePrefix s2 len (sublist 0 i p) i ->
+  CenterRadiusMaximal s2 len i r -> Znth i p 0 = r ->
+  RadiusTablePrefix s2 len p (i + 1).
 Proof.
-  intros str s2 len i r maxLen HT HC Hmax Hge Hi Hile Hneq.
-  destruct HC as [_ [Hr [Hcr [Hpr _]]]].
-  assert (r = 1) by lia.
-  subst r maxLen.
-  assert (i = 1 \/ i = 2) as [-> | ->] by lia; [lia|].
-  exfalso.
-  destruct HT as [Hlen [HZlen [Hfirst [Hlast [Hnul [Hnot36 [Hodd Hnot0]]]]]]].
-  assert (0 <= 0 < Zlength str) as Hk0 by lia.
-  pose proof (Hodd 0 Hk0) as [Hone _].
-  replace (2 * 0 + 1) with 1 in Hone by lia.
-  assert (Zlength str = 1 \/ 2 <= Zlength str) as [Hz1 | Hz2] by lia.
-  - assert (len = 4) by lia.
-    replace (2 + 1 - 0) with (len - 1) in Hneq by lia.
-    replace (2 - 1 - 0) with 1 in Hneq by lia.
-    congruence.
-  - assert (0 <= 1 < Zlength str) as Hk1 by lia.
-    pose proof (Hodd 1 Hk1) as [Hthree _].
-    replace (2 * 1 + 1) with 3 in Hthree by lia.
-    replace (2 + 1 - 0) with 3 in Hneq by lia.
-    replace (2 - 1 - 0) with 1 in Hneq by lia.
-    congruence.
+  intros s2 len p i r Hprefix Hcurrent Hpi k Hk.
+  destruct (Z_lt_ge_dec k i).
+  - specialize (Hprefix k ltac:(lia)).
+    rewrite Znth_sublist0 in Hprefix by lia. exact Hprefix.
+  - assert (k = i) by lia. subst k. rewrite Hpi. exact Hcurrent.
 Qed.
 
-Lemma manacher_best_radius_keep_after_mismatch:
-  forall str s2 len p_written i r id limit maxId maxLen,
-    ManacherLoopState str s2 len (sublist 0 i p_written) i id limit maxId maxLen ->
-    ExpansionCandidate s2 len i r ->
-    maxLen >= r - 1 ->
-    Znth (i + r - 0) s2 0 <> Znth (i - r - 0) s2 0 ->
-    Zlength p_written = i + 1 ->
-    Znth i p_written 0 = r ->
-    1 <= i ->
-    i < len ->
-    ManacherLoopState str s2 len p_written (i + 1) id limit maxId maxLen.
+Lemma best_radius_prefix_keep : forall s2 len p i r maxId maxLen,
+  BestRadiusPrefix s2 len (sublist 0 i p) i maxId maxLen ->
+  Znth i p 0 = r -> r - 1 <= maxLen ->
+  BestRadiusPrefix s2 len p (i + 1) maxId maxLen.
 Proof.
-  intros str s2 len p_written i r id limit maxId maxLen
-    HLoop HC Hge Hneq Hlenp Hpi Hi Hilt.
-  destruct HLoop as [HT [HR [Hid [Hcur HB]]]].
-  unfold ManacherLoopState.
-  split; [exact HT|].
+  intros s2 len p i r maxId maxLen Hbest Hpi Hle.
+  rewrite best_radius_prefix_iff in *.
+  destruct Hbest as [Hpal [Hupper Hatt]].
+  split; [exact Hpal|]. split.
+  - intros k Hk. destruct (Z_lt_ge_dec k i).
+    + specialize (Hupper k ltac:(lia)).
+      rewrite Znth_sublist0 in Hupper by lia. exact Hupper.
+    + assert (k = i) by lia. subst k. rewrite Hpi. lia.
+  - destruct Hatt as [Hz|[k [Hk [Heq Hval]]]].
+    + left; auto.
+    + right; exists k. repeat split; try lia.
+      rewrite Znth_sublist0 in Hval by lia. exact Hval.
+Qed.
+
+Lemma best_radius_prefix_update : forall s2 len p i r maxId maxLen,
+  BestRadiusPrefix s2 len (sublist 0 i p) i maxId maxLen ->
+  CenterRadiusPalindrome s2 len i r -> Znth i p 0 = r ->
+  1 <= i -> maxLen < r - 1 ->
+  BestRadiusPrefix s2 len p (i + 1) i (r - 1).
+Proof.
+  intros s2 len p i r maxId maxLen Hbest Hpal Hpi Hi Hlt.
+  rewrite best_radius_prefix_iff in *.
+  destruct Hbest as [_ [Hupper _]].
   split.
-  - unfold RadiusTablePrefix in *.
-    destruct HR as [HRlen [HRbounds HRmax]].
-    split; [exact Hlenp|].
-    split; [lia|].
-    intros k Hk.
-    destruct (Z_lt_ge_dec k i) as [Hki | Hki].
-    + specialize (HRmax k ltac:(lia)).
-      rewrite (Znth_sublist0 0 k i p_written) in HRmax by lia.
-      exact HRmax.
-    + assert (k = i) by lia.
-      subst k.
-      rewrite Hpi.
-      unfold CenterRadiusMaximal.
-      split.
-      * destruct HC as [_ [_ [_ [_ [Hpal _]]]]].
-        exact Hpal.
-      * right; right.
-        replace (i - r) with (i - r - 0) by lia.
-        replace (i + r) with (i + r - 0) by lia.
-        intros Heq; apply Hneq; symmetry; exact Heq.
-  - split; [lia|].
-    split; [exact Hcur|].
-    unfold BestRadiusPrefix in *.
-    destruct HB as [HBbounds [HBmaxLen [HBmaxId [HBpal [HBall HBex]]]]].
-    repeat split; try lia.
-    + destruct HBpal as [[Hz Hupto] | Hpal].
-      * destruct (Z_lt_ge_dec i 2) as [Hi2 | Hige2].
-        -- left; lia.
-        -- left.
-           split; [lia|].
-           eapply manacher_best_zero_keep_edge_contradiction; eauto; lia.
-      * right; exact Hpal.
-    + intros k Hk.
-      destruct (Z_lt_ge_dec k i) as [Hki | Hki].
-      * specialize (HBall k ltac:(lia)).
-        rewrite (Znth_sublist0 0 k i p_written) in HBall by lia.
-        exact HBall.
-      * assert (k = i) by lia.
-        subst k.
-        rewrite Hpi.
-        lia.
-    + destruct HBex as [[Hz Hupto] | [k [Hk1 [Hkmax Hval]]]].
-      * destruct (Z_lt_ge_dec i 2) as [Hi2 | Hige2].
-        -- left; lia.
-        -- left.
-           split; [lia|].
-           eapply manacher_best_zero_keep_edge_contradiction; eauto; lia.
-      * right.
-        exists k.
-        repeat split; try lia.
-        rewrite (Znth_sublist0 0 k i p_written) in Hval by lia.
-        exact Hval.
+  - right. replace (r - 1 + 1) with r by lia. exact Hpal.
+  - split.
+    + intros k Hk. destruct (Z_lt_ge_dec k i).
+      * specialize (Hupper k ltac:(lia)).
+        rewrite Znth_sublist0 in Hupper by lia. lia.
+      * assert (k = i) by lia. subst k. rewrite Hpi. lia.
+    + right; exists i. repeat split; auto; lia.
 Qed.
 
-Lemma manacher_best_radius_keep_after_mismatch_new_window:
-  forall str s2 len p_written i r id limit maxId maxLen,
-    ManacherLoopState str s2 len (sublist 0 i p_written) i id limit maxId maxLen ->
-    ExpansionCandidate s2 len i r ->
-    maxLen >= r - 1 ->
-    Znth (i + r - 0) s2 0 <> Znth (i - r - 0) s2 0 ->
-    Zlength p_written = i + 1 ->
-    Znth i p_written 0 = r ->
-    1 <= i ->
-    i < len ->
-    ManacherLoopState str s2 len p_written (i + 1) i (i + r) maxId maxLen.
+Lemma manacher_loop_step : forall str s2 len p i r id limit maxId maxLen,
+  ManacherLoopState str s2 len (sublist 0 i p) i id limit maxId maxLen ->
+  CenterRadiusPalindrome s2 len i r ->
+  Znth (i + r) s2 0 <> Znth (i - r) s2 0 ->
+  Znth i p 0 = r -> 1 <= i ->
+  ManacherLoopState str s2 len p (i + 1)
+    (if Z_lt_dec limit (i + r) then i else id)
+    (if Z_lt_dec limit (i + r) then i + r else limit)
+    (if Z_lt_dec maxLen (r - 1) then i else maxId)
+    (if Z_lt_dec maxLen (r - 1) then r - 1 else maxLen).
 Proof.
-  intros str s2 len p_written i r id limit maxId maxLen
-    HLoop HC Hge Hneq Hlenp Hpi Hi Hilt.
-  pose proof (manacher_best_radius_keep_after_mismatch
-    str s2 len p_written i r id limit maxId maxLen
-    HLoop HC Hge Hneq Hlenp Hpi Hi Hilt) as HKeep.
-  destruct HKeep as [HT [HR [_ [_ HB]]]].
-  unfold ManacherLoopState.
-  split; [exact HT|].
-  split; [exact HR|].
-  split; [lia|].
-  split.
-  - unfold CurrentRightmostWindow.
-    destruct HC as [[HCi HClen] [Hrad [Hlower [Hupper [Hpal _]]]]].
-    split; [lia|].
-    split; [lia|].
-    intros _.
-    replace (i + r - i) with r by lia.
-    exact Hpal.
-  - exact HB.
+  intros str s2 len p i r id limit maxId maxLen
+    [Htrans [Htable [Hwindow Hbest]]] Hpal Hneq Hpi Hi.
+  assert (Hmax : CenterRadiusMaximal s2 len i r).
+  { rewrite center_radius_maximal_iff. split; [exact Hpal|]. right; right. congruence. }
+  assert (Htable' : RadiusTablePrefix s2 len p (i + 1)).
+  { eapply radius_table_prefix_extend; eauto. }
+  assert (Hbest' : BestRadiusPrefix s2 len p (i + 1)
+    (if Z_lt_dec maxLen (r - 1) then i else maxId)
+    (if Z_lt_dec maxLen (r - 1) then r - 1 else maxLen)).
+  { destruct (Z_lt_dec maxLen (r - 1)).
+    - eapply best_radius_prefix_update; eauto.
+    - eapply best_radius_prefix_keep; eauto; lia. }
+  unfold ManacherLoopState. split; [exact Htrans|].
+  split; [exact Htable'|]. split; [|exact Hbest'].
+  destruct (Z_lt_dec limit (i + r)); [|exact Hwindow].
+  unfold CurrentRightmostWindow. intros _.
+  replace (i + r - i) with r by lia. exact Hpal.
 Qed.
 
-Lemma expansion_loop_best_update_inside :
-  forall str s2 len p_written i r id limit maxId maxLen,
-    maxLen < r - 1 ->
-    i + r <= limit ->
-    Znth (i + r - 0) s2 0 <> Znth (i - r - 0) s2 0 ->
-    1 <= i ->
-    i < len ->
-    1 <= r ->
-    0 <= i - r ->
-    i + r <= len ->
-    ExpansionLoopState str s2 len p_written i r id limit maxId maxLen ->
-    ManacherLoopState str s2 len p_written (i + 1) id limit i (r - 1).
-Proof.
-  intros str s2 len p_written i r id limit maxId maxLen
-         Hbest_lt Hlimit Hneq Hi Hilen Hr Hleft Hright Hexp.
-  unfold ExpansionLoopState in Hexp.
-  destruct Hexp as [Hp_len [Hloop [Hp_i Hcand]]].
-  unfold ManacherLoopState in Hloop |- *.
-  destruct Hloop as [Htrans [Hradius [Hwindow Hbest]]].
-  unfold RadiusTablePrefix in Hradius.
-  destruct Hradius as [Hsub_len [Hupto Hmax_old]].
-  unfold BestRadiusPrefix in Hbest.
-  destruct Hbest as [Hbest_upto [Hmax_nonneg [Hmaxid_bounds
-           [Hbest_pal [Hbest_bound Hbest_exists]]]]].
-  destruct Hbest_exists as [Hbest_bound_old Hbest_exists_old].
-  unfold ExpansionCandidate in Hcand.
-  destruct Hcand as [Hcenter [Hrad_pos [Hcand_left [Hcand_right [Hpal Hextend]]]]].
-  split; [exact Htrans |].
-  split.
-  - unfold RadiusTablePrefix.
-    split; [exact Hp_len |].
-    split; [lia |].
-    intros k Hk.
-    destruct (Z_lt_ge_dec k i) as [Hki | Hik].
-    + assert (Hz : Znth k (sublist 0 i p_written) 0 = Znth k p_written 0).
-      { apply Znth_sublist0; lia. }
-      rewrite <- Hz.
-      apply Hmax_old; lia.
-    + assert (k = i) by lia; subst k.
-      rewrite Hp_i.
-      unfold CenterRadiusMaximal.
-      split; [exact Hpal |].
-      right; right.
-      replace (i - r) with (i - r - 0) by lia.
-      replace (i + r) with (i + r - 0) by lia.
-      intro Heq; apply Hneq; symmetry; exact Heq.
-  - split; [lia |].
-    split; [exact Hbest_upto |].
-    unfold BestRadiusPrefix.
-    repeat split; try lia.
-    + right.
-      replace (r - 1 + 1) with r by lia.
-      exact Hpal.
-    + intros k Hk.
-      destruct (Z_lt_ge_dec k i) as [Hki | Hik].
-      * specialize (Hbest_bound_old k ltac:(lia)).
-        assert (Hz : Znth k (sublist 0 i p_written) 0 = Znth k p_written 0).
-        { apply Znth_sublist0; lia. }
-        rewrite <- Hz.
-        lia.
-      * assert (k = i) by lia; subst k.
-        rewrite Hp_i; lia.
-    + right.
-      exists i.
-      repeat split; try lia.
-Qed.
-
-Lemma expansion_loop_best_update_extend :
-  forall str s2 len p_written i r id limit maxId maxLen,
-    maxLen < r - 1 ->
-    i + r > limit ->
-    Znth (i + r - 0) s2 0 <> Znth (i - r - 0) s2 0 ->
-    1 <= i ->
-    i < len ->
-    1 <= r ->
-    0 <= i - r ->
-    i + r <= len ->
-    ExpansionLoopState str s2 len p_written i r id limit maxId maxLen ->
-    ManacherLoopState str s2 len p_written (i + 1) i (i + r) i (r - 1).
-Proof.
-  intros str s2 len p_written i r id limit maxId maxLen
-         Hbest_lt Hlimit Hneq Hi Hilen Hr Hleft Hright Hexp.
-  unfold ExpansionLoopState in Hexp.
-  destruct Hexp as [Hp_len [Hloop [Hp_i Hcand]]].
-  unfold ManacherLoopState in Hloop |- *.
-  destruct Hloop as [Htrans [Hradius [Hwindow Hbest]]].
-  unfold RadiusTablePrefix in Hradius.
-  destruct Hradius as [Hsub_len [Hupto Hmax_old]].
-  unfold BestRadiusPrefix in Hbest.
-  destruct Hbest as [Hbest_upto [Hmax_nonneg [Hmaxid_bounds
-           [Hbest_pal [Hbest_bound Hbest_exists]]]]].
-  destruct Hbest_exists as [Hbest_bound_old Hbest_exists_old].
-  unfold ExpansionCandidate in Hcand.
-  destruct Hcand as [Hcenter [Hrad_pos [Hcand_left [Hcand_right [Hpal Hextend]]]]].
-  split; [exact Htrans |].
-  split.
-  - unfold RadiusTablePrefix.
-    split; [exact Hp_len |].
-    split; [lia |].
-    intros k Hk.
-    destruct (Z_lt_ge_dec k i) as [Hki | Hik].
-    + assert (Hz : Znth k (sublist 0 i p_written) 0 = Znth k p_written 0).
-      { apply Znth_sublist0; lia. }
-      rewrite <- Hz.
-      apply Hmax_old; lia.
-    + assert (k = i) by lia; subst k.
-      rewrite Hp_i.
-      unfold CenterRadiusMaximal.
-      split; [exact Hpal |].
-      right; right.
-      replace (i - r) with (i - r - 0) by lia.
-      replace (i + r) with (i + r - 0) by lia.
-      intro Heq; apply Hneq; symmetry; exact Heq.
-  - split; [lia |].
-    split.
-    + unfold CurrentRightmostWindow.
-      split; [lia |].
-      split; [lia |].
-      intros Hlt.
-      replace (i + r - i) with r by lia.
-      exact Hpal.
-    + unfold BestRadiusPrefix.
-      repeat split; try lia.
-      * right.
-        replace (r - 1 + 1) with r by lia.
-        exact Hpal.
-      * intros k Hk.
-        destruct (Z_lt_ge_dec k i) as [Hki | Hik].
-        -- specialize (Hbest_bound_old k ltac:(lia)).
-           assert (Hz : Znth k (sublist 0 i p_written) 0 = Znth k p_written 0).
-           { apply Znth_sublist0; lia. }
-           rewrite <- Hz.
-           lia.
-        -- assert (k = i) by lia; subst k.
-           rewrite Hp_i; lia.
-      * right.
-        exists i.
-        repeat split; try lia.
-Qed.
-
+(* Splits an uninitialized output buffer into an empty written prefix and an
+   uninitialized suffix; useful when output copying starts at length zero. *)
 Lemma char_undef_full_to_full0_undef:
   forall x n,
     0 <= n ->
@@ -710,6 +620,8 @@ Proof.
   - split_pures; dump_pre_spatial; lia.
 Qed.
 
+(* Merges two adjacent CharArray uninitialized segments starting at zero back
+   into a full uninitialized block with the original base address. *)
 Lemma char_undef_seg0_merge_to_undef_full:
   forall x mid hi,
     0 <= mid <= hi ->
@@ -723,6 +635,8 @@ Proof.
   cancel.
 Qed.
 
+(* IntArray analogue of [char_undef_seg0_merge_to_undef_full], used when
+   releasing the local radius table. *)
 Lemma int_undef_seg0_merge_to_undef_full:
   forall x mid hi,
     0 <= mid <= hi ->
@@ -736,6 +650,8 @@ Proof.
   cancel.
 Qed.
 
+(* Initializes output-copy progress before any transformed-window position has
+   been visited. *)
 Lemma output_copy_prefix_nil:
   forall s2 start,
     0 <= start ->
@@ -749,18 +665,21 @@ Proof.
   reflexivity.
 Qed.
 
+(* Advances output-copy progress over a non-# transformed character, appending
+   it to the copied output and increasing [j]. *)
 Lemma output_copy_prefix_step_nonhash:
   forall s2 out start i j maxLen,
+    0 <= start <= i ->
     OutputCopyPrefix s2 out start i j ->
-    OutputCopyBound s2 start (i + 1) maxLen ->
+    (0 <= start /\ start <= i + 1 /\ i + 1 <= Zlength s2 /\
+     Zlength (NonHashChars (sublist start (i + 1) s2)) <= maxLen) ->
     Znth (i - 0) s2 0 <> 35 ->
     OutputCopyPrefix s2 (out ++ Znth (i - 0) s2 0 :: nil) start (i + 1) (j + 1) /\
     j + 1 <= maxLen.
 Proof.
-  intros s2 out start i j maxLen Hpref Hbound Hneq.
+  intros s2 out start i j maxLen [Hs0 Hsi] Hpref Hbound Hneq.
   unfold OutputCopyPrefix in Hpref.
-  unfold OutputCopyBound in Hbound.
-  destruct Hpref as [Hs0 [Hsi [HiLen [Hout Hj]]]].
+  destruct Hpref as [Hout Hj].
   destruct Hbound as [_ [_ [Hi1Len Hbound_len]]].
   assert (HiLen' : i < Zlength s2) by lia.
   assert (Hstep :
@@ -787,17 +706,20 @@ Proof.
     lia.
 Qed.
 
+(* Advances output-copy progress over a '#' marker without changing the copied
+   output length. *)
 Lemma output_copy_prefix_step_hash:
   forall s2 out start i j maxLen,
+    0 <= start <= i ->
     OutputCopyPrefix s2 out start i j ->
-    OutputCopyBound s2 start (i + 1) maxLen ->
+    (0 <= start /\ start <= i + 1 /\ i + 1 <= Zlength s2 /\
+     Zlength (NonHashChars (sublist start (i + 1) s2)) <= maxLen) ->
     Znth (i - 0) s2 0 = 35 ->
     OutputCopyPrefix s2 out start (i + 1) j.
 Proof.
-  intros s2 out start i j maxLen Hpref Hbound Heq.
+  intros s2 out start i j maxLen [Hs0 Hsi] Hpref Hbound Heq.
   unfold OutputCopyPrefix in Hpref.
-  unfold OutputCopyBound in Hbound.
-  destruct Hpref as [Hs0 [Hsi [HiLen [Hout Hj]]]].
+  destruct Hpref as [Hout Hj].
   destruct Hbound as [_ [_ [Hi1Len _]]].
   assert (HiLen' : i < Zlength s2) by lia.
   assert (Hstep :
@@ -820,6 +742,8 @@ Proof.
   subst out. rewrite Hstep. reflexivity.
 Qed.
 
+(* Derives basic bounds for the final selected best window from the completed
+   Manacher loop state. *)
 Lemma manacher_final_selected_window_bounds:
   forall str s2 p len id limit maxId maxLen n_pre,
     string_length str = n_pre ->
@@ -831,19 +755,19 @@ Proof.
   intros str s2 p len id limit maxId maxLen n_pre Hstrlen Hn Hlen Hstate.
   unfold string_length in Hstrlen.
   unfold ManacherLoopState in Hstate.
-  destruct Hstate as [Htrans [Hrt [_ [_ Hbest]]]].
-  unfold ManacherTransformedString in Htrans.
+  destruct Hstate as [Htrans [Hrt [_ Hbest]]].
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as
     [_ [_ [_ [Hlast_hash [_ [_ [Hchars _]]]]]]].
   unfold RadiusTablePrefix in Hrt.
-  destruct Hrt as [_ [_ Hmaximal]].
-  unfold BestRadiusPrefix in Hbest.
-  destruct Hbest as [_ [_ [_ [Hpal_or [Hall _]]]]].
+  rename Hrt into Hmaximal.
+  rewrite best_radius_prefix_iff in Hbest.
+  destruct Hbest as [Hpal_or [Hall _]].
   assert (Hlen_gt2 : 2 < len) by lia.
   assert (Hp2_ge2 : 2 <= Znth 2 p 0).
   {
     pose proof (Hmaximal 2 ltac:(lia)) as Hcm.
-    unfold CenterRadiusMaximal in Hcm.
+    rewrite center_radius_maximal_iff in Hcm.
     destruct Hcm as [Hpal Hstop].
     unfold CenterRadiusPalindrome in Hpal.
     destruct Hpal as [_ [Hrad [_ [_ _]]]].
@@ -880,7 +804,7 @@ Proof.
   }
   assert (Hbounds : 0 <= maxId - maxLen /\ maxId + maxLen < len).
   {
-    destruct Hpal_or as [[Hzero Hsmall] | Hpal].
+    destruct Hpal_or as [Hzero | Hpal].
     - lia.
     - unfold CenterRadiusPalindrome in Hpal.
       destruct Hpal as [_ [_ [Hleft [Hright _]]]].
@@ -889,6 +813,11 @@ Proof.
   tauto.
 Qed.
 
+(* Small local helper for list-length arithmetic in the counting lemmas below. *)
+Ltac zlength_simpl := rewrite ?Zlength_cons, ?Zlength_nil in *.
+
+(* Nat-indexed counting lemma: if all even positions in a length [2m+1] list
+   are '#', then at most [m] non-# characters remain. *)
 Lemma nonhash_even_slots_hash_bound_nat:
   forall (m : nat) xs,
     (forall k, 0 <= k < Zlength xs -> k mod 2 = 0 -> Znth k xs 0 = 35) ->
@@ -948,6 +877,7 @@ Proof.
         destruct (Z.eqb b 35); simpl; zlength_simpl; lia.
 Qed.
 
+(* Z-indexed wrapper around [nonhash_even_slots_hash_bound_nat]. *)
 Lemma nonhash_even_slots_hash_bound:
   forall xs m,
     0 <= m ->
@@ -961,6 +891,8 @@ Proof.
   apply Hbound. lia.
 Qed.
 
+(* Nat-indexed exact counting: even slots are '#', odd slots are not '#', so
+   the transformed slice contains exactly [m] original characters. *)
 Lemma nonhash_even_hash_odd_nonhash_exact_nat:
   forall (m : nat) xs,
     Zlength xs = 2 * Z.of_nat m + 1 ->
@@ -1053,6 +985,7 @@ Proof.
         simpl. rewrite Zlength_cons. lia.
 Qed.
 
+(* Z-indexed wrapper around [nonhash_even_hash_odd_nonhash_exact_nat]. *)
 Lemma nonhash_even_hash_odd_nonhash_exact:
   forall xs m,
     0 <= m ->
@@ -1068,6 +1001,8 @@ Proof.
   apply Hexact; auto.
 Qed.
 
+(* In the complete transformed string, every odd transformed slot is '#',
+   including the final marker before [len]. *)
 Lemma manacher_transformed_hash_at_odd_slot:
   forall s s2 len q,
     ManacherTransformedString s s2 len ->
@@ -1076,7 +1011,7 @@ Lemma manacher_transformed_hash_at_odd_slot:
 Proof.
   intros s s2 len q Htrans Hq.
   pose proof Htrans as Htrans_full.
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as [Hlen [_ [_ [Hlast [_ [_ [Hchars _]]]]]]].
   destruct (Z_lt_ge_dec q (Zlength s)) as [Hlt | Hge].
   - destruct (Hchars q ltac:(lia)) as [Hhash _].
@@ -1087,9 +1022,11 @@ Proof.
     exact Hlast.
 Qed.
 
+(* Even transformed slots that correspond to original characters are not '#',
+   by the alphanumeric input assumption. *)
 Lemma manacher_transformed_even_slot_not_hash:
   forall s s2 len n_pre q,
-    AlnumString s ->
+    Forall AlnumCode s ->
     string_length s = n_pre ->
     len = 2 * n_pre + 2 ->
     ManacherTransformedString s s2 len ->
@@ -1097,16 +1034,19 @@ Lemma manacher_transformed_even_slot_not_hash:
     Znth (2 * q) s2 0 <> 35.
 Proof.
   intros s s2 len n_pre q Halnum Hstrlen Hlen Htrans Hq.
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as [_ [_ [_ [_ [_ [_ [Hchars _]]]]]]].
   destruct (Hchars (q - 1)) as [_ Hchar]; [unfold string_length in Hstrlen; lia|].
   replace (2 * (q - 1) + 2) with (2 * q) in Hchar by lia.
   rewrite Hchar.
+  rewrite (Forall_Znth AlnumCode 0) in Halnum.
   specialize (Halnum (q - 1) ltac:(unfold string_length in Hstrlen; lia)).
   unfold AlnumCode in Halnum.
   lia.
 Qed.
 
+(* The final selected palindrome window starts at an odd transformed index,
+   i.e. at a '#' marker.  This makes the non-# counting exact. *)
 Lemma manacher_final_selected_window_start_odd:
   forall str s2 p len id limit maxId maxLen n_pre,
     string_length str = n_pre ->
@@ -1120,23 +1060,23 @@ Proof.
     str s2 p len id limit maxId maxLen n_pre Hstrlen Hn Hlen Hstate)
     as [HmaxLen_pos [Hstart_nonneg Hend_lt]].
   unfold ManacherLoopState in Hstate.
-  destruct Hstate as [Htrans [Hrt [_ [_ Hbest]]]].
+  destruct Hstate as [Htrans [Hrt [_ Hbest]]].
   unfold RadiusTablePrefix in Hrt.
-  destruct Hrt as [_ [_ Hmaximal]].
-  unfold BestRadiusPrefix in Hbest.
-  destruct Hbest as [_ [_ [_ [Hpal_or [_ Hexists]]]]].
-  destruct Hpal_or as [[Hzero _] | Hpal_best]; [lia |].
-  destruct Hexists as [[Hzero _] | [k [Hk_bounds [Hk_eq Hk_radius]]]]; [lia |].
+  rename Hrt into Hmaximal.
+  rewrite best_radius_prefix_iff in Hbest.
+  destruct Hbest as [Hpal_or [_ Hexists]].
+  destruct Hpal_or as [Hzero | Hpal_best]; [lia |].
+  destruct Hexists as [Hzero | [k [Hk_bounds [Hk_eq Hk_radius]]]]; [lia |].
   subst k.
   pose proof (Hmaximal maxId ltac:(unfold CenterRadiusPalindrome in Hpal_best; tauto))
     as Hmaximal_at.
   replace (Znth maxId p 0) with (maxLen + 1) in Hmaximal_at by lia.
-  unfold CenterRadiusMaximal in Hmaximal_at.
+  rewrite center_radius_maximal_iff in Hmaximal_at.
   destruct Hmaximal_at as [Hpal_max Hstop].
   unfold CenterRadiusPalindrome in Hpal_max.
   destruct Hpal_max as [_ [_ [_ [_ Hsym]]]].
   pose proof Htrans as Htrans_full.
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as [Hlen_shape [_ [Hfirst [_ [_ [Hnot36 _]]]]]].
   set (start := maxId - maxLen).
   set (finish := maxId + maxLen).
@@ -1212,6 +1152,8 @@ Proof.
         congruence.
 Qed.
 
+(* Every prefix of the final selected transformed window copies at most
+   [maxLen] original characters.  Used as the output-copy loop bound. *)
 Lemma manacher_output_copy_bound_from_selected_window:
   forall str s2 len p id limit maxId maxLen n_pre cur,
     string_length str = n_pre ->
@@ -1219,7 +1161,8 @@ Lemma manacher_output_copy_bound_from_selected_window:
     len = 2 * n_pre + 2 ->
     ManacherLoopState str s2 len p len id limit maxId maxLen ->
     maxId - maxLen <= cur <= maxId + maxLen + 1 ->
-    OutputCopyBound s2 (maxId - maxLen) cur maxLen.
+    (0 <= maxId - maxLen /\ maxId - maxLen <= cur /\ cur <= Zlength s2 /\
+     Zlength (NonHashChars (sublist (maxId - maxLen) cur s2)) <= maxLen).
 Proof.
   intros str s2 len p id limit maxId maxLen n_pre cur
     Hstrlen Hn Hlen Hstate Hcur.
@@ -1229,11 +1172,10 @@ Proof.
   pose proof (manacher_final_selected_window_start_odd
     str s2 p len id limit maxId maxLen n_pre Hstrlen Hn Hlen Hstate)
     as [q Hstart_odd].
-  unfold OutputCopyBound.
   repeat split; try lia.
   - unfold ManacherLoopState in Hstate.
     destruct Hstate as [Htrans _].
-    unfold ManacherTransformedString in Htrans.
+    rewrite manacher_transformed_string_iff in Htrans.
     destruct Htrans as [_ [Hs2_len _]].
     rewrite Hs2_len. lia.
   - set (start := maxId - maxLen).
@@ -1241,7 +1183,7 @@ Proof.
     unfold ManacherLoopState in Hstate.
     destruct Hstate as [Htrans _].
     pose proof Htrans as Htrans_full.
-    unfold ManacherTransformedString in Htrans.
+    rewrite manacher_transformed_string_iff in Htrans.
     destruct Htrans as [_ [Hs2_len _]].
     assert (Hcur_s2 : cur <= Zlength s2) by (rewrite Hs2_len; lia).
     eapply nonhash_even_slots_hash_bound with (m := maxLen).
@@ -1264,9 +1206,11 @@ Proof.
       unfold start. lia.
 Qed.
 
+(* The whole selected transformed window contains exactly [maxLen] non-#
+   characters. *)
 Lemma manacher_selected_window_nonhash_length:
   forall str s2 len p id limit maxId maxLen n_pre,
-    AlnumString str ->
+    Forall AlnumCode str ->
     string_length str = n_pre ->
     1 <= n_pre ->
     len = 2 * n_pre + 2 ->
@@ -1286,7 +1230,7 @@ Proof.
   set (finish := maxId + maxLen + 1).
   assert (Hsub_len : Zlength (sublist start finish s2) = 2 * maxLen + 1).
   {
-    rewrite Zlength_sublist by (unfold start, finish; unfold ManacherTransformedString in Htrans; tauto || lia).
+    rewrite Zlength_sublist by (unfold start, finish; rewrite manacher_transformed_string_iff in Htrans; tauto || lia).
     unfold start, finish. lia.
   }
   apply (nonhash_even_hash_odd_nonhash_exact
@@ -1318,9 +1262,10 @@ Proof.
       lia.
 Qed.
 
+(* At the end of output copying, the copy index [j] is exactly [maxLen]. *)
 Lemma manacher_output_copy_prefix_full_j:
   forall str s2 len p id limit maxId maxLen n_pre out j,
-    AlnumString str ->
+    Forall AlnumCode str ->
     string_length str = n_pre ->
     1 <= n_pre ->
     len = 2 * n_pre + 2 ->
@@ -1331,11 +1276,13 @@ Proof.
   intros str s2 len p id limit maxId maxLen n_pre out j
     Halnum Hstrlen Hn Hlen Hstate Hpref.
   unfold OutputCopyPrefix in Hpref.
-  destruct Hpref as [_ [_ [_ [Hout Hj]]]].
+  destruct Hpref as [Hout Hj].
   subst j out.
   eapply manacher_selected_window_nonhash_length; eauto.
 Qed.
 
+(* Reads back an original string character from its even slot in the complete
+   transformed string. *)
 Lemma manacher_transformed_even_value:
   forall s s2 len q,
     ManacherTransformedString s s2 len ->
@@ -1343,13 +1290,15 @@ Lemma manacher_transformed_even_value:
     Znth (2 * q) s2 0 = Znth (q - 1) s 0.
 Proof.
   intros s s2 len q Htrans Hq.
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as [_ [_ [_ [_ [_ [_ [Hchars _]]]]]]].
   destruct (Hchars (q - 1) ltac:(lia)) as [_ Hchar].
   replace (2 * (q - 1) + 2) with (2 * q) in Hchar by lia.
   exact Hchar.
 Qed.
 
+(* A maximal stored radius dominates any other palindromic radius at the same
+   center. *)
 Lemma center_radius_maximal_dominates:
   forall s2 len center r r',
     CenterRadiusMaximal s2 len center r ->
@@ -1357,7 +1306,7 @@ Lemma center_radius_maximal_dominates:
     r' <= r.
 Proof.
   intros s2 len center r r' Hmax Hpal'.
-  unfold CenterRadiusMaximal in Hmax.
+  rewrite center_radius_maximal_iff in Hmax.
   destruct Hmax as [Hpal Hstop].
   unfold CenterRadiusPalindrome in Hpal.
   destruct Hpal as [_ [Hr [_ [_ _]]]].
@@ -1368,6 +1317,8 @@ Proof.
   destruct Hstop as [Hleft | [Hright | Hneq]]; lia || congruence.
 Qed.
 
+(* Embeds an original-string palindrome segment into the transformed-string
+   center/radius representation. *)
 Lemma palindrome_segment_to_center_radius:
   forall s s2 len lo plen,
     ManacherTransformedString s s2 len ->
@@ -1378,7 +1329,7 @@ Proof.
   unfold PalindromeSegment in Hpal.
   destruct Hpal as [Hlo [Hplen [Hrange Hsym_s]]].
   pose proof Htrans as Htrans_full.
-  unfold ManacherTransformedString in Htrans.
+  rewrite manacher_transformed_string_iff in Htrans.
   destruct Htrans as [Hlen [Hs2len [_ [_ [_ [_ [_ Hnonzero]]]]]]].
   unfold CenterRadiusPalindrome.
   repeat split; try lia.
@@ -1439,9 +1390,11 @@ Proof.
     exact Hsym_s.
 Qed.
 
+(* Nat-indexed structural lemma: removing '#' markers from a selected
+   transformed window recovers the corresponding original substring. *)
 Lemma manacher_window_nonhash_substring_nat:
   forall n str s2 len q,
-    AlnumString str ->
+    Forall AlnumCode str ->
     ManacherTransformedString str s2 len ->
     0 <= q ->
     q + Z.of_nat n <= Zlength str ->
@@ -1452,8 +1405,8 @@ Proof.
   - change (Z.of_nat 0) with 0.
     replace (2 * q + 1 + 2 * 0 + 1) with (2 * q + 2) by lia.
     replace (2 * q + 2) with (2 * q + 1 + 1) by lia.
-    rewrite (sublist_single 0 (2 * q + 1) s2) by (unfold ManacherTransformedString in Htrans; lia).
-    rewrite (manacher_transformed_hash_at_odd_slot str s2 len q Htrans ltac:(unfold ManacherTransformedString in Htrans; lia)).
+    rewrite (sublist_single 0 (2 * q + 1) s2) by (rewrite manacher_transformed_string_iff in Htrans; lia).
+    rewrite (manacher_transformed_hash_at_odd_slot str s2 len q Htrans ltac:(rewrite manacher_transformed_string_iff in Htrans; lia)).
     unfold NonHashChars. simpl.
     destruct (Z.eqb_spec 35 35) as [_ | Hneq]; [|contradiction].
     rewrite Zsublist_nil by lia.
@@ -1462,15 +1415,15 @@ Proof.
     set (m := Z.of_nat n).
     replace (2 * q + 1 + 2 * Z.succ m + 1) with (2 * q + 3 + 2 * m + 1) by lia.
     rewrite (sublist_split (2 * q + 1) (2 * q + 3 + 2 * m + 1) (2 * q + 3))
-      by (unfold ManacherTransformedString in Htrans; lia).
+      by (rewrite manacher_transformed_string_iff in Htrans; lia).
     rewrite (sublist_split (2 * q + 1) (2 * q + 3) (2 * q + 2))
-      by (unfold ManacherTransformedString in Htrans; lia).
+      by (rewrite manacher_transformed_string_iff in Htrans; lia).
     replace (2 * q + 2) with (2 * q + 1 + 1) by lia.
     replace (2 * q + 3) with (2 * q + 2 + 1) by lia.
-    rewrite (sublist_single 0 (2 * q + 1) s2) by (unfold ManacherTransformedString in Htrans; lia).
+    rewrite (sublist_single 0 (2 * q + 1) s2) by (rewrite manacher_transformed_string_iff in Htrans; lia).
     replace (2 * q + 1 + 1) with (2 * q + 2) by lia.
-    rewrite (sublist_single 0 (2 * q + 2) s2) by (unfold ManacherTransformedString in Htrans; lia).
-    rewrite (manacher_transformed_hash_at_odd_slot str s2 len q Htrans ltac:(unfold ManacherTransformedString in Htrans; lia)).
+    rewrite (sublist_single 0 (2 * q + 2) s2) by (rewrite manacher_transformed_string_iff in Htrans; lia).
+    rewrite (manacher_transformed_hash_at_odd_slot str s2 len q Htrans ltac:(rewrite manacher_transformed_string_iff in Htrans; lia)).
     replace (2 * q + 2) with (2 * (q + 1)) by lia.
     rewrite (manacher_transformed_even_value str s2 len (q + 1) Htrans ltac:(lia)).
     rewrite <- app_assoc.
@@ -1478,6 +1431,7 @@ Proof.
     unfold NonHashChars at 1.
     assert (Hchar_ne : Znth q str 0 <> 35).
     {
+      rewrite (Forall_Znth AlnumCode 0) in Halnum.
       specialize (Halnum q ltac:(lia)).
       unfold AlnumCode in Halnum.
       lia.
@@ -1538,9 +1492,10 @@ Proof.
     reflexivity.
 Qed.
 
+(* Z-indexed wrapper around [manacher_window_nonhash_substring_nat]. *)
 Lemma manacher_window_nonhash_substring:
   forall str s2 len q m,
-    AlnumString str ->
+    Forall AlnumCode str ->
     ManacherTransformedString str s2 len ->
     0 <= m ->
     0 <= q ->
@@ -1554,6 +1509,8 @@ Proof.
   apply Hnat; lia.
 Qed.
 
+(* Converts a transformed-string center/radius palindrome back into an
+   original-string palindrome segment. *)
 Lemma center_radius_to_palindrome_segment:
   forall s s2 len lo plen,
     ManacherTransformedString s s2 len ->
@@ -1591,9 +1548,12 @@ Proof.
     symmetry; exact Hsym.
 Qed.
 
+(* Main semantic bridge for the final witness: the final loop state plus the
+   completed output-copy prefix implies the user-facing longest-palindrome
+   result. *)
 Lemma manacher_longest_result_from_final_prefix:
   forall str s2 len p id limit maxId maxLen n_pre out,
-    AlnumString str ->
+    Forall AlnumCode str ->
     string_length str = n_pre ->
     1 <= n_pre ->
     len = 2 * n_pre + 2 ->
@@ -1610,9 +1570,9 @@ Proof.
     str s2 p len id limit maxId maxLen n_pre Hstrlen Hn Hlen Hstate)
     as [HmaxLen_pos [Hstart_nonneg Hend_lt]].
   unfold ManacherLoopState in Hstate.
-  destruct Hstate as [Htrans [Hrt [_ [_ Hbest]]]].
+  destruct Hstate as [Htrans [Hrt [_ Hbest]]].
   unfold OutputCopyPrefix in Hpref.
-  destruct Hpref as [_ [_ [_ [Hout Hj]]]].
+  destruct Hpref as [Hout Hj].
   assert (Hq_nonneg : 0 <= q) by lia.
   assert (Hq_range : q + maxLen <= Zlength str).
   {
@@ -1637,19 +1597,25 @@ Proof.
   }
   exists q.
   split; [exact Hout_sub|].
-  split.
-  - unfold BestRadiusPrefix in Hbest.
-    destruct Hbest as [_ [_ [_ [Hpal_or _]]]].
-    destruct Hpal_or as [[Hzero _] | Hpal]; [lia |].
+  assert (Hselected : PalindromeSegment str q maxLen).
+  { rewrite best_radius_prefix_iff in Hbest.
+    destruct Hbest as [Hpal_or _].
+    destruct Hpal_or as [Hzero | Hpal]; [lia |].
     replace maxId with (2 * q + maxLen + 1) in Hpal by lia.
-    eapply center_radius_to_palindrome_segment; eauto; lia.
-  - intros lo' len' Hseg.
+    eapply center_radius_to_palindrome_segment; eauto; lia. }
+  split; [exact Hselected|].
+  unfold max_value_of_subset, max_object_of_subset.
+  exists (q, maxLen). split; [|reflexivity].
+  split; [exact Hselected|].
+  intros [lo' len'] Hseg.
+  change (PalindromeSegment str lo' len') in Hseg.
+  change (len' <= maxLen).
     destruct (Z_le_gt_dec len' 0) as [Hlen'_nonpos | Hlen'_pos].
     { unfold PalindromeSegment in Hseg; lia. }
     unfold RadiusTablePrefix in Hrt.
-    destruct Hrt as [_ [_ Hmaximal]].
-    unfold BestRadiusPrefix in Hbest.
-    destruct Hbest as [_ [_ [_ [_ [Hall _]]]]].
+    rename Hrt into Hmaximal.
+    rewrite best_radius_prefix_iff in Hbest.
+    destruct Hbest as [_ [Hall _]].
     set (center := 2 * lo' + len' + 1).
     assert (Hcenter_bounds : 1 <= center < len).
     {
@@ -1665,26 +1631,4 @@ Proof.
       as Hdom.
     specialize (Hall center Hcenter_bounds).
     lia.
-Qed.
-
-Lemma manacher_output_copy_done_from_final_prefix:
-  forall str s2 len p id limit maxId maxLen n_pre out,
-    AlnumString str ->
-    string_length str = n_pre ->
-    1 <= n_pre ->
-    len = 2 * n_pre + 2 ->
-    ManacherLoopState str s2 len p len id limit maxId maxLen ->
-    OutputCopyPrefix s2 out (maxId - maxLen) (maxId + maxLen + 1) maxLen ->
-    OutputCopyDone str s2 out len maxId maxLen maxLen.
-Proof.
-  intros str s2 len p id limit maxId maxLen n_pre out
-    Halnum Hstrlen Hn Hlen Hstate Hpref.
-  unfold OutputCopyDone.
-  split.
-  - unfold ManacherLoopState in Hstate.
-    destruct Hstate as [Htrans _].
-    exact Htrans.
-  - split; [reflexivity|].
-    split; [exact Hpref|].
-    eapply manacher_longest_result_from_final_prefix; eauto.
 Qed.

@@ -1,25 +1,29 @@
 /*@ Extern Coq
-      (EulerSieveResult : Z -> Z -> list Z -> list Z -> Prop)
+      (Modern::PrimePrefixList : Z -> Z -> list Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.sieve_of_euler.rocq.spec_lib */
 
-int *get_prime(int n, int tot, int *flag, int *prime)
-/*@ With (flag0 : list Z) (prime0 : list Z)
+int *get_prime(int n, int tot, int *prime)
+/*@ With (prime0 : list Z)
     Require
       2 <= n && n <= 46340 &&
-      Zlength(flag0) == n - 1 &&
       Zlength(prime0) == n &&
-      IntArray::seg(flag, 2, n + 1, flag0) *
       IntArray::seg(prime, 1, n + 1, prime0)
     Ensure
-      exists flag_out prime_out final_tot,
+      exists prime_out final_tot,
       __return == prime@pre &&
-      EulerSieveResult(n@pre, final_tot, flag_out, prime_out) &&
-      IntArray::seg(flag@pre, 2, n@pre + 1, flag_out) *
+      0 <= final_tot && final_tot <= n@pre &&
+      Modern::PrimePrefixList(n@pre, final_tot, prime_out) &&
       IntArray::seg(prime@pre, 1, n@pre + 1, prime_out)
  */
 {
-	tot = 0;
+     int flag[46341];
+
+     for (int z = 2; z <= n; ++z) {
+          flag[z] = 0;
+     }
+
+     tot = 0;
 
      for (int i = 2; i <= n; i++)
 		flag[i] = i;

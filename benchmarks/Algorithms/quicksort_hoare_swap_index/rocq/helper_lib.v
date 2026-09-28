@@ -1,3 +1,5 @@
+Require Export PVbench.Algorithms.quicksort_hoare_swap_index.rocq.spec_lib.
+Require Import SumLib.ZRange.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.Bool.Bool.
 Require Import Coq.Strings.String.
@@ -22,14 +24,17 @@ Local Open Scope sac.
 
 Definition same_outside_range (l l1 : list Z) (left right : Z) : Prop :=
   Zlength l = Zlength l1 /\
-  forall k,
-    0 <= k < Zlength l ->
-    k < left \/ right < k ->
-    Znth k l1 0 = Znth k l 0.
+  Forall2 eq
+    (map (fun k => Znth k l1 0)
+      (filter (fun k : Z => orb (Z.ltb k left) (Z.ltb right k)) (Zrange 0 (Zlength l))))
+    (map (fun k => Znth k l 0)
+      (filter (fun k : Z => orb (Z.ltb k left) (Z.ltb right k)) (Zrange 0 (Zlength l)))).
+
 Definition partitioned_at (l : list Z) (low high p : Z) : Prop :=
   low <= p <= high /\
   Forall (fun x => x <= Znth p l 0) (sublist low p l) /\
   Forall (fun x => Znth p l 0 <= x) (sublist (p + 1) (high + 1) l).
+
 Definition range_nondecreasing (l : list Z) (left right : Z) : Prop :=
   forall i j,
     left <= i ->

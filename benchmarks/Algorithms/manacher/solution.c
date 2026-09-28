@@ -65,7 +65,6 @@ int longestPalindrom(char *s, int n, char *output)
         r = 0;
         mirror = 0;
         i++;
-
     }
     j = 0;
     i = maxId - maxLen;
@@ -77,8 +76,8 @@ int longestPalindrom(char *s, int n, char *output)
         }
         i++;
     }
+
     output[j] = 0;
     ret = maxLen;
-
     return ret;
 }

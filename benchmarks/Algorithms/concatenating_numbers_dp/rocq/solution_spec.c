@@ -1,18 +1,22 @@
+#include "array2_def.h"
+
 /*@ Extern Coq
+      (concat : {A} -> list (list A) -> list A)
+      (DecimalRowValues : list (list Z) -> list Z -> list Z)
       (sum : list Z -> Z)
       (Z::shiftl : Z -> Z -> Z)
-      (RowsWellFormed : list (list Z) -> list Z -> Z -> Z -> Prop)
-      (FlatRows : list Z -> list (list Z) -> Z -> Z -> Prop)
-      (DPTablePrefix : list (list Z) -> list Z -> Z -> Z -> list Z -> Prop)
+      (Forall : {A} -> (A -> Prop) -> list A -> Prop)
+      (map : {A B} -> (A -> B) -> list A -> list B)
+      (eq : {A} -> A -> A -> Prop)
+      (Z::le : Z -> Z -> Prop)
+      (Z::ge : Z -> Z -> Prop)
+      (hd : {A} -> A -> list A -> A)
+      (concatenate_indices : list (list Z) -> list Z -> list Z -> list Z)
+      (all_indices : Z -> list Z)
       (LargestConcatenation : list (list Z) -> list Z -> list Z -> Prop)
  */
 /*@ Import Coq Require Import PVbench.Algorithms.concatenating_numbers_dp.rocq.spec_lib */
 
-/*
- * Compare the two possible orders left+right and right+left without building
- * either temporary concatenation.  A positive result means that left should
- * be placed before right in a largest concatenation.
- */
 int compare_concatenated_order(const int *numbers, const int *lengths,
                                       int number_width, int left, int right)
 
@@ -54,32 +58,8 @@ int compare_concatenated_order(const int *numbers, const int *lengths,
     return 0;
 }
 
-/*
- * Build the largest concatenation with subset dynamic programming.
- *
- * numbers contains count rows of number_width integer cells.  Row i stores
- * the decimal digits of one positive integer, and lengths[i] is the number of
- * valid cells in that row.  Digits are stored from most to least significant.
- *
- * best_first must contain at least 2^count integer cells.  For each nonempty
- * mask, best_first[mask] records an index that can be placed first in an
- * optimal concatenation of exactly the rows selected by mask.  Removing that
- * index produces the next subset state.  result must contain at least
- * sum(lengths[0..count)) cells and receives the answer as decimal digits.
- *
- * The exchange rule x+y >= y+x determines which of two rows may occur first
- * in an optimal answer.  Consequently, if bit is one selected index and rest
- * is the mask without bit, the transition is
- *
- *   best_first[mask] = better(bit, best_first[rest]).
- *
- * There are 2^count states.  Finding the selected bit takes at most count
- * steps, and each transition compares at most 2 * number_width digits, so the
- * running time is O(2^count * (count + number_width)).  The DP uses
- * O(2^count) integer cells.
- */
 int *concatenating_numbers_dp(const int *numbers, int count, int number_width,
-                              const int *lengths, int *best_first,
+                              const int *lengths,
                               int *result)
 /*@ With (rows : list (list Z)) (lens : list Z) (flat : list Z)
     Require
@@ -87,24 +67,31 @@ int *concatenating_numbers_dp(const int *numbers, int count, int number_width,
       1 <= number_width && number_width <= 10 &&
       2 <= Z::shiftl(1, count) && Z::shiftl(1, count) <= 1048576 &&
       1 <= sum(lens) && sum(lens) <= 200 &&
-      RowsWellFormed(rows, lens, count, number_width) &&
-      FlatRows(flat, rows, count, number_width) &&
-      IntArray::full(numbers, count * number_width, flat) *
+      Zlength(rows) == count &&
+      Zlength(lens) == count &&
+      Forall(eq(number_width), map(Zlength, rows)) &&
+      Forall(Z::le(1), lens) &&
+      Forall(Z::ge(number_width), lens) &&
+      Forall(Z::le(1), map(hd(0), rows)) &&
+      Forall(Z::ge(9), map(hd(0), rows)) &&
+      Forall(Z::le(0), concatenate_indices(rows, lens, all_indices(Zlength(rows)))) &&
+      Forall(Z::ge(9), concatenate_indices(rows, lens, all_indices(Zlength(rows)))) &&
+      flat == concat(rows) &&
+      Forall(Z::ge(1000000000), DecimalRowValues(rows, lens)) &&
+      IntArray2::full(numbers, count, number_width, rows) *
       IntArray::full(lengths, count, lens) *
-      IntArray::undef_full(best_first, Z::shiftl(1, count)) *
       IntArray::undef_full(result, sum(lens))
     Ensure
-      exists choices output,
+      exists output,
         __return == result &&
-        DPTablePrefix(rows, lens, count, Z::shiftl(1, count), choices) &&
         LargestConcatenation(rows, lens, output) &&
-        Zlength(output) == sum(lens) &&
-        IntArray::full(numbers, count * number_width, flat) *
+        IntArray2::full(numbers, count, number_width, rows) *
         IntArray::full(lengths, count, lens) *
-        IntArray::full(best_first, Z::shiftl(1, count), choices) *
         IntArray::full(result, sum(lens), output)
  */
 {
+    int best_first[1048576];
+
     int state_count = 1 << count;
 
     best_first[0] = -1;

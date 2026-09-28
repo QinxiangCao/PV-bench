@@ -1,0 +1,23 @@
+{
+  "id": "P064_1992F_valuable_cards",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1992/F",
+    "title": "Valuable Cards",
+    "url": "https://codeforces.com/problemset/problem/1992/F",
+    "rating": 1900,
+    "tags": [
+      "brute force",
+      "dp",
+      "greedy",
+      "number theory",
+      "two pointers"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": true
+  }
+}

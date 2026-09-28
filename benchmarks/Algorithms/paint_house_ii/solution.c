@@ -1,3 +1,5 @@
+#include "int_ptr_array2_def.h"
+
 int paint_house_ii(int **costs, int n, int k)
 
 {

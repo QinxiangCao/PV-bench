@@ -2,29 +2,27 @@ From Coq Require Import ZArith List.
 Import ListNotations.
 Local Open Scope Z_scope.
 
-Definition ModularPower
-    (base exponent modulus result : Z) : Prop :=
-  result = (base ^ exponent) mod modulus.
+Require Import
+  PVbench.Algorithms.modular_power.rocq.spec_lib.
 
-Definition EulerTotientValue (n : Z) : Z :=
-  Z.of_nat
-    (length
-       (filter
-          (fun k : nat => Z.eqb (Z.gcd (Z.of_nat k) n) 1)
-          (seq 1 (Z.to_nat n)))).
-Definition EulerPhi (n result : Z) : Prop :=
-  result = EulerTotientValue n.
+(** The canonical Euler totient is the cardinality of the positive residues
+    [1, n] that are coprime to [n].  This finite count is independent of the
+    trial-division implementation used by the C program. *)
+Require Import AUXLib.ListLib SumLib.ZRange.
 
-(** The public inverse result is the canonical modular-power value obtained
-    from Euler's totient, and it satisfies the modular inverse equation. *)
+From Coq Require Import Lia Sorting.Permutation.
+
+(** The public result states the inverse equation, independently of the
+    totient computation and modular exponentiation used to obtain it. *)
 Definition EulerTheoremInverse
     (value modulus inverse : Z) : Prop :=
-  exists phi,
-    EulerPhi modulus phi /\
-    ModularPower value (phi - 1) modulus inverse /\
-    (value * inverse) mod modulus = 1.
+  (value * inverse) mod modulus = 1.
 
-(** The residual state isolates the mathematical work still carried by the
-    unprocessed factor [remaining].  Besides the totient identity, divisibility
-    records the accumulator's reachable factorization shape: every unprocessed
-    factor still present in [remaining] is also present in [result]. *)
+(** Proof-only arithmetic support for the structural transport lemmas below. *)
+Require Import Coq.micromega.Lia.
+Require Import Coq.setoid_ring.Ring.
+
+From Coq Require Import Lia Psatz ZArith.Znumtheory ZArith.Zpow_facts
+  Sorting.Permutation.
+From Coq Require Import Lia Psatz ZArith.Znumtheory ZArith.Zquot.
+From Coq Require Import ZArith.Znumtheory Sorting.Permutation.

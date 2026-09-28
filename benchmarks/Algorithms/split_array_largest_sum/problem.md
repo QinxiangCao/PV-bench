@@ -1,18 +1,17 @@
 # LeetCode 410: Split Array Largest Sum
 
-## Description
+## Abstract model
+
+Partition a nonnegative array into exactly $k$ nonempty contiguous segments.
+For each partition, take its largest segment sum; minimize that value over all
+partitions. The verification case binary-searches the answer and greedily tests
+whether a candidate bound needs at most $k$ segments.
+
+## Problem statement
 
 Given a nonnegative integer array `nums` and an integer $k$, split the array
 into $k$ nonempty contiguous subarrays. Return the smallest possible value of
 the largest subarray sum.
-
-## Input
-
-The function receives a nonnegative integer array `nums` and the number $k$ of nonempty contiguous parts.
-
-## Output
-
-Return the minimum possible largest part sum.
 
 ## Constraints
 

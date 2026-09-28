@@ -1,16 +1,17 @@
-int rod_cutting(const int *price, int *revenue, int n)
+int rod_cutting(const int *price, int n)
 
 {
+  int revenue[1001];
+
     int j;
 
     revenue[0] = 0;
-
+    
     for (j = 1; j <= n; ++j) {
         int best = 0;
         int i;
 
         for (i = 1; i <= j; ++i) {
-
             int candidate = price[i] + revenue[j - i];
             if (best < candidate) {
                 best = candidate;
@@ -19,5 +20,7 @@ int rod_cutting(const int *price, int *revenue, int n)
         revenue[j] = best;
     }
 
-    return revenue[n];
+    int result = revenue[n];
+    
+  return result;
 }

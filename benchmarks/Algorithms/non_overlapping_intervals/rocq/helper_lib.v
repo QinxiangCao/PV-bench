@@ -1,19 +1,24 @@
-Require Import PVbench.Algorithms.non_overlapping_intervals.rocq.spec_lib.
-
+Require Export PVbench.Algorithms.non_overlapping_intervals.rocq.spec_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.Sorting.Permutation.
 Require Import Coq.ZArith.ZArith.
+Require Import Coq.micromega.Lia.
 From AUXLib Require Import ListLib.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
+Require Import Coq.Sorting.Sorted.
 
+Definition IntervalPermutation : list interval -> list interval -> Prop :=
+  @Permutation interval.
+
+(** Exact record-level swap used by both parallel arrays. *)
 Definition interval_swap
     (ps : list interval) (i j : Z) : list interval :=
   replace_Znth j (Znth i ps default_interval)
     (replace_Znth i (Znth j ps default_interval) ps).
+
 Definition IntervalSwappedAt
     (before after : list interval) (i j : Z) : Prop :=
   after = interval_swap before i j.
@@ -40,12 +45,22 @@ Definition IntervalPartitionedAt
       pivot < k <= high ->
       interval_end (Znth pivot ps default_interval) <
       interval_end (Znth k ps default_interval)).
+
 Definition IntervalsEndSortedRange
     (ps : list interval) (left right : Z) : Prop :=
   forall i j,
     left <= i -> i <= j -> j <= right ->
     interval_end (Znth i ps default_interval) <=
     interval_end (Znth j ps default_interval).
+
+Definition IntervalsEndSorted (ps : list interval) : Prop :=
+  forall i j,
+    0 <= i -> i <= j -> j < Zlength ps ->
+    interval_end (Znth i ps default_interval) <=
+    interval_end (Znth j ps default_interval).
+
+(** Predicate-first Lomuto scan state.  Machine index ranges, parallel-array
+    ownership, record bounds, and array-read bindings stay in C annotations. *)
 Definition LomutoScanState
     (before current : list interval)
     (low high placed scanned pivot_end : Z) : Prop :=
@@ -58,6 +73,7 @@ Definition LomutoScanState
   (forall k,
       placed < k < scanned ->
       pivot_end < interval_end (Znth k current default_interval)).
+
 Definition schedule_finish (kept : list interval) : Z :=
   interval_end
     (Znth (Zlength kept - 1) kept default_interval).
@@ -70,14 +86,17 @@ Definition GreedyPrefixState
     IntervalSelection (sublist 0 processed ps) kept /\
     NonOverlappingSchedule kept /\
     Zlength kept = kept_count /\
+    (* This guards the last-element index used by schedule_finish. *)
     0 < Zlength kept /\
     last_finish = schedule_finish kept /\
-    (forall alternative,
-        IntervalSelection (sublist 0 processed ps) alternative ->
-        NonOverlappingSchedule alternative ->
-        Zlength alternative <= kept_count) /\
-    (forall alternative,
-        IntervalSelection (sublist 0 processed ps) alternative ->
-        NonOverlappingSchedule alternative ->
-        Zlength alternative = kept_count ->
-        last_finish <= schedule_finish alternative).
+    max_value_of_subset Z.le
+      (fun alternative =>
+         IntervalSelection (sublist 0 processed ps) alternative /\
+         NonOverlappingSchedule alternative)
+      (@Zlength interval) kept_count /\
+    min_value_of_subset Z.le
+      (fun alternative =>
+         IntervalSelection (sublist 0 processed ps) alternative /\
+         NonOverlappingSchedule alternative /\
+         Zlength alternative = kept_count)
+      schedule_finish last_finish.

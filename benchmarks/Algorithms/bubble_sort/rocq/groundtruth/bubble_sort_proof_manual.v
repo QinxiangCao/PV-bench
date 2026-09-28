@@ -18,8 +18,7 @@ Local Open Scope string.
 Local Open Scope list.
 Import ListNotations.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.bubble_sort.rocq.helper_lib.
-From PVbench.Algorithms.bubble_sort.rocq.groundtruth Require Import proof_lib.
+Require Import PVbench.Algorithms.bubble_sort.rocq.groundtruth.proof_lib.
 Local Open Scope sac.
 
 Lemma proof_of_sortArray_entail_wit_1 : sortArray_entail_wit_1.
@@ -305,64 +304,6 @@ Proof.
 		+ dump_pre_spatial. exact Hps.
 Qed.
 
-Lemma proof_of_sortArray_return_wit_1_split_goal_1 : sortArray_return_wit_1_split_goal_1.
-Proof.
-  LLM_pre_process ltac:(int_auto).
-  pose proof (Permutation_length PreH10) as Hperm.
-  apply f_equal with (f := Z.of_nat) in Hperm.
-  repeat rewrite <- Zlength_correct in Hperm.
-  rewrite <- PreH5 in Hperm.
-  symmetry; exact Hperm.
-Qed.
-
-Lemma proof_of_sortArray_return_wit_1_split_goal_2 : sortArray_return_wit_1_split_goal_2.
-Proof.
-  LLM_pre_process ltac:(int_auto).
-  assert (Hi : i = numsSize_pre - 1) by lia.
-  assert (Hlen_l3 : Zlength l3 = numsSize_pre).
-  { pose proof (Permutation_length PreH10) as Hperm.
-    apply f_equal with (f := Z.of_nat) in Hperm.
-    repeat rewrite <- Zlength_correct in Hperm.
-    rewrite <- PreH5 in Hperm.
-    symmetry; exact Hperm. }
-  assert (Hlen_l1 : Zlength l1_2 = 1).
-  { rewrite PreH4 in Hlen_l3.
-    rewrite Zlength_app in Hlen_l3.
-    rewrite <- PreH6 in Hlen_l3.
-    rewrite Hi in Hlen_l3.
-    lia. }
-  destruct l1_2.
-  - rewrite Zlength_nil in Hlen_l1; lia.
-  - assert (Hlen_tail : Zlength l1_2 = 0).
-    { rewrite Zlength_cons in Hlen_l1; simpl in Hlen_l1; lia. }
-    apply Zlength_nil_inv in Hlen_tail.
-    subst l1_2.
-    assert (Hlb : lowerbound z l2).
-    { unfold prefix_suffix_sorted in PreH12.
-      apply PreH12; simpl; auto. }
-    assert (Hinc : increasing (z :: l2)).
-    { apply increasing_cons_local; assumption. }
-    rewrite PreH4; simpl; exact Hinc.
-Qed.
-
-Lemma proof_of_sortArray_return_wit_2_split_goal_1 : sortArray_return_wit_2_split_goal_1.
-Proof.
-  LLM_pre_process ltac:(int_auto).
-  assert (Hsize : numsSize_pre = 1) by lia.
-  destruct l.
-  - rewrite Zlength_nil in PreH2; lia.
-  - destruct l.
-    + simpl; auto.
-    + pose proof (Zlength_nonneg l) as Hl_nonneg.
-      rewrite !Zlength_cons in PreH2.
-      lia.
-Qed.
-
-Lemma proof_of_sortArray_return_wit_2_split_goal_2 : sortArray_return_wit_2_split_goal_2.
-Proof.
-  LLM_pre_process ltac:(int_auto).
-Qed.
-
 Lemma proof_of_sortArray_return_wit_1 : sortArray_return_wit_1.
 Proof.
 	LLM_pre_process ltac:(int_auto).
@@ -402,7 +343,6 @@ Proof.
 		+ split_pures.
 			* dump_pre_spatial. rewrite PreH4 in PreH10. simpl in PreH10. exact PreH10.
 			* dump_pre_spatial. exact Hinc.
-			* dump_pre_spatial. rewrite PreH4 in Hlen_l3. simpl in Hlen_l3. exact Hlen_l3.
 Qed.
 
 Lemma proof_of_sortArray_return_wit_2 : sortArray_return_wit_2.
@@ -418,7 +358,7 @@ Proof.
 			split_pure_spatial.
 			* cancel (IntArray.full nums_pre 1 [z]).
 				cancel ((returnSize_pre) # Int |-> 1).
-			* split_pures; [dump_pre_spatial; apply Permutation_refl | dump_pre_spatial; simpl; auto].
+			* split_pures; dump_pre_spatial; auto using Permutation_refl.
 		+ pose proof (Zlength_nonneg l) as Hl_nonneg.
 			exfalso.
 			assert (Htwo : 2 <= Zlength (z :: z0 :: l)).

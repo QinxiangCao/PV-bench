@@ -17,6 +17,7 @@ Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
 Require Import PVbench.Algorithms.climbing_stairs.rocq.spec_lib.
+Require Import PVbench.Algorithms.climbing_stairs.rocq.helper_lib.
 Local Open Scope sac.
 
 (*----- Function climbStairs -----*)
@@ -52,7 +53,8 @@ forall (n_pre: Z) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 45)) ,
 .
 
 Definition climbStairs_safety_wit_4 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+(
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   ((( &( "next" ) )) # Int  |->_)
   **  ((( &( "n" ) )) # Int  |-> n_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
@@ -61,10 +63,43 @@ forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 
 |--
   “ ((prev + curr ) <= INT_MAX) ” 
   &&  “ ((INT_MIN) <= (prev + curr )) ”
+) \/
+(
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
+  ((( &( "next" ) )) # Int  |->_)
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "prev" ) )) # Int  |-> prev)
+  **  ((( &( "curr" ) )) # Int  |-> curr)
+|--
+  “ ((prev + curr ) <= INT_MAX) ” 
+  &&  “ ((INT_MIN) <= (prev + curr )) ”
+).
+
+Definition climbStairs_safety_wit_4_split_goal_1 := 
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
+  ((( &( "next" ) )) # Int  |->_)
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "prev" ) )) # Int  |-> prev)
+  **  ((( &( "curr" ) )) # Int  |-> curr)
+|--
+  “ ((prev + curr ) <= INT_MAX) ”
+.
+
+Definition climbStairs_safety_wit_4_split_goal_2 := 
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
+  ((( &( "next" ) )) # Int  |->_)
+  **  ((( &( "n" ) )) # Int  |-> n_pre)
+  **  ((( &( "i" ) )) # Int  |-> i)
+  **  ((( &( "prev" ) )) # Int  |-> prev)
+  **  ((( &( "curr" ) )) # Int  |-> curr)
+|--
+  “ ((INT_MIN) <= (prev + curr )) ”
 .
 
 Definition climbStairs_safety_wit_5 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   ((( &( "next" ) )) # Int  |-> (prev + curr ))
   **  ((( &( "n" ) )) # Int  |-> n_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
@@ -76,7 +111,7 @@ forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 
 .
 
 Definition climbStairs_safety_wit_6 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   ((( &( "next" ) )) # Int  |-> (prev + curr ))
   **  ((( &( "n" ) )) # Int  |-> n_pre)
   **  ((( &( "i" ) )) # Int  |-> i)
@@ -99,8 +134,7 @@ forall (n_pre: Z) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 45)) ,
   &&  “ (0 <= 1) ” 
   &&  “ (0 <= 1) ” 
   &&  “ (ClimbingStairsCount (2 - 2 ) 1 ) ” 
-  &&  “ (ClimbingStairsCount (2 - 1 ) 1 ) ” 
-  &&  “ ((2 <= n_pre) -> ((INT_MIN <= (1 + 1 )) /\ ((1 + 1 ) <= INT_MAX))) ”
+  &&  “ (ClimbingStairsCount (2 - 1 ) 1 ) ”
   &&  emp
 ) \/
 (
@@ -124,7 +158,7 @@ forall (n_pre: Z) (PreH1 : (1 <= n_pre)) (PreH2 : (n_pre <= 45)) ,
 
 Definition climbStairs_entail_wit_2 := 
 (
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   TT && emp 
 |--
   “ (1 <= n_pre) ” 
@@ -134,45 +168,38 @@ forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 
   &&  “ (0 <= curr) ” 
   &&  “ (0 <= (prev + curr )) ” 
   &&  “ (ClimbingStairsCount ((i + 1 ) - 2 ) curr ) ” 
-  &&  “ (ClimbingStairsCount ((i + 1 ) - 1 ) (prev + curr ) ) ” 
-  &&  “ (((i + 1 ) <= n_pre) -> ((INT_MIN <= (curr + (prev + curr ) )) /\ ((curr + (prev + curr ) ) <= INT_MAX))) ”
+  &&  “ (ClimbingStairsCount ((i + 1 ) - 1 ) (prev + curr ) ) ”
   &&  emp
 ) \/
 (
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   TT && emp 
 |--
-  “ (((i + 1 ) <= n_pre) -> ((INT_MIN <= (curr + (prev + curr ) )) /\ ((curr + (prev + curr ) ) <= INT_MAX))) ” 
-  &&  “ (ClimbingStairsCount ((i + 1 ) - 1 ) (prev + curr ) ) ” 
+  “ (ClimbingStairsCount ((i + 1 ) - 1 ) (prev + curr ) ) ” 
   &&  “ (ClimbingStairsCount ((i + 1 ) - 2 ) curr ) ”
   &&  emp
 ).
 
 Definition climbStairs_entail_wit_2_split_goal_1 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
-  (((i + 1 ) <= n_pre) -> ((INT_MIN <= (curr + (prev + curr ) )) /\ ((curr + (prev + curr ) ) <= INT_MAX)))
-.
-
-Definition climbStairs_entail_wit_2_split_goal_2 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   (ClimbingStairsCount ((i + 1 ) - 1 ) (prev + curr ) )
 .
 
-Definition climbStairs_entail_wit_2_split_goal_3 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+Definition climbStairs_entail_wit_2_split_goal_2 := 
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i <= n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   (ClimbingStairsCount ((i + 1 ) - 2 ) curr )
 .
 
 Definition climbStairs_return_wit_1 := 
 (
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   TT && emp 
 |--
   “ (ClimbingStairsCount n_pre curr ) ”
   &&  emp
 ) \/
 (
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   TT && emp 
 |--
   “ (ClimbingStairsCount n_pre curr ) ”
@@ -180,7 +207,7 @@ forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <
 ).
 
 Definition climbStairs_return_wit_1_split_goal_1 := 
-forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) (PreH10 : ((i <= n_pre) -> ((INT_MIN <= (prev + curr )) /\ ((prev + curr ) <= INT_MAX)))) ,
+forall (n_pre: Z) (curr: Z) (prev: Z) (i: Z) (PreH1 : (i > n_pre)) (PreH2 : (1 <= n_pre)) (PreH3 : (n_pre <= 45)) (PreH4 : (2 <= i)) (PreH5 : (i <= (n_pre + 1 ))) (PreH6 : (0 <= prev)) (PreH7 : (0 <= curr)) (PreH8 : (ClimbingStairsCount (i - 2 ) prev )) (PreH9 : (ClimbingStairsCount (i - 1 ) curr )) ,
   (ClimbingStairsCount n_pre curr )
 .
 

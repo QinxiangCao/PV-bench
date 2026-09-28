@@ -1,32 +1,24 @@
 /*@ Extern Coq
-      (Zgcd: Z -> Z -> Z)
+      (ModularInverse : Z -> Z -> Z -> Prop)
  */
+/*@ Extern Coq (Zgcd : Z -> Z -> Z) */
+/*@ Import Coq Require Import PVbench.Algorithms.modular_inverse.rocq.spec_lib */
 
-/*
- * The verified exgcd case supplies this interface.  In particular, x and y
- * are Bezout coefficients when the call returns.
- */
 int exgcd(int a, int b, int *x, int *y)
 ;
 
-/*
- * Return the canonical representative of the inverse of a modulo modulus.
- * The precondition restricts this small example to the usual coprime,
- * positive inputs for which an inverse exists.
- */
 int modular_inverse(int a, int modulus)
 /*@ Require
       1 < modulus && 0 < a && a < modulus && Zgcd(a, modulus) == 1 && emp
     Ensure
       0 <= __return && __return < modulus &&
-      exists k, a * __return + modulus * k == 1 && emp
+      ModularInverse(a, modulus, __return) && emp
 */
 {
     int x;
     int y;
     int g = exgcd(a, modulus, &x, &y);
 
-    /* The precondition and the exgcd contract imply g == 1. */
     int inverse = x % modulus;
     if (inverse < 0) {
         inverse += modulus;

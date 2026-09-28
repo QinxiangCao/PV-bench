@@ -3,21 +3,26 @@ Require Import Coq.Sorting.Permutation.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import AUXLib.ListLib.
+Require Import AUXLib.MonotonicList.
 From MaxMinLib Require Import MaxMin Interface.
-
 Import ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope list_scope.
 
+(** A full binary prefix-code tree.  Leaves carry symbol frequencies and every
+    internal constructor has exactly two children, so this datatype describes
+    the genuine feasible tree space independently of the Huffman algorithm. *)
 Inductive HuffmanTree : Type :=
   | HuffmanLeaf : Z -> HuffmanTree
   | HuffmanNode : HuffmanTree -> HuffmanTree -> HuffmanTree.
+
 Fixpoint HuffmanLeaves (tree : HuffmanTree) : list Z :=
   match tree with
   | HuffmanLeaf weight => [weight]
   | HuffmanNode left_tree right_tree =>
       HuffmanLeaves left_tree ++ HuffmanLeaves right_tree
   end.
+
 Fixpoint HuffmanTreeWeight (tree : HuffmanTree) : Z :=
   match tree with
   | HuffmanLeaf weight => weight
@@ -35,6 +40,7 @@ Fixpoint HuffmanWeightedPathLength (tree : HuffmanTree) : Z :=
       HuffmanWeightedPathLength right_tree +
       HuffmanTreeWeight left_tree + HuffmanTreeWeight right_tree
   end.
+
 Definition HuffmanTreeFeasible
     (weights : list Z) (tree : HuffmanTree) : Prop :=
   Permutation weights (HuffmanLeaves tree).
@@ -49,18 +55,3 @@ Definition HuffmanOptimalCost
     (HuffmanTreeFeasible weights)
     HuffmanWeightedPathLength
     answer.
-Definition HuffmanInputBounded (weights : list Z) : Prop :=
-  forall i,
-    0 <= i < Zlength weights ->
-    1 <= Znth i weights 0 <= 1000.
-
-(** The scratch array's only public value-level commitment: its surviving
-    live root has the sum of all input frequencies.  Remaining cells are
-    intentionally unconstrained. *)
-Definition HuffmanScratchFinal
-    (weights scratch : list Z) : Prop :=
-  Znth 0 scratch 0 = sum weights.
-
-(** Internal mathematical interface shared by the merge-loop phases.  It says
-    that solving the current residual instance and adding the already charged
-    merge cost gives a genuine optimum for the original input. *)

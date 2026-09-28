@@ -1,17 +1,15 @@
 # LeetCode 169: Majority Element
 
-## Description
+## Abstract model
+
+Find an element whose multiplicity is strictly greater than
+$\lfloor n/2\rfloor$. Existence is guaranteed. The verification case implements
+the Boyer-Moore cancellation process using one candidate and one vote counter.
+
+## Problem statement
 
 Given an integer array `nums` of length $n$, return its majority element. The
 input is guaranteed to contain such an element.
-
-## Input
-
-The function receives an integer array `nums` that is guaranteed to have a majority element.
-
-## Output
-
-Return the majority element.
 
 ## Constraints
 

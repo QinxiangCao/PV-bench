@@ -1,17 +1,19 @@
-Require Import PVbench.Algorithms.container_with_most_water_linear.rocq.spec_lib.
-
+Require Export PVbench.Algorithms.container_with_most_water_linear.rocq.spec_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
 Require Import AUXLib.ListLib.
-
+Require Import AUXLib.MonotonicList.
+Require Import MaxMinLib.MaxMin.
 Import ListNotations.
 Local Open Scope Z_scope.
 
+(** [best] is either the initial zero or the area of an inspected pair. *)
 Definition LinearContainerBest (l : list Z) (best : Z) : Prop :=
   best = 0 \/
   exists i j,
     LinearContainerPair l i j /\ best = LinearContainerArea l i j.
+
 Definition LinearContainerRemaining
     (l : list Z) (left right i j : Z) : Prop :=
   LinearContainerPair l i j /\ left <= i /\ j <= right.

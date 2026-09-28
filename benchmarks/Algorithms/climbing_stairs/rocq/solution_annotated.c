@@ -1,5 +1,6 @@
 /*@ Extern Coq (ClimbingStairsCount : Z -> Z -> Prop) */
 /*@ Import Coq Require Import PVbench.Algorithms.climbing_stairs.rocq.spec_lib */
+/*@ Import Coq Require Import PVbench.Algorithms.climbing_stairs.rocq.helper_lib */
 
 int climbStairs(int n)
 /*@ Require
@@ -18,9 +19,7 @@ int climbStairs(int n)
           2 <= i && i <= n@pre + 1 &&
           0 <= prev && 0 <= curr &&
           ClimbingStairsCount(i - 2, prev) &&
-          ClimbingStairsCount(i - 1, curr) &&
-          (i <= n@pre =>
-             INT_MIN <= prev + curr && prev + curr <= INT_MAX)
+          ClimbingStairsCount(i - 1, curr)
      */
     while (i <= n) {
         int next = prev + curr;

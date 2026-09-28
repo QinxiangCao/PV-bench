@@ -1,5 +1,4 @@
-Require Import PVbench.Algorithms.majority_element.rocq.spec_lib.
-
+Require Export PVbench.Algorithms.majority_element.rocq.spec_lib.
 Require Import Coq.Lists.List.
 Require Import Coq.ZArith.ZArith.
 Require Import Coq.micromega.Lia.
@@ -10,5 +9,6 @@ Local Open Scope Z_scope.
 
 Definition repeated (candidate vote : Z) : list Z :=
   repeat candidate (Z.to_nat vote).
+
 Definition MajorityOnReduced (major candidate vote : Z) (rest : list Z) : Prop :=
-  0 <= vote /\ IsMajorityElement major (repeated candidate vote ++ rest).
+  IsMajorityElement major (repeated candidate vote ++ rest).

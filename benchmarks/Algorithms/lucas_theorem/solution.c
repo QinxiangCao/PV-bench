@@ -1,27 +1,6 @@
-/*
- * Compute C(n + m, n) modulo a prime p with Lucas' theorem.
- *
- * The problem guarantees
- *
- *   1 <= n, m, p <= 100000
- *
- * and that p is prime.  For this verification example, all arithmetic used by
- * the program is additionally assumed to stay within the signed int range.
- *
- * Input/output handling is intentionally left to the caller.  The function
- * lucas_theorem is the algorithmic entry point for one test case.
- */
-
 int modular_power(int base, int exponent, int modulus)
 ;
 
-/*
- * Compute C(upper, lower) modulo prime, where
- * 0 <= lower <= upper < prime.
- *
- * Because every factor in lower! is nonzero modulo prime, Fermat's little
- * theorem gives lower!^(prime - 2) as its modular inverse.
- */
 int binomial_digit_mod_prime(int upper, int lower, int prime)
 
 {
@@ -38,16 +17,16 @@ int binomial_digit_mod_prime(int upper, int lower, int prime)
 
     for (int i = 1; i <= lower; ++i) {
         int factor = upper - lower + i;
-        int numerator_product = numerator * factor;
-        int denominator_product = denominator * i;
+        long long numerator_product = (long long)numerator * factor;
+        long long denominator_product = (long long)denominator * i;
 
-        numerator = numerator_product % prime;
-        denominator = denominator_product % prime;
+        numerator = (int)(numerator_product % prime);
+        denominator = (int)(denominator_product % prime);
     }
 
     int inverse = modular_power(denominator, prime - 2, prime);
-    int answer = numerator * inverse;
-    return answer % prime;
+    long long answer = (long long)numerator * inverse;
+    return (int)(answer % prime);
 }
 
 int lucas_theorem(int n, int m, int prime)
@@ -67,8 +46,8 @@ int lucas_theorem(int n, int m, int prime)
 
         int digit_binomial =
             binomial_digit_mod_prime(upper_digit, lower_digit, prime);
-        int product = result * digit_binomial;
-        result = product % prime;
+        long long product = (long long)result * digit_binomial;
+        result = (int)(product % prime);
 
         upper /= prime;
         lower /= prime;

@@ -2,22 +2,22 @@
 
 A benchmark for measuring how well LLMs do **program verification** — not code generation — on real, human-authored problems.
 
-It has 215 problems. Each one comes with a correct C solution that has been given a formal
+It has 233 problems. Each one comes with a correct C solution that has been given a formal
 spec and checked by [**QCP**](https://www.qua.codes/en/index.html). The proofs are done in one
-of two backends, **Rocq** or **Lean 4**. All 215 have a Rocq version; 83 also have a Lean one.
+of two backends, **Rocq** or **Lean 4**. All 233 have a Rocq version; 83 also have a Lean one.
 
 The problems are in four groups, all under `benchmarks/`, next to the build files:
 
 | group | problems | C lines | source |
 |---|---:|---:|---|
-| `benchmarks/Codeforces/` | 128 | 5,685 | competitive-programming problems, grouped into `examples_shard<NN>/` slices |
-| `benchmarks/Algorithms/` | 74 | 4,250 | classic algorithms, one directory per algorithm |
+| `benchmarks/Codeforces/` | 147 | 6,899 | competitive-programming problems, grouped into `examples_shard<NN>/` slices |
+| `benchmarks/Algorithms/` | 73 | 3,986 | classic algorithms, one directory per algorithm |
 | `benchmarks/Data_structures/` | 5 | 404 | array stack, BIT and three priority-queue interfaces |
 | `benchmarks/Engineering/` | 8 | 338 | MiniSat vectors and C string / memory routines |
-| total | 215 | 10,677 | |
+| total | 233 | 11,627 | |
 
 "C lines" counts the unannotated `solution.c` — the program a model is asked to specify and
-verify. They are small by design: a median of 40 lines, 50 on average, from 10 up to 189
+verify. They are small by design: a median of 40 lines, 50 on average, from 5 up to 189
 (`Algorithms/kosaraju`). The difficulty is in the property to be proved, not in the size of the
 code.
 
@@ -73,7 +73,7 @@ backend's assertion language.
       └── groundtruth/
 ```
 
-`rocq/` is present for all 215 problems; `lean/` for 83 of them — 45 Algorithms,
+`rocq/` is present for all 233 problems; `lean/` for 83 of them — 45 Algorithms,
 34 Codeforces (14 in `examples_shard00`, 20 in `examples_shard01`), 3 Data_structures and
 1 Engineering. The `.lean` libraries mirror the corresponding `.v` files; cases without
 private definitions import shared libraries directly from the C annotations.

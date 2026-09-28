@@ -1,0 +1,20 @@
+{
+  "id": "P091_1063D_candies_for_children",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1063/D",
+    "title": "Candies for Children",
+    "url": "https://codeforces.com/problemset/problem/1063/D",
+    "rating": 2600,
+    "tags": [
+      "brute force",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "H2",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": false
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "P001_1102A_integer_sequence_dividing",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1102/A",
+    "title": "Integer Sequence Dividing",
+    "url": "https://codeforces.com/problemset/problem/1102/A",
+    "rating": 800,
+    "tags": [
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "E",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

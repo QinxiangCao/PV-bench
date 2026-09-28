@@ -1,0 +1,22 @@
+{
+  "id": "P080_1204E_natasha_sasha_and_prefix_sums",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1204/E",
+    "title": "Natasha, Sasha and the Prefix Sums",
+    "url": "https://codeforces.com/problemset/problem/1204/E",
+    "rating": 2300,
+    "tags": [
+      "combinatorics",
+      "dp",
+      "math",
+      "number theory"
+    ]
+  },
+  "stratification": {
+    "band": "H1",
+    "output_mode": "COUNTOPT",
+    "interactive": false,
+    "multi_test": false
+  }
+}

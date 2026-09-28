@@ -1,8 +1,5 @@
-/*
- * Compare the two possible orders left+right and right+left without building
- * either temporary concatenation.  A positive result means that left should
- * be placed before right in a largest concatenation.
- */
+#include "array2_def.h"
+
 int compare_concatenated_order(const int *numbers, const int *lengths,
                                       int number_width, int left, int right)
 
@@ -44,35 +41,13 @@ int compare_concatenated_order(const int *numbers, const int *lengths,
     return 0;
 }
 
-/*
- * Build the largest concatenation with subset dynamic programming.
- *
- * numbers contains count rows of number_width integer cells.  Row i stores
- * the decimal digits of one positive integer, and lengths[i] is the number of
- * valid cells in that row.  Digits are stored from most to least significant.
- *
- * best_first must contain at least 2^count integer cells.  For each nonempty
- * mask, best_first[mask] records an index that can be placed first in an
- * optimal concatenation of exactly the rows selected by mask.  Removing that
- * index produces the next subset state.  result must contain at least
- * sum(lengths[0..count)) cells and receives the answer as decimal digits.
- *
- * The exchange rule x+y >= y+x determines which of two rows may occur first
- * in an optimal answer.  Consequently, if bit is one selected index and rest
- * is the mask without bit, the transition is
- *
- *   best_first[mask] = better(bit, best_first[rest]).
- *
- * There are 2^count states.  Finding the selected bit takes at most count
- * steps, and each transition compares at most 2 * number_width digits, so the
- * running time is O(2^count * (count + number_width)).  The DP uses
- * O(2^count) integer cells.
- */
 int *concatenating_numbers_dp(const int *numbers, int count, int number_width,
-                              const int *lengths, int *best_first,
+                              const int *lengths,
                               int *result)
 
 {
+    int best_first[1048576];
+
     int state_count = 1 << count;
 
     best_first[0] = -1;
@@ -92,7 +67,7 @@ int *concatenating_numbers_dp(const int *numbers, int count, int number_width,
 
         if (previous_best < 0 ||
             compare_concatenated_order(numbers, lengths, number_width,
-                                       bit, previous_best)  > 0) {
+                                       bit, previous_best)   > 0) {
             best_first[mask] = bit;
         } else {
             best_first[mask] = previous_best;

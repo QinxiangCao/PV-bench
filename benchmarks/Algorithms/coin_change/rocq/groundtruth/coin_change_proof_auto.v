@@ -17,7 +17,6 @@ Local Open Scope sets.
 Local Open Scope string_scope.
 Local Open Scope list.
 Import naive_C_Rules.
-Require Import PVbench.Algorithms.coin_change.rocq.spec_lib.
 Require Import PVbench.Algorithms.coin_change.rocq.helper_lib.
 Local Open Scope sac.
 
@@ -64,6 +63,9 @@ Lemma proof_of_coinChange_safety_wit_14 : coinChange_safety_wit_14.
 Proof. Admitted. 
 
 Lemma proof_of_coinChange_safety_wit_15 : coinChange_safety_wit_15.
+Proof. Admitted. 
+
+Lemma proof_of_coinChange_safety_wit_16 : coinChange_safety_wit_16.
 Proof. Admitted. 
 
 Lemma proof_of_coinChange_return_wit_1 : coinChange_return_wit_1.

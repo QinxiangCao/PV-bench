@@ -1,0 +1,20 @@
+{
+  "id": "P062_1729F_kirei_and_the_linear_function",
+  "source": {
+    "dataset": "codeforces",
+    "cf_id": "1729/F",
+    "title": "Kirei and the Linear Function",
+    "url": "https://codeforces.com/problemset/problem/1729/F",
+    "rating": 1900,
+    "tags": [
+      "hashing",
+      "math"
+    ]
+  },
+  "stratification": {
+    "band": "M2",
+    "output_mode": "DISCRIM",
+    "interactive": false,
+    "multi_test": true
+  }
+}

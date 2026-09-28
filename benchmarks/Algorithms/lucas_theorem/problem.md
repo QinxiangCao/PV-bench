@@ -1,23 +1,50 @@
-# P3807 — Lucas Theorem
+# P3807 [Template] Lucas Theorem
 
-## Description
+## 题目背景
 
-For each query, compute the binomial coefficient $\binom{n+m}{m}$ modulo a prime using Lucas' theorem.
+This is a template problem.
 
-## Input
+## 题目描述
 
-Each test case contains integers $n$, $m$, and prime $p$.
+Given integers $n, m, p$, compute $C_{n + m}^n \bmod p$.
 
-## Output
+The input guarantees that $p$ is prime.
 
-Print $\binom{n+m}{m} \bmod p$ for each test case.
+Note: $C$ denotes the binomial coefficient.
 
-## Constraints
+## 输入格式
 
-- $1 \le n,m \le 100000$.
-- $2 \le p \le 100000$ and $p$ is prime.
-- The verified C arithmetic must remain within its stated machine bounds.
+This problem contains multiple test cases.
 
-## Source
+The first line contains an integer $T$, the number of test cases.
 
-[Luogu P3807, Lucas Theorem](https://www.luogu.com.cn/problem/P3807).
+For each test case:
+
+One line with three integers $n, m, p$.
+
+## 输出格式
+
+For each test case, output one line with one integer, the required value.
+
+## 输入输出样例 #1
+
+### 输入 #1
+
+```
+2
+1 2 5
+2 1 5
+```
+
+### 输出 #1
+
+```
+3
+3
+```
+
+## 说明/提示
+
+For $100\%$ of the testdata, $1 \leq n, m, p \leq 10^5$, $1 \leq T \leq 10$.
+
+Translated by ChatGPT 5

@@ -1,18 +1,7 @@
-/*
- * Huffman encoding: minimum weighted path length of a binary prefix code.
- *
- * Repeatedly merging the two smallest live weights constructs a Huffman tree.
- * The sum of all merge weights is that tree's weighted path length and is
- * minimum among all full binary prefix-code trees over the input frequencies.
- *
- * This verification-oriented implementation uses a fresh selection scan for
- * each of the two minima.  Removing a selected item is done by moving the last
- * live item into its slot, so only the prefix work[0..active) is live.
- */
-
-int huffman_cost(int *weights, int n, int *work)
+int huffman_cost(int *weights, int n)
 
 {
+  int work[8];
 
   for (int i = 0; i < n; ++i) {
     work[i] = weights[i];

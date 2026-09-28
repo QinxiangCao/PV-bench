@@ -1,0 +1,6 @@
+From PVbench.Codeforces.examples_shard00.P001_1102A_integer_sequence_dividing.rocq.groundtruth Require Import P001_1102A_integer_sequence_dividing_goal P001_1102A_integer_sequence_dividing_proof_auto P001_1102A_integer_sequence_dividing_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include P001_1102A_integer_sequence_dividing_proof_auto.
+  Include P001_1102A_integer_sequence_dividing_proof_manual.
+End VC_Correctness.

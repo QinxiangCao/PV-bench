@@ -1,6 +1,8 @@
-int lcs_n(int *x, int *y, int n, int *table)
+int longest_common_sequence(int *x, int *y, int n)
 
 {
+  int table[1002001];
+
   int stride;
   int i;
   int j;
@@ -52,5 +54,7 @@ int lcs_n(int *x, int *y, int n, int *table)
     i = i + 1;
   }
 
-  return table[stride * n + n];
+  int result = table[stride * n + n];
+
+  return result;
 }
